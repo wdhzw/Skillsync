@@ -3,13 +3,14 @@ import './App.css';
 
 import Navbar from './Navbar';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 function App() {
   return (
     <>
       <Navbar/>
-      <Login/>
+      <Register/>
     </>
     // <div className="App">
     //   <header className="App-header">

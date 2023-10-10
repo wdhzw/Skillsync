@@ -8,11 +8,11 @@ export default function Login() {
       <form>
         <label>
           <p>Username</p>
-          <input type="text" />
+          <input type="text" placeholder='Enter username here'/>
         </label>
         <label>
           <p>Password</p>
-          <input type="password" />
+          <input type="password" placeholder='Enter password here'/>
         </label>
         <div>
           <button type="submit">Log in</button>
