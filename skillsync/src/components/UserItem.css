@@ -1,0 +1,24 @@
+.user-item {
+    text-align: center;
+  }
+  
+  .location-bubble {
+    background-color: purple;
+    color: white;
+    border-radius: 12px;
+    padding: 4px 8px;
+    display: inline-block;
+    margin-top: 8px;
+  }
+  
+  .skill-box {
+    border: 1px solid grey;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 4px;
+    display: inline-block;
+  }
+  
+  .user-item img {
+    border-radius: 50%;
+  }
