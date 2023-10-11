@@ -1,9 +1,11 @@
 import React from 'react';
 import './Login.css';
+import SideNav from '../SideNav';
 
 export default function Register() {
   return(
     <div className="register-wrapper">
+      <SideNav/>
       <h1>Welcome to SkillSync!</h1>
       <h3>Registration</h3>
       <form>

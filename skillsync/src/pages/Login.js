@@ -1,9 +1,12 @@
 import React from 'react';
 import './Login.css';
+import SideNav from '../SideNav';
 
 export default function Login() {
   return(
+    
     <div className="login-wrapper">
+      <SideNav/>
       <h1>Welcome to SkillSync!</h1>
       <form>
         <label>
@@ -16,8 +19,8 @@ export default function Login() {
         </label>
         <div>
           <button type="submit">Log in</button>
-        </div>
-        <a href = "/register">Doesn't have an account? Sign up here</a>
+        </div><br/>
+        <a type="link" href = "/register">Doesn't have an account? Sign up here</a>
       </form>
     </div>
   )
