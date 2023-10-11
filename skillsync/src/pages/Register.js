@@ -23,10 +23,10 @@ export default function Register() {
         <label>
             <p>Gender</p>
             <select id="gender" name="gender">
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-            </select><br />
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
         </label>
 
         <label htmlFor="avatar">
@@ -34,16 +34,17 @@ export default function Register() {
         </label>
         <input type="file" id="avatar" name="avatar"/><br />
 
-        <label>
+        <label type="select">
             <p>Confident skills</p>
-            <select id="skill" name="skill">
-                <option value="badminton">badminton</option>
-                <option value="tennis">tennis</option>
-                <option value="basketball">basketball</option>
-                <option value="Programming">Programming</option>
-            </select>
+            <div>
+                <select id="skill" class = "skill" name="skill" type ="horizontal">
+                    <option value="badminton">badminton</option>
+                    <option value="tennis">tennis</option>
+                    <option value="basketball">basketball</option>
+                    <option value="Programming">Programming</option>
+                </select>
+            </div>
             <button type="plus">+</button>
-            <br />
         </label>
 
         <label htmlFor="postalCode">

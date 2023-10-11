@@ -18,36 +18,52 @@ p {
     margin: 5px 0; 
 }
 
-input,
-select {
-  display: inline-block;
+input, select{
+  display: flex;
   background-color: #eee; 
   border: 1px solid #ccc; 
   padding: 8px;
   width: 100%; 
   border-radius: 10px; 
+  margin-bottom: 10px;
+}
+
+select[type="horizontal"] {
+    display: flex;
+    background-color: #eee; 
+    border: 1px solid #ccc; 
+    padding: 8px;
+    width: 100%; 
+    border-radius: 10px; 
+    margin-left: 10px;
+}
+
+label[type="select"] {
+    display: flex;
+    align-items: center; 
 }
   
-button {
+button,input[type=file]::file-selector-button  {
   background-color: rgb(2, 2, 58);
   color: white;
   padding: 7px 10px;
   border: none;
   cursor: pointer;
-  margin-top: 15px;
-  margin-bottom: 10px;
   border-radius: 10px;
 }
 
 button[type="plus"]  {
-    display: inline-block;
+    display: flex;
+    flex-shrink: 0;
     background-color: rgb(2, 2, 58);
     color: white;
     border: none;
     cursor: pointer;
     border-radius: 20px;
     font-size: 16px; 
+    margin-left: 20px;
 }
+
 
 input[type="file"] {
     width: calc(100% - 20px); 
