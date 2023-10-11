@@ -1,6 +1,6 @@
 import React from 'react';
 import './UserItem.css';
-
+ 
 function UserItem({ user }) {
     return (
       <div className="user-item">

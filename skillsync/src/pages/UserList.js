@@ -1,7 +1,7 @@
 import React from 'react';
 import UserItem from '../components/UserItem.js';
 import '../pages/UserList.css'; 
-
+ 
 
 export default function UserList() {
     const users = [
