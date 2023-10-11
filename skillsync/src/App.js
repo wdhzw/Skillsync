@@ -6,6 +6,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import UserList from './pages/UserList';
 import SideNav from './SideNav';
+import ViewProfile from './pages/ViewProfile';
 
 import {
   BrowserRouter as Router,
@@ -25,6 +26,7 @@ function App() {
           <Route path="/UserList" element={<UserList />} />
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
+          <Route path="/ViewProfile" element={<ViewProfile />} />
 
         </Routes>
         <SideNav />

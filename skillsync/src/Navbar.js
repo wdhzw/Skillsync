@@ -1,4 +1,4 @@
-import {Link, useMatch, useResolvedPath} from "react-router-dom"
+import {Link, useMatch, useResolvedPath} from "react-router-dom";
 
 export default function Navbar() {
     return (
@@ -8,7 +8,7 @@ export default function Navbar() {
             </a>
             <ul>
                 <li>
-                    <a href = "/Login">Log in/Register</a>
+                    <Link to="/ViewProfile" className="nav-link">ViewProfile</Link>
                 </li>
             </ul>
         </nav>
