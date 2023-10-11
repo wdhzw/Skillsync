@@ -8,7 +8,7 @@ function UserItem({ user }) {
         <h2>{user.name}</h2>
         <div className="location-bubble">{user.location}</div>
         <p><h3>{user.noofskills}</h3></p>
-        <p>{user.noofskills} Skills to Share</p>
+        <p>Skills to Share</p>
         <div>
           {user.skills.map((skill) => (
             <div className="skill-box">

@@ -1,16 +1,35 @@
 // import logo from './logo.svg';
 import './App.css';
-
+  
 import Navbar from './Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import UserList from './pages/UserList';
+import SideNav from './SideNav';
+
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link
+} from 'react-router-dom';
+
 
 function App() {
   return (
     <>
-      <Navbar/>
-      <Register/>
+      <Router>
+      <Navbar />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/UserList" element={<UserList />} />
+          <Route path="/Register" element={<Register />} />
+          <Route path="/Login" element={<Login />} />
+
+        </Routes>
+        <SideNav />
+      </Router>
+
     </>
     // <div className="App">
     //   <header className="App-header">

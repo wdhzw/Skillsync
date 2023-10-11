@@ -1,3 +1,11 @@
+.userlist-wrapper {
+  display: flex;
+  flex-direction: column;
+  margin-left: 15%;
+  margin-right: 5%;
+
+}
+
 .user-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr); 
@@ -12,4 +20,34 @@
     padding: 16px;
     background-color: white;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.sortnfilter {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.filters, .sort {
+  display: flex;
+  align-items: center;
+}
+
+.filters select,
+.sort select {
+  width: auto; 
+  margin-left: 10px;
+}
+
+.filters label, .sort label {
+  margin-right: 10px;
+}
+
+
+.search{
+  text-align: right; 
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+
 }
