@@ -1,6 +1,7 @@
 import React from 'react';
 import './Login.css';
 import SideNav from '../SideNav';
+import MapContainer from './MapContainer';
 
 export default function Register() {
   return(
@@ -53,7 +54,7 @@ export default function Register() {
             <p>Postal Code</p>
         </label>
         <input type="text" id="postalCode" name="postalCode"/><br />
-
+        <MapContainer/>
         <div>
           <button type="submit">Register</button>
         </div>
