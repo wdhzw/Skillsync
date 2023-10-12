@@ -5,9 +5,9 @@ const Chats = () => {
     const [selectedChat, setSelectedChat] = useState(null);
 
     const conversations = [
-        {id: 1, name: "John Doe"},
-        {id: 2, name: "Jane Smith"},
-        // Add more conversations as needed
+        {id: 1, name: "John Doe", profileImage: "/path/to/image1.jpg"},
+        {id: 2, name: "Jane Smith", profileImage: "/path/to/image2.jpg"},
+        // Add more conversations with profileImage path as needed
     ];
 
     return (
@@ -26,7 +26,9 @@ const Chats = () => {
 
             <div className="chat-content">
                 <div className="chat-header">
+                    <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"}  className="profile-img"/>
                     Chat with {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
+                    <button className="block-btn">Block User</button>
                 </div>
                 <div className="chat-body">
                     {/* Messages for the selected chat go here */}
