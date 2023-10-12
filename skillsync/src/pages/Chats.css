@@ -1,0 +1,84 @@
+/* Adjusting and improving the existing styles */
+
+.chat-container {
+    display: flex;
+    margin-left: 200px;
+    width: calc(100% - 200px);
+    height: calc(100vh - 76px);
+    background-color: #FAFAFA;  /* Lighter background for chat area */
+}
+
+.conversations-list {
+    width: 250px;
+    border-right: 1px solid #E0E0E0;
+    overflow-y: auto;
+    background-color: #FFFFFF;
+}
+
+.conversation-item {
+    padding: 10px 15px;
+    border-bottom: 1px solid #E0E0E0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-weight: 500; /* Make the conversation names bold */
+}
+
+.conversation-item:hover {
+    background-color: #F5F5F5;
+}
+
+.conversation-item.active {
+    background-color: #E1E1E1;
+    color: #007BFF;  /* Highlight text color for selected chat */
+}
+
+.chat-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 10px 20px;
+    border-bottom: 1px solid #E0E0E0;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.chat-input {
+    padding: 10px 20px;
+    background-color: #FFFFFF;
+    border-top: 1px solid #E0E0E0;
+    display: flex;
+    align-items: center;
+}
+
+.chat-input input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #E0E0E0;
+    margin-right: 10px;
+    outline: none;
+}
+
+.chat-input button {
+    background-color: #007BFF;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.chat-input button:hover {
+    background-color: #0056b3;  /* Slightly darker blue on hover */
+}

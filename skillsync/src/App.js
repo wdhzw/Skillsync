@@ -10,6 +10,7 @@ import ViewProfile from './pages/ViewProfile';
 import RecUserList from './pages/RecUserList';
 import SkillList from './pages/SkillList';
 import Invitations from './pages/Invitations';
+import Chats from './pages/Chats';
 
 
 import {
@@ -30,12 +31,11 @@ function App() {
           <Route path="/UserList" element={<UserList />} />
           <Route path="/RecUserList" element={<RecUserList />} />
           <Route path="/SkillList" element={<SkillList />} />
-          <Route path="/Invitations" element={<Invitations />} />
 
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/ViewProfile" element={<ViewProfile />} />
-
+          <Route path="/Chats" element={<Chats />} />
         </Routes>
         <SideNav />
       </Router>
