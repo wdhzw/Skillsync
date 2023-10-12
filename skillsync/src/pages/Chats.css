@@ -20,12 +20,12 @@ body {
     width: 250px;
     border-right: 1px solid rgb(2, 2, 58);
     overflow-y: auto;
-    background: linear-gradient(to bottom, rgb(12, 12, 68), rgb(2, 2, 58)); /* Gradient background */
+    background: linear-gradient(to bottom, #929292, #7b7b7b); /* Neutral gradient */
 }
 
 .conversation-item {
     padding: 10px 15px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Adjusted for visibility against gradient */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
     transition: background-color 0.3s;
     font-weight: 500;
@@ -33,11 +33,11 @@ body {
 }
 
 .conversation-item:hover {
-    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white for hover */
+    background-color: rgba(2, 2, 58, 0.2); /* Dark blue tint on hover */
 }
 
 .conversation-item.active {
-    background-color: rgba(2, 2, 58, 0.8); /* Darker for active state */
+    background-color: rgba(2, 2, 58, 0.5); /* More prominent dark blue for active state */
     color: #EEE;
 }
 
@@ -49,8 +49,8 @@ body {
 
 .chat-header {
     padding: 10px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Adjusted for visibility against gradient */
-    background: linear-gradient(to bottom, rgb(12, 12, 68), rgb(8, 8, 63)); /* Lighter gradient */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: #868686; /* Slightly different shade of gray */
     font-weight: bold;
     font-size: 1.1em;
     color: white;
@@ -73,7 +73,7 @@ body {
 
 .block-btn {
     padding: 6px 12px;
-    background-color: rgba(2, 2, 58, 0.7);
+    background-color:rgba(2, 2, 58, 0.7)5;
     border: none;
     border-radius: 5px;
     cursor: pointer;
