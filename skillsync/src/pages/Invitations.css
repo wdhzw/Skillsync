@@ -1,0 +1,15 @@
+.invitations-wrapper {
+    display: flex;
+    flex-direction: column;
+    margin-left: 15%;
+    margin-right: 5%;
+  
+  }
+  
+  .invitations-grid { 
+      display: grid;
+      gap: 19px; 
+      list-style: none;
+      padding: 0;
+    }
+     

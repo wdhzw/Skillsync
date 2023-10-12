@@ -1,0 +1,47 @@
+.invitations-grid-item {
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 3px;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    height: 80px; 
+    font-size: 12px;
+
+}
+
+.invitations-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-right:10px;
+}
+
+.invitations-maincontent {
+    display: flex;
+    align-items: center; 
+}
+
+
+
+  .location-bubble {
+    background-color: purple;
+    color: white;
+    border-radius: 12px;
+    padding: 6px 6px 6px 6px;
+    display: inline-block;
+    margin-top: 8px;
+    margin-left: 10px;
+    font-size: 12px;
+    margin-bottom: 8px;
+
+  }
+  
+  .invitations-grid-item img {
+    border-radius: 50%;
+    margin-right: 16px; 
+
+  }

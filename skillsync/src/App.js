@@ -9,6 +9,7 @@ import SideNav from './SideNav';
 import ViewProfile from './pages/ViewProfile';
 import RecUserList from './pages/RecUserList';
 import SkillList from './pages/SkillList';
+import Invitations from './pages/Invitations';
 
 
 import {
@@ -29,6 +30,7 @@ function App() {
           <Route path="/UserList" element={<UserList />} />
           <Route path="/RecUserList" element={<RecUserList />} />
           <Route path="/SkillList" element={<SkillList />} />
+          <Route path="/Invitations" element={<Invitations />} />
 
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
