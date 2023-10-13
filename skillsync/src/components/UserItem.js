@@ -4,7 +4,7 @@ import './UserItem.css';
 function UserItem({ user }) {
     return (
       <div className="user-item">
-        <img src={user.picture} width="100" />
+        <img src={user.picture} width="100" height="50"/>
         <h2>{user.name}</h2>
         <div className="location-bubble">{user.location}</div>
         <p><h3>{user.noofskills}</h3></p>

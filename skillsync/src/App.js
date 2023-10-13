@@ -11,6 +11,7 @@ import RecUserList from './pages/RecUserList';
 import SkillList from './pages/SkillList';
 import Invitations from './pages/Invitations';
 import Chats from './pages/Chats';
+import SkillDetails from './pages/SkillDetails';
 
 
 import {
@@ -31,6 +32,7 @@ function App() {
           <Route path="/UserList" element={<UserList />} />
           <Route path="/RecUserList" element={<RecUserList />} />
           <Route path="/SkillList" element={<SkillList />} />
+          <Route path="/SkillDetails" element={<SkillDetails />} />
 
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
