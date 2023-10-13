@@ -1,11 +1,13 @@
 import React from 'react';
 import logo from '../logo.svg';
 import './Login.css';
+import MapContainer from './MapContainer';
 
 const Profile = () => {
   const user = {
     username: 'JohnDoe',
     gender: 'Male',
+    age: '21',
     skills: ['React', 'JavaScript', 'CSS'],
     neighborhood: 'Sample Neighborhood',
     avatarUrl: '',
@@ -37,8 +39,9 @@ const Profile = () => {
         {user.gender}
       </div>
       <div>
-        <strong>Avatar: </strong>
-        <img src={logo} className="App-logo" alt="logo" /> </div>
+        <strong>Age: </strong>
+        {user.age}
+      </div>
       <div>
         <strong>Skills: </strong>
         <div>
@@ -49,14 +52,15 @@ const Profile = () => {
           ))}
         </div>
       </div>
+
+      <div>
+        <strong>Avatar: </strong>
+        <img src={logo} className="App-logo" alt="logo" /> </div>
       <div>
         <strong>Neighborhood: </strong>
         {user.neighborhood}
-        {/* Map component to show the neighborhood */}
-        {/* Replace with actual map integration */}
-        <div style={{ width: '200px', height: '200px', border: '1px solid black' }}>
-          <div style={{ width: '10px', height: '10px', backgroundColor: 'red', borderRadius: '50%' }} />
-        </div>
+        <MapContainer/>
+        
       </div>
     </div>
   );

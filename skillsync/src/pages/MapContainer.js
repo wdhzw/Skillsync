@@ -18,7 +18,7 @@ const MapContainer = () => {
     >
       <GoogleMap
         mapContainerStyle={mapStyles}
-        zoom={10}
+        zoom={14}
         center={defaultCenter}
       >
         { /* Add map markers or other map components here */ }
