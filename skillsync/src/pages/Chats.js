@@ -24,14 +24,14 @@ const sampleMessages = {
             text: "I'm having trouble understanding hooks, especially useEffect. Can we schedule a call?"
         }
     ],
-    2: [ // Messages for conversation with Jane Smith (id: 2)
+    2: [ // Messages for conversation with Jane Smith (id: 3)
         {
             senderId: 2,
             timestamp: new Date('2023-10-14T09:00:00'),
             text: "Hey Jane! I saw you're proficient in Graphic Design. I'm trying to learn the basics, got any tips?"
         },
         {
-            senderId: 2,
+            senderId: 3,
             timestamp: new Date('2023-10-14T09:20:00'),
             text: "Sure! Start with the basic tools and get hands-on practice. Would you like some resources?"
         }
