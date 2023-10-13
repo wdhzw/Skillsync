@@ -1,7 +1,9 @@
 import React from 'react';
-import logo from '../logo.svg';
+import pic from '../pic.jpg';
 import './Login.css';
 import MapContainer from './MapContainer';
+import GradeIcon from '@mui/icons-material/Grade';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 const Profile = () => {
   const user = {
@@ -27,40 +29,59 @@ const Profile = () => {
 
 
   return (
-    <div className="register-wrapper">
-      <h1>Welcome to SkillSync!</h1>
-      <h3>Profile</h3>
-      <div>
-        <strong>Username: </strong>
-        {user.username}
-      </div>
-      <div>
-        <strong>Gender: </strong>
-        {user.gender}
-      </div>
-      <div>
-        <strong>Age: </strong>
-        {user.age}
-      </div>
-      <div>
-        <strong>Skills: </strong>
+    <div className='whole'>
+      <div className="register-wrapper">
+        <h1>Welcome to SkillSync!</h1>
+        <h3>Profile</h3>
         <div>
-          {user.skills.map((skill, index) => (
-            <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
-              {skill}
-            </div>
-          ))}
+          <strong>Username: </strong>
+          {user.username}
+        </div>
+        <div>
+          <strong>Gender: </strong>
+          {user.gender}
+        </div>
+        <div>
+          <strong>Age: </strong>
+          {user.age}
+        </div>
+        <div>
+          <strong>Avatar: </strong>
+          <img src={pic} className="App-logo" alt="logo" /> </div>
+        <div>
+          <strong>Skills: </strong>
+          <div>
+            {user.skills.map((skill, index) => (
+              <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
+                {skill}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <div>
+          <strong>Neighborhood: </strong>
+          {user.neighborhood}
+          <MapContainer/>
         </div>
       </div>
-
-      <div>
-        <strong>Avatar: </strong>
-        <img src={logo} className="App-logo" alt="logo" /> </div>
-      <div>
-        <strong>Neighborhood: </strong>
-        {user.neighborhood}
-        <MapContainer/>
-        
+      <div class="grid-container">
+          <div class="grid-item">
+            <p className='item-text'>
+            <GradeIcon className='icon'/>
+              Rating:<br/> 
+              7/10
+            </p>
+        </div>
+      </div>
+      <div class="grid-container">
+          <div class="grid-item">
+            <p className='item-text'>
+            <ThumbUpIcon className='icon'/>
+              Match:<br/> 
+              16 times
+            </p>
+        </div>
       </div>
     </div>
   );
