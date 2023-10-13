@@ -2,6 +2,7 @@ import React from 'react';
 import InvitationItem from '../components/InvitationItem.js';
 import '../pages/Invitations.css'; 
 import SideNav from '../SideNav.js';
+import UserItem from '../components/UserItem.js';
 
 
 export default function Invitations() {
