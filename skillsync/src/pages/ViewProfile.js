@@ -5,6 +5,8 @@ import MapContainer from './MapContainer';
 import GradeIcon from '@mui/icons-material/Grade';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
+import { Box, Typography, Grid, Slider } from '@mui/material';
+
 const Profile = () => {
   const user = {
     username: 'JohnDoe',
@@ -27,6 +29,39 @@ const Profile = () => {
     }
   };
 
+  const sliderStyle = {
+    width: '95%',
+    margin: '0 auto',
+  };
+  
+  const ReviewGrid = ({ userName, service, rating, content }) => {
+    return (
+      <Box border={1} p={2} m={2} width={300} height={250} marginRight={90} className='box'>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="subtitle1" align="left">
+              {userName}
+            </Typography>
+            <Typography variant="caption" align="right">
+              {service}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <Slider
+              value={rating}
+              max={100}
+              valueLabelDisplay="auto"
+              valueLabelFormat={(value) => `${value}%`}
+              style={sliderStyle}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="body1">{content}</Typography>
+          </Grid>
+        </Grid>
+      </Box>
+    );
+  };
 
   return (
     <div className='whole'>
@@ -64,10 +99,37 @@ const Profile = () => {
           {user.neighborhood}
           <MapContainer/>
         </div>
+
         <br/>
         <h3>Reviews</h3>
-        
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} md={4} className='grid'>
+          <ReviewGrid
+            userName="John Doe"
+            service="Basketball"
+            rating={60}
+            content="This is a great service! I highly recommend it."
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} className='grid'>
+          <ReviewGrid
+            userName="Alice Smith"
+            service="Badminton"
+            rating={85}
+            content="Excellent service and very professional."
+          />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} className='grid'>
+          <ReviewGrid
+            userName="Mike Johnson"
+            service="Programming"
+            rating={75}
+            content="Good experience, would use again."
+          />
+        </Grid>
+      </Grid>
       </div>
+
       <div class="grid-container">
           <div class="grid-item">
             <p className='item-text'>
@@ -88,19 +150,6 @@ const Profile = () => {
       </div>
     </div>
   );
-};
-
-const getColorForSkill = (skill) => {
-  switch (skill) {
-    case 'React':
-      return 'red';
-    case 'JavaScript':
-      return 'yellow';
-    case 'CSS':
-      return 'green';
-    default:
-      return 'black';
-  }
 };
 
 export default Profile;

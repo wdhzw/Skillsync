@@ -134,3 +134,9 @@ button:hover {
     margin-top: 15px;
     vertical-align: middle;
   }
+
+  .box {
+    background-color: #56c54a;
+    border-radius: 10px;
+    padding: 20px;
+  }
