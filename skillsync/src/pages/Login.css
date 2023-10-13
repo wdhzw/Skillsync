@@ -10,11 +10,11 @@
     margin-left: 17%;
 }
 
-img {
-    width: 100px; 
-    height: 75px; 
-    margin: none;
+.whole {
+    display: flex;
+    flex-direction: row;
 }
+
   
 strong {
     display: inline-block;
@@ -31,6 +31,7 @@ h3{
     margin-top: 1px;
     margin-bottom: 5px;
 }
+
 p {
     margin: 5px 0; 
     font-size: smaller;
@@ -72,6 +73,11 @@ button,input[type=file]::file-selector-button  {
   border-radius: 10px;
 }
 
+img {
+    width: 50px;
+    height: 50px;
+}
+
 button[type="plus"]  {
     display: flex;
     flex-shrink: 0;
@@ -105,3 +111,26 @@ button:hover {
 .login-wrapper a{
     color: grey;
 }
+
+.grid-container {
+    display: flex;
+    margin-top: 80px;
+  }
+  
+.grid-item {
+    width: 150px; 
+    height: 75px; 
+    background-color: rgba(255, 255, 255, 0.877);
+    border: 1px solid #ccc; 
+    border-radius: 10px;
+    margin-right: 10px;
+    box-shadow: 5px 0px 5px rgba(0, 0, 0, 0.1), 0px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+.item-text {
+    font-family: Arial, sans-serif; 
+    font-size: 18px; 
+    text-align: center;
+    margin-top: 15px;
+    vertical-align: middle;
+  }
