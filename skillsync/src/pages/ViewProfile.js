@@ -64,6 +64,9 @@ const Profile = () => {
           {user.neighborhood}
           <MapContainer/>
         </div>
+        <br/>
+        <h3>Reviews</h3>
+        
       </div>
       <div class="grid-container">
           <div class="grid-item">

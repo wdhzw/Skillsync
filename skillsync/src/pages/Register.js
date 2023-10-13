@@ -49,6 +49,18 @@ export default function Register() {
             </div>
             <button type="plus">+</button>
         </label>
+        <label type="select">
+            <p>Interested skills</p>
+            <div>
+                <select id="skill" class = "skill" name="skill" type ="horizontal">
+                    <option value="badminton">badminton</option>
+                    <option value="tennis">tennis</option>
+                    <option value="basketball">basketball</option>
+                    <option value="Programming">Programming</option>
+                </select>
+            </div>
+            <button type="plus">+</button>
+        </label>
 
         <label htmlFor="postalCode">
             <p>Postal Code</p>
