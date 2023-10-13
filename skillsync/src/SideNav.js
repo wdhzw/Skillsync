@@ -22,6 +22,9 @@ const SideNav = () => {
           <Link to="/SkillList" className="nav-link">
             <ListAltIcon className="icon"/>
             Skills</Link>
+          <Link to="/SkillDetails" className="nav-link">
+            <ListAltIcon className="icon"/>
+            Skills</Link>
           <Link to="/UserList" className="nav-link">
             <PeopleIcon className="icon"/>
             Users</Link>
