@@ -1,26 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Login.css';
-import SideNav from '../SideNav';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  return(
-    
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (username === "admin" && password === "admin123") {
+      navigate("/UserList"); 
+    } else {
+      navigate("/ViewProfile"); 
+    }
+  }
+
+  return (
     <div className="login-wrapper">
-      <SideNav/>
       <h1>Welcome to SkillSync!</h1>
-      <form>
+      <form onSubmit={handleLogin}>
         <label>
           <p>Username</p>
-          <input type="text" placeholder='Enter username here' required/>
+          <input 
+            type="text" 
+            placeholder='Enter username here' 
+            required
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </label>
         <label>
           <p>Password</p>
-          <input type="password" placeholder='Enter password here' required/>
+          <input 
+            type="password" 
+            placeholder='Enter password here' 
+            required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </label>
         <div>
           <button type="submit">Log in</button>
-        </div><br/>
-        <a type="link" href = "/register">Doesn't have an account? Sign up here</a>
+        </div>
+        <br/>
+        <Link to="/Register">Doesn't have an account? Sign up here</Link>
       </form>
     </div>
   )
