@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import './Chats.css'; 
-
+import './Chats.css';
 
 const conversations = [
     {id: 1, name: "John Doe", profileImage: "/images/john-doe.png"},
@@ -11,6 +10,7 @@ const Chats = () => {
     const [selectedChat, setSelectedChat] = useState(conversations[0].id);
     const [messages, setMessages] = useState({});
     const [currentMessage, setCurrentMessage] = useState("");
+    const [searchTerm, setSearchTerm] = useState("");
 
     const handleSendMessage = () => {
         if (!selectedChat) return;
@@ -29,7 +29,15 @@ const Chats = () => {
     return (
         <div className="chat-container">
             <div className="conversations-list">
-                {conversations.map(conversation => (
+                <div className="search-bar">
+                    <input 
+                        type="text" 
+                        placeholder="Search..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                </div>
+                {conversations.filter(convo => convo.name.toLowerCase().includes(searchTerm.toLowerCase())).map(conversation => (
                     <div 
                         key={conversation.id} 
                         className={`conversation-item ${selectedChat === conversation.id ? 'active' : ''}`}
@@ -38,16 +46,15 @@ const Chats = () => {
                             setCurrentMessage("");
                         }}
                     >
-                        <img src={conversation.profileImage} alt={conversation.name} className="small-profile-img" />
+                        <img src={conversation.profileImage} className="small-profile-img" alt={conversation.name} />
                         {conversation.name}
                     </div>
                 ))}
             </div>
 
-
             <div className="chat-content">
                 <div className="chat-header">
-                    <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"}  className="profile-img"/>
+                    <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"}  className="profile-img" alt="profile" />
                     {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
                     <button className="block-btn">Block User</button>
                 </div>
