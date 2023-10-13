@@ -1,9 +1,11 @@
 import React from 'react';
+import {Link, useMatch, useResolvedPath} from "react-router-dom";
 import pic from '../pic.jpg';
 import './Login.css';
 import MapContainer from './MapContainer';
 import GradeIcon from '@mui/icons-material/Grade';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import EditProfile from './EditProfile';
 
 import { Box, Typography, Grid, Slider } from '@mui/material';
 
@@ -64,89 +66,112 @@ const Profile = () => {
   };
 
   return (
-    <div className='whole'>
-      <div className="register-wrapper">
-        <h1>Welcome to SkillSync!</h1>
-        <h3>Profile</h3>
-        <div>
-          <strong>Username: </strong>
-          {user.username}
-        </div>
-        <div>
-          <strong>Gender: </strong>
-          {user.gender}
-        </div>
-        <div>
-          <strong>Age: </strong>
-          {user.age}
-        </div>
-        <div>
-          <strong>Avatar: </strong>
-          <img src={pic} className="App-logo" alt="logo" /> </div>
-        <div>
-          <strong>Skills: </strong>
+    <div>
+      <div className='whole'>
+        <div className="register-wrapper">
+          <h1>Welcome to SkillSync!</h1>
+          <h3>Profile</h3>
           <div>
-            {user.skills.map((skill, index) => (
-              <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
-                {skill}
-              </div>
-            ))}
+            <strong>Username: </strong>
+            {user.username}
           </div>
+          <div>
+            <strong>Gender: </strong>
+            {user.gender}
+          </div>
+          <div>
+            <strong>Age: </strong>
+            {user.age}
+          </div>
+          <div>
+            <strong>Avatar: </strong>
+            <img src={pic} className="App-logo" alt="logo" /> </div>
+          <div>
+            <strong>Skills: </strong>
+            <div>
+              {user.skills.map((skill, index) => (
+                <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
+                  {skill}
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <strong>Neighborhood: </strong>
+            {user.neighborhood}
+            <MapContainer/>
+          </div>
+
+          <br/>
+          <h3>Reviews</h3>
         </div>
         
-        <div>
-          <strong>Neighborhood: </strong>
-          {user.neighborhood}
-          <MapContainer/>
+        <div class="grid-container">
+            <div class="grid-item">
+              <p className='item-text'>
+              <GradeIcon className='icon'/>
+                Rating:<br/> 
+                7/10
+              </p>
+          </div>
         </div>
-
-        <br/>
-        <h3>Reviews</h3>
+        <div class="grid-container">
+            <div class="grid-item">
+              <p className='item-text'>
+              <ThumbUpIcon className='icon'/>
+                Match:<br/> 
+                16 times
+              </p>
+          </div>
+        </div>
+{/* 
+        <div class="grid-container">
+            <div class="grid-item">
+              <p className='item-text'>
+              <GradeIcon className='icon'/>
+                Rating:<br/> 
+                7/10
+              </p>
+          </div>
+        </div>
+        <div class="grid-container">
+            <div class="grid-item">
+              <p className='item-text'>
+              <ThumbUpIcon className='icon'/>
+                Match:<br/> 
+                16 times
+              </p>
+          </div>
+        </div> */}
+      </div>
+      <div className='grid'>
         <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4} className='grid'>
-          <ReviewGrid
-            userName="John Doe"
-            service="Basketball"
-            rating={60}
-            content="This is a great service! I highly recommend it."
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} className='grid'>
-          <ReviewGrid
-            userName="Alice Smith"
-            service="Badminton"
-            rating={85}
-            content="Excellent service and very professional."
-          />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} className='grid'>
-          <ReviewGrid
-            userName="Mike Johnson"
-            service="Programming"
-            rating={75}
-            content="Good experience, would use again."
-          />
-        </Grid>
-      </Grid>
-      </div>
-
-      <div class="grid-container">
-          <div class="grid-item">
-            <p className='item-text'>
-            <GradeIcon className='icon'/>
-              Rating:<br/> 
-              7/10
-            </p>
-        </div>
-      </div>
-      <div class="grid-container">
-          <div class="grid-item">
-            <p className='item-text'>
-            <ThumbUpIcon className='icon'/>
-              Match:<br/> 
-              16 times
-            </p>
-        </div>
+            <Grid item xs={12} sm={6} md={4} className='grid'>
+              <ReviewGrid
+                userName="John Doe"
+                service="Basketball"
+                rating={60}
+                content="This is a great service! I highly recommend it."
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} className='grid'>
+              <ReviewGrid
+                userName="Alice Smith"
+                service="Badminton"
+                rating={85}
+                content="Excellent service and very professional."
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} className='grid'>
+              <ReviewGrid
+                userName="Mike Johnson"
+                service="Programming"
+                rating={75}
+                content="Good experience, would use again."
+              />
+            </Grid>
+          </Grid>
       </div>
     </div>
   );

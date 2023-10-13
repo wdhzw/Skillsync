@@ -12,6 +12,7 @@ import SkillList from './pages/SkillList';
 import Invitations from './pages/Invitations';
 import Chats from './pages/Chats';
 import SkillDetails from './pages/SkillDetails';
+import EditProfile from './pages/EditProfile';
 
 
 import {
@@ -38,6 +39,7 @@ function App() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/ViewProfile" element={<ViewProfile />} />
+          <Route path="/EditProfile" element={<EditProfile />} />
           <Route path="/Chats" element={<Chats />} />
         </Routes>
         <SideNav />
