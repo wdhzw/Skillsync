@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import './Chats.css';
+import '../Modal.css';
 
 const conversations = [
     {id: 1, name: "John Doe", profileImage: "/images/john-doe.png"},
@@ -40,32 +41,48 @@ const sampleMessages = {
 const Chats = () => {
     const [selectedChat, setSelectedChat] = useState(conversations[0].id);
     const [messages, setMessages] = useState(sampleMessages);
-
     const [currentMessage, setCurrentMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
+    const [isBlocked, setIsBlocked] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+
+    const handleBlock = () => {
+        setShowModal(true);
+    }
+
+    const confirmBlock = () => {
+        setIsBlocked(true);
+        setShowModal(false);
+    }
 
     const handleSendMessage = () => {
-        if (!selectedChat) return;
-    
+        if (!currentMessage || !selectedChat || isBlocked) return;
+
         const newMessage = {
-            senderId: 2, // or whatever the current user's ID is
+            senderId: 2,
             timestamp: new Date(),
             text: currentMessage
         };
-    
+
         setMessages(prevMessages => ({
             ...prevMessages,
-            [selectedChat]: [
-                ...(prevMessages[selectedChat] || []),
-                newMessage
-            ]
+            [selectedChat]: [...(prevMessages[selectedChat] || []), newMessage]
         }));
-    
+
         setCurrentMessage("");
     };
 
     return (
         <div className="chat-container">
+            {showModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <p>Are you sure you want to block this user?</p>
+                        <button className="confirm-btn" onClick={confirmBlock}>Yes</button>
+                        <button className="cancel-btn" onClick={() => setShowModal(false)}>No</button>
+                    </div>
+                </div>
+            )}
             <div className="conversations-list">
                 <div className="search-bar">
                     <input 
@@ -92,9 +109,9 @@ const Chats = () => {
 
             <div className="chat-content">
                 <div className="chat-header">
-                    <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"}  className="profile-img" alt="profile" />
+                    <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"} className="profile-img" alt="profile" />
                     {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
-                    <button className="block-btn">Block User</button>
+                    <button onClick={handleBlock} className="block-btn">Block User</button>
                 </div>
                 <div className="chat-body">
                     {(messages[selectedChat] || []).map((message, idx) => (
@@ -103,8 +120,6 @@ const Chats = () => {
                         </div>
                     ))}
                 </div>
-
-
                 <div className="chat-input">
                     <input 
                         type="text" 
@@ -112,11 +127,11 @@ const Chats = () => {
                         value={currentMessage}
                         onChange={(e) => setCurrentMessage(e.target.value)}
                     />
-                    <button onClick={handleSendMessage} disabled={!currentMessage || !selectedChat}>Send</button>
+                    <button onClick={handleSendMessage} disabled={!currentMessage || !selectedChat || isBlocked}>Send</button>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
 export default Chats;
