@@ -1,4 +1,5 @@
 import {Link, useMatch, useResolvedPath} from "react-router-dom";
+import PortraitIcon from '@mui/icons-material/Portrait';
 
 export default function Navbar() {
     return (
@@ -8,6 +9,7 @@ export default function Navbar() {
             </a>
             <ul>
                 <li>
+                    <PortraitIcon className="icon"/>
                     <Link to="/ViewProfile" className="nav-link">ViewProfile</Link>
                 </li>
             </ul>
