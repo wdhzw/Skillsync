@@ -1,14 +1,30 @@
 import React, { useState } from "react";
 import './Chats.css'; 
 
-const Chats = () => {
-    const [selectedChat, setSelectedChat] = useState(null);
 
-    const conversations = [
-        {id: 1, name: "John Doe", profileImage: "/path/to/image1.jpg"},
-        {id: 2, name: "Jane Smith", profileImage: "/path/to/image2.jpg"},
-        // Add more conversations with profileImage path as needed
-    ];
+const conversations = [
+    {id: 1, name: "John Doe", profileImage: "/images/john-doe.png"},
+    {id: 2, name: "Jane Smith", profileImage: "/images/jane-smith.png"},
+];
+
+const Chats = () => {
+    const [selectedChat, setSelectedChat] = useState(conversations[0].id);
+    const [messages, setMessages] = useState({});
+    const [currentMessage, setCurrentMessage] = useState("");
+
+    const handleSendMessage = () => {
+        if (!selectedChat) return;
+
+        setMessages(prevMessages => ({
+            ...prevMessages,
+            [selectedChat]: [
+                ...(prevMessages[selectedChat] || []),
+                currentMessage
+            ]
+        }));
+
+        setCurrentMessage("");
+    };
 
     return (
         <div className="chat-container">
@@ -17,25 +33,39 @@ const Chats = () => {
                     <div 
                         key={conversation.id} 
                         className={`conversation-item ${selectedChat === conversation.id ? 'active' : ''}`}
-                        onClick={() => setSelectedChat(conversation.id)}
+                        onClick={() => {
+                            setSelectedChat(conversation.id);
+                            setCurrentMessage("");
+                        }}
                     >
+                        <img src={conversation.profileImage} alt={conversation.name} className="small-profile-img" />
                         {conversation.name}
                     </div>
                 ))}
             </div>
 
+
             <div className="chat-content">
                 <div className="chat-header">
                     <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"}  className="profile-img"/>
-                    Chat with {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
+                    {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
                     <button className="block-btn">Block User</button>
                 </div>
                 <div className="chat-body">
-                    {/* Messages for the selected chat go here */}
+                    {(messages[selectedChat] || []).map((message, idx) => (
+                        <div key={idx} className="message user">
+                            {message}
+                        </div>
+                    ))}
                 </div>
                 <div className="chat-input">
-                    <input type="text" placeholder="Type a message..."/>
-                    <button>Send</button>
+                    <input 
+                        type="text" 
+                        placeholder="Type a message..."
+                        value={currentMessage}
+                        onChange={(e) => setCurrentMessage(e.target.value)}
+                    />
+                    <button onClick={handleSendMessage} disabled={!currentMessage || !selectedChat}>Send</button>
                 </div>
             </div>
         </div>
