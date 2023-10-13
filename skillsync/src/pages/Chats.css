@@ -18,30 +18,48 @@ body {
 
 .conversations-list {
     width: 250px;
-    border-right: 1px solid rgb(2, 2, 58);
+    background-color: #FFFFFF;
     overflow-y: auto;
-    background: linear-gradient(to bottom, #929292, #7b7b7b); /* Neutral gradient */
+}
+
+/* Chat List */
+.conversations-list {
+    width: 250px;
+    background-color: #FFFFFF;
+    overflow-y: auto;
 }
 
 .conversation-item {
-    padding: 10px 20px;  /* Adjusted padding */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 10px 20px;
     cursor: pointer;
     transition: background-color 0.3s;
     font-weight: 500;
-    color: white;
-    display: flex;  /* Flexbox to align items center */
-    align-items: center; /* Align items vertically in the center */
+    color: #000000;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E0E0E0; /* Light gray separator */
+    border-radius: 8px;
 }
 
-
 .conversation-item:hover {
-    background-color: rgb(2, 2, 58,0.7);
+    background-color: #F2F2F7; /* Light gray background on hover */
 }
 
 .conversation-item.active {
-    background-color: rgb(2, 2, 58,0.7);
-    color: #EEE;
+    background-color: #E5E5EA; /* Slightly darker gray for the active chat */
+    font-weight: bold;
+}
+
+/* Chat Header */
+.chat-header {
+    padding: 15px 25px;
+    background-color: #FFFFFF;
+    font-weight: bold;
+    font-size: 1.1em;
+    color: #000000;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E0E0E0; /* Light gray separator */
 }
 
 .chat-content {
@@ -51,16 +69,13 @@ body {
     border-left: 1px solid rgba(255, 255, 255, 0.1); /* subtle border between chat list and chat content */
 }
 
-.chat-header {
-    padding: 15px 25px;  /* Increased padding slightly */
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    background: #868686;
-    font-weight: bold;
-    font-size: 1.1em;
-    color: white;
+.profile-container {  /* New class to wrap the profile image and user name */
     display: flex;
-    justify-content: space-between;
     align-items: center;
+}
+
+.profile-name {  /* New class for user name styling */
+    margin-right: 10px;
 }
 
 .profile-img {
@@ -71,6 +86,22 @@ body {
     box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
     object-fit: cover; /* ensures the image fits properly */
 }
+
+.block-btn {
+    padding: 8px 16px;
+    background-color: #868686;  
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 0.9em;
+    margin-left: auto;  /* Pushes the block button to the rightmost part */
+}
+
+.block-btn:hover {
+    background-color:rgba(2, 2, 58);
+}
+
 
 .small-profile-img {
     width: 30px;
@@ -83,28 +114,18 @@ body {
 }
 
 
-.block-btn {
-    padding: 8px 16px;
-    background-color: rgba(2, 2, 58);
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    color: white;
-    font-size: 0.9em;
-}
-
-.block-btn:hover {
-    background-color: darkblue;
-}
-
 .chat-body {
-    flex: 1;
-    padding: 25px;  /* Increased padding slightly */
-    overflow-y: auto;
+    flex: 1; /* This allows the chat body to grow and fill the available space */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* This will let the chat body scroll if there's more content than space available */
+    padding: 15px 25px; /* Optional: for some spacing around the messages */
 }
+
+
 
 .chat-input {
-    padding: 15px 25px;  /* Increased padding slightly */
+    padding: 15px 25px;
     background-color: white;
     border-top: 2px solid rgba(2, 2, 58, 0.1);
     display: flex;
@@ -113,21 +134,25 @@ body {
 
 .chat-input input[type="text"] {
     flex: 1;
-    padding: 10px 20px;
-    border-radius: 25px;  /* Rounded corners for a modern look */
+    height: 40px; /* Set an explicit height */
+    padding: 15px 20px; /* Adjusted vertical padding */
+    border-radius: 25px;
     border: 1px solid rgba(2, 2, 58, 0.5);
     margin-right: 15px;
     outline: none;
 }
 
 .chat-input button {
+    height: 40px; /* Same height as the input */
     background-color: rgba(2, 2, 58);
     color: white;
-    padding: 10px 20px;
+    padding: 0px 20px; /* Adjusted vertical padding */
     border: none;
-    border-radius: 25px;  /* Rounded corners for a modern look */
+    border-radius: 25px;
     cursor: pointer;
     font-size: 1em;
+    line-height: 40px; /* To vertically center the text */
+    margin-bottom:10px;
 }
 
 .chat-input button:hover {
@@ -140,6 +165,7 @@ body {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+
 .search-bar input[type="text"] {
     width: 100%;
     padding: 10px;
@@ -149,3 +175,26 @@ body {
     outline: none;
     box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
 }
+/* Existing styles, just for context */
+.message {
+    padding: 10px;
+    border-radius: 10px;
+    margin: 5px 0;
+}
+
+.message.user {
+    background-color: #f1f1f1; /* Light gray for illustration, adjust as needed */
+    align-self: flex-start;  /* Aligns the message to the left */
+    margin-right: auto;
+    margin-left: 20px;      /* Some space from the left for aesthetics */
+}
+
+
+.message.self {
+    background-color: #007AFF; 
+    color: white;
+    align-self: flex-end;   
+    margin-left: auto;
+    margin-right: 20px;   
+}
+
