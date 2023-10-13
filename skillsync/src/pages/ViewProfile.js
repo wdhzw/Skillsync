@@ -65,6 +65,8 @@ const Profile = () => {
     );
   };
 
+  const isCurrentUser = user.username === user.username;
+
   return (
     <div>
       <div className='whole'>
@@ -125,6 +127,12 @@ const Profile = () => {
               </p>
           </div>
         </div>
+        
+        {isCurrentUser ? (
+        <button type='edit'><Link to="/EditProfile" className="button-link">Edit</Link></button>
+      ) : (
+        <button>Invite</button>
+      )}
 {/* 
         <div class="grid-container">
             <div class="grid-item">
