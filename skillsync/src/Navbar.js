@@ -1,5 +1,6 @@
 import {Link, useMatch, useResolvedPath} from "react-router-dom";
 import PortraitIcon from '@mui/icons-material/Portrait';
+import './Navbar.css'; 
 
 export default function Navbar() {
     return (

@@ -1,10 +1,32 @@
 .skilllist-wrapper {
   display: flex;
   flex-direction: column;
-  margin-left: 15%;
+  margin-left: 17%;
   margin-right: 5%;
-
+  margin-bottom: 30px; 
 }
+
+
+h1 {
+  text-decoration: underline;
+  margin-bottom: 5px;
+}
+
+h3 {
+  margin-top: 1px;
+  margin-bottom: 5px;
+}
+
+input {
+  display: flex;
+  background-color: #eee; 
+  border: 1px solid #ccc; 
+  padding: 8px;
+  width: 300px; 
+  border-radius: 10px; 
+  margin-bottom: 10px;
+}
+
 
 .skill-grid {
     display: grid;
@@ -14,12 +36,18 @@
     padding: 0;
   }
    
-  .skill-grid-item {
+.skill-grid-item {
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 10px;
     padding: 16px;
     background-color: white;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.skill-grid-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transform: scale(1.02); 
 }
 
 
