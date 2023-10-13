@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import '../pages/SkillDetails.css'; 
 import SideNav from '../SideNav.js';
+import CourseItem from '../components/CourseItem.js';
 import UserItem from '../components/UserItem.js';
+
+
 //import axios from "axios";
 
 
@@ -76,6 +79,14 @@ const userswithskill = [
 
 */
 
+const courses = [ 
+  {id: 1, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
+  {id: 2, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
+  {id: 3, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
+  {id: 4, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
+  {id: 5, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
+];
+
       return (
         <div className="skills-wrapper">
         <SideNav/>
@@ -103,6 +114,15 @@ const userswithskill = [
           <div className="skillsfuture">
           <p>External data pulled from SkillsFuture</p>
 
+          <div className="courses-grid">
+            {
+              courses.map(function(course) {
+                return (
+                    <CourseItem course={course} />
+                );
+              })
+            }
+          </div>
 
           </div>
 
