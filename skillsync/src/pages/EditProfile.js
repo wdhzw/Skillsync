@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import pic from '../pic.jpg';
 
 const EditProfile = () => {
   const [user, setUser] = useState({
@@ -6,6 +7,7 @@ const EditProfile = () => {
     gender: 'Male',
     age: '21',
     skills: ['React', 'JavaScript', 'CSS'],
+    interested:['Swimming','Soccer'],
     neighborhood: 'Sample Neighborhood',
     avatarUrl: '',
   });
@@ -73,10 +75,32 @@ const EditProfile = () => {
           ))}
         </div>
       </div>
+      
+      <div>
+        <strong>Interests: </strong>
+        <div>
+          {user.interested.map((skill, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: getColorForSkill(skill),
+                color: 'white',
+                padding: '4px',
+                margin: '2px',
+                display: 'inline-block',
+                borderRadius: '4px',
+              }}
+            >
+              {skill}
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div>
         <strong>Avatar: </strong>
-        <img src={user.avatarUrl} className="App-logo" alt="logo" />
+        <img src={pic} className="App-logo" alt="logo" />
+        <input type="file" id="avatar" name="avatar"/>
       </div>
       <div>
         <strong>Neighborhood: </strong>

@@ -90,6 +90,7 @@ button[type="edit"]{
 img {
     width: 50px;
     height: 50px;
+    margin-right: 20px;
 }
 
 button[type="plus"]{

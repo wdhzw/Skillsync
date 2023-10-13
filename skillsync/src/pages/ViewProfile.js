@@ -15,6 +15,7 @@ const Profile = () => {
     gender: 'Male',
     age: '21',
     skills: ['React', 'JavaScript', 'CSS'],
+    interested:['Swimming','Soccer'],
     neighborhood: 'Sample Neighborhood',
     avatarUrl: '',
 };
@@ -27,7 +28,7 @@ const Profile = () => {
       case 'CSS':
         return { backgroundColor: 'green', color: 'white' };
       default:
-        return {};
+        return {backgroundColor: 'grey', color: 'white' };
     }
   };
 
@@ -87,11 +88,22 @@ const Profile = () => {
           </div>
           <div>
             <strong>Avatar: </strong>
-            <img src={pic} className="App-logo" alt="logo" /> </div>
+            <img src={pic} className="App-logo" alt="logo" /> <br />
+          </div>
           <div>
-            <strong>Skills: </strong>
+            <strong>My Skills: </strong>
             <div>
               {user.skills.map((skill, index) => (
+                <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
+                  {skill}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div>
+            <strong>Interests: </strong>
+            <div>
+              {user.interested.map((skill, index) => (
                 <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
                   {skill}
                 </div>
