@@ -3,31 +3,6 @@
   flex-direction: column;
   margin-left: 17%;
   margin-right: 5%;
-<<<<<<< HEAD
-=======
-  margin-bottom: 30px; 
-}
-
-
-h1 {
-  text-decoration: underline;
-  margin-bottom: 5px;
-}
-
-h3 {
-  margin-top: 1px;
-  margin-bottom: 5px;
-}
-
-input {
-  display: flex;
-  background-color: #eee; 
-  border: 1px solid #ccc; 
-  padding: 8px;
-  width: 300px; 
-  border-radius: 10px; 
-  margin-bottom: 10px;
->>>>>>> 617b3f438f4dddf1ab501ed9bb3a2ae4e1a07683
 }
 
 
@@ -86,5 +61,19 @@ input {
 }
 
 .skill-grid-item button {
+  background-color: rgb(2, 2, 58);
+  color: #fff; 
+  border: none; 
+  padding: 8px 12px; 
   margin-right: 5px;
+  cursor: pointer; 
+  transition: background-color 0.3s ease; 
+}
+
+.skill-grid-item button:hover {
+  background-color: rgb(32, 32, 88); 
+}
+
+.skill-grid-item button:active {
+  background-color: rgb(0, 0, 48); 
 }
