@@ -6,6 +6,7 @@ const conversations = [
     {id: 1, name: "John Doe", profileImage: "/images/john-doe.png"},
     {id: 2, name: "Jane Smith", profileImage: "/images/jane-smith.png"},
 ];
+
 const sampleMessages = {
     1: [ // Messages for conversation with John Doe (id: 1)
         {
@@ -43,20 +44,24 @@ const Chats = () => {
     const [messages, setMessages] = useState(sampleMessages);
     const [currentMessage, setCurrentMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [isBlocked, setIsBlocked] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [blockedUsers, setBlockedUsers] = useState([]);
 
     const handleBlock = () => {
-        setShowModal(true);
+        if (blockedUsers.includes(selectedChat)) {
+            setBlockedUsers(blockedUsers.filter(id => id !== selectedChat));
+        } else {
+            setShowModal(true);
+        }
     }
 
     const confirmBlock = () => {
-        setIsBlocked(true);
+        setBlockedUsers([...blockedUsers, selectedChat]);
         setShowModal(false);
     }
 
     const handleSendMessage = () => {
-        if (!currentMessage || !selectedChat || isBlocked) return;
+        if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat)) return;
 
         const newMessage = {
             senderId: 2,
@@ -83,6 +88,7 @@ const Chats = () => {
                     </div>
                 </div>
             )}
+
             <div className="conversations-list">
                 <div className="search-bar">
                     <input 
@@ -111,14 +117,22 @@ const Chats = () => {
                 <div className="chat-header">
                     <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"} className="profile-img" alt="profile" />
                     {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
-                    <button onClick={handleBlock} className="block-btn">Block User</button>
+                    <button onClick={handleBlock} className="block-btn">
+                        {blockedUsers.includes(selectedChat) ? 'Unblock User' : 'Block User'}
+                    </button>
                 </div>
                 <div className="chat-body">
-                    {(messages[selectedChat] || []).map((message, idx) => (
-                        <div key={idx} className={`message ${message.senderId === 2 ? 'self' : 'user'}`}>
-                            {message.text}
+                    {blockedUsers.includes(selectedChat) ? (
+                        <div className="blocked-message">
+                            You have blocked this user. To view messages and interact, unblock them.
                         </div>
-                    ))}
+                    ) : (
+                        (messages[selectedChat] || []).map((message, idx) => (
+                            <div key={idx} className={`message ${message.senderId === 2 ? 'self' : 'user'}`}>
+                                {message.text}
+                            </div>
+                        ))
+                    )}
                 </div>
                 <div className="chat-input">
                     <input 
@@ -127,7 +141,7 @@ const Chats = () => {
                         value={currentMessage}
                         onChange={(e) => setCurrentMessage(e.target.value)}
                     />
-                    <button onClick={handleSendMessage} disabled={!currentMessage || !selectedChat || isBlocked}>Send</button>
+                    <button onClick={handleSendMessage} disabled={!currentMessage || !selectedChat || blockedUsers.includes(selectedChat)}>Send</button>
                 </div>
             </div>
         </div>
