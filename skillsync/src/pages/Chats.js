@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from 'react-router-dom';
 import './Chats.css';
 import '../Modal.css';
 
@@ -115,7 +116,9 @@ const Chats = () => {
 
             <div className="chat-content">
                 <div className="chat-header">
-                    <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"} className="profile-img" alt="profile" />
+                    <Link to="/ViewProfile">
+                        <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"} className="profile-img" alt="profile" />
+                    </Link>
                     {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
                     <button onClick={handleBlock} className="block-btn">
                         {blockedUsers.includes(selectedChat) ? 'Unblock User' : 'Block User'}
