@@ -22,12 +22,9 @@ import {
   Link
 } from 'react-router-dom';
 
-
-function App() {
+function MainContent() {
   return (
-    <>
-      <Router>
-      <Navbar />
+    <div className="main-content">
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/UserList" element={<UserList />} />
@@ -42,7 +39,19 @@ function App() {
           <Route path="/EditProfile" element={<EditProfile />} />
           <Route path="/Chats" element={<Chats />} />
         </Routes>
-        <SideNav />
+    </div>
+  );
+}
+
+
+
+function App() {
+  return (
+    <>
+      <Router>
+      <Navbar />
+      <MainContent />
+      <SideNav />
       </Router>
 
     </>

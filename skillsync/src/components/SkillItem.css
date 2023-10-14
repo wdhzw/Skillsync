@@ -1,16 +1,19 @@
 .skill-item {
     text-align: center;
+    padding: 16px;
+
   }
    
-  .location-bubble {
-    background-color: purple;
-    color: white;
-    border-radius: 12px;
-    padding: 4px 8px;
-    display: inline-block;
-    margin-top: 8px;
-  }
-  
   .skill-item img {
     border-radius: 50%;
+    width:100px;
+    height:auto;
+    padding-right:0;
+    margin-right:0;
   }
+  
+
+  .skill-item h2 {
+    margin: 5px;
+    padding: 5px;
+}
