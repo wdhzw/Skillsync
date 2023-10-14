@@ -46,3 +46,10 @@
 .cancel-btn:hover {
     background-color: #6a6a6a;
 }
+
+.rating-input {
+    width: 250px;  /* or whatever width you desire */
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}

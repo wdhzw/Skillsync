@@ -41,31 +41,56 @@ const sampleMessages = {
 };
 
 const Chats = () => {
+
     const [selectedChat, setSelectedChat] = useState(conversations[0].id);
     const [messages, setMessages] = useState(sampleMessages);
     const [currentMessage, setCurrentMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
-    const [showModal, setShowModal] = useState(false);
+    const [showBlockModal, setShowBlockModal] = useState(false);
     const [blockedUsers, setBlockedUsers] = useState([]);
+    const [skillSyncingUsers, setSkillSyncingUsers] = useState([]);
+    const [showConfirmSkillSyncModal, setShowConfirmSkillSyncModal] = useState(false);
+    const [showRateModal, setShowRateModal] = useState(false);
+    const [rating, setRating] = useState('');
+    const [comment, setComment] = useState('');
+
+    const handleStartSkillSync = () => {
+        setShowConfirmSkillSyncModal(true);
+    };
+
+    const confirmSkillSync = () => {
+        if (!skillSyncingUsers.includes(selectedChat)) {
+            setSkillSyncingUsers([...skillSyncingUsers, selectedChat]);
+        }
+        setShowConfirmSkillSyncModal(false);
+    };
 
     const handleBlock = () => {
         if (blockedUsers.includes(selectedChat)) {
             setBlockedUsers(blockedUsers.filter(id => id !== selectedChat));
         } else {
-            setShowModal(true);
+            setShowBlockModal(true);
         }
-    }
+    };
 
     const confirmBlock = () => {
         setBlockedUsers([...blockedUsers, selectedChat]);
-        setShowModal(false);
+        setShowBlockModal(false);
     }
+
+    const handleRate = () => {
+        setShowRateModal(true);
+    };
+
+    const submitRating = () => {
+        setShowRateModal(false);
+    };
 
     const handleSendMessage = () => {
         if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat)) return;
 
         const newMessage = {
-            senderId: 2,
+            senderId: 2, // Assuming 2 is your user ID
             timestamp: new Date(),
             text: currentMessage
         };
@@ -77,19 +102,42 @@ const Chats = () => {
 
         setCurrentMessage("");
     };
-
     return (
         <div className="chat-container">
-            {showModal && (
+
+            {showConfirmSkillSyncModal && (
                 <div className="modal">
                     <div className="modal-content">
-                        <p>Are you sure you want to block this user?</p>
-                        <button className="confirm-btn" onClick={confirmBlock}>Yes</button>
-                        <button className="cancel-btn" onClick={() => setShowModal(false)}>No</button>
+                        <p>Are you sure you want to initiate SkillSync with this user?</p>
+                        <button className="confirm-btn" onClick={confirmSkillSync}>Yes</button>
+                        <button className="cancel-btn" onClick={() => setShowConfirmSkillSyncModal(false)}>No</button>
                     </div>
                 </div>
             )}
 
+            {showRateModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <p>Rate this user:</p>
+                        <input type="number" className="rating-input" value={rating} onChange={e => setRating(e.target.value)} min="0" max="5" />
+                        <textarea placeholder="Leave a comment..." value={comment} onChange={e => setComment(e.target.value)} />
+                        <button className="confirm-btn" onClick={submitRating}>Submit Rating</button>
+                        <button className="cancel-btn" onClick={() => setShowRateModal(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
+
+            {showBlockModal && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <p>Are you sure you want to block this user?</p>
+                        <button className="confirm-btn" onClick={confirmBlock}>Yes</button>
+                        <button className="cancel-btn" onClick={() => setShowBlockModal(false)}>No</button>
+                    </div>
+                </div>
+            )}
+    
+            {/* Conversations List */}
             <div className="conversations-list">
                 <div className="search-bar">
                     <input 
@@ -113,17 +161,38 @@ const Chats = () => {
                     </div>
                 ))}
             </div>
-
+    
+            {/* Chat Content */}
             <div className="chat-content">
                 <div className="chat-header">
                     <Link to="/ViewProfile">
                         <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"} className="profile-img" alt="profile" />
                     </Link>
                     {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
+    
+                    {/* SkillSync buttons */}
+                    {!skillSyncingUsers.includes(selectedChat) && (
+                        <button onClick={handleStartSkillSync} className="initiate-exchange-btn">
+                            SkillSync Start
+                        </button>
+                    )}
+                    {skillSyncingUsers.includes(selectedChat) && (
+                        <>
+                            <button onClick={handleRate} className="rate-btn">
+                                Rate
+                            </button>
+                            <button className="skillsyncing-btn">
+                                SkillSyncing
+                            </button>
+                        </>
+                    )}
+
+                    {/* Block user button */}
                     <button onClick={handleBlock} className="block-btn">
                         {blockedUsers.includes(selectedChat) ? 'Unblock User' : 'Block User'}
                     </button>
                 </div>
+    
                 <div className="chat-body">
                     {blockedUsers.includes(selectedChat) ? (
                         <div className="blocked-message">
@@ -137,6 +206,7 @@ const Chats = () => {
                         ))
                     )}
                 </div>
+    
                 <div className="chat-input">
                     <input 
                         type="text" 
@@ -149,6 +219,7 @@ const Chats = () => {
             </div>
         </div>
     );
+    
 }
 
 export default Chats;

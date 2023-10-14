@@ -87,6 +87,28 @@ body {
     object-fit: cover; /* ensures the image fits properly */
 }
 
+.initiate-exchange-btn {
+    padding: 8px 16px;
+    background-color: rgba(2, 2, 58, 0.9);  
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 0.9em;
+    margin-right: 15px; /* Adds space between initiate and block button */
+    margin-left: auto;
+}
+.skillsyncing-btn{
+    padding: 8px 16px;
+    background-color: rgba(2, 2, 58, 0.9);  
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 0.9em;
+    margin-right: 15px; /* Adds space between initiate and block button */
+
+}
 .block-btn {
     padding: 8px 16px;
     background-color: #868686;  
@@ -95,8 +117,21 @@ body {
     cursor: pointer;
     color: white;
     font-size: 0.9em;
-    margin-left: auto;  /* Pushes the block button to the rightmost part */
 }
+
+.rate-btn {
+    padding: 8px 16px;
+    background-color: rgba(2, 2, 58);  /* Yellow color for rating */
+    border: none;   
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+    font-size: 0.9em;
+    margin-left: auto;  /* Pushes all the items to the rightmost part */
+    margin-right: 15px;
+}
+
+
 
 .block-btn:hover {
     background-color:rgba(2, 2, 58);
