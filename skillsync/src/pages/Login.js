@@ -5,17 +5,32 @@ import { Link, useNavigate } from 'react-router-dom';
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [userRole, setUserRole] = useState('user'); // default to 'user'
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
     e.preventDefault();
+  
+    let role; // Define a local variable to determine the user role
+  
     if (username === "admin" && password === "admin123") {
-      navigate("/UserList"); 
+      role = 'admin';
     } else {
-      navigate("/ViewProfile"); 
+      role = 'user';
     }
-  }
-
+  
+    // Now, update the local storage using the local variable
+    localStorage.setItem('userRole', role);
+  
+    // Also, update the state
+    setUserRole(role);
+  
+    if (role === 'admin') {
+      navigate("/UserList");
+    } else {
+      navigate("/ViewProfile");
+    }
+  };
   return (
     <div className="login-wrapper">
       <h1>Welcome to SkillSync!</h1>
