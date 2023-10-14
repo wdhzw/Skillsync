@@ -82,11 +82,15 @@ export default function SkillList() {
 
 function EditModal({ skill, onClose, onSave }) {
     const [name, setName] = useState(skill.name);
+    const [picture, setPicture] = useState(skill.picture);
 
     return (
         <div className="edit-modal">
             <h2>Edit Skill</h2>
+            <label>Name: </label>
             <input value={name} onChange={e => setName(e.target.value)} />
+            <label>Picture URL: </label>
+            <input value={picture} onChange={e => setPicture(e.target.value)} />
             <button onClick={() => onSave(name)}>Save</button>
             <button onClick={onClose}>Cancel</button>
         </div>
