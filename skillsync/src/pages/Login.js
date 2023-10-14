@@ -15,6 +15,7 @@ export default function Login() {
   
     if (username === "admin" && password === "admin123") {
       role = 'admin';
+      alert('Logged in as admin! Redirected to the Users page.'); 
     } else {
       role = 'user';
     }

@@ -3,23 +3,22 @@
   flex-direction: column;
   margin-left: 15%;
   margin-right: 5%;
-
 }
 
 .user-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 19px; 
-    list-style: none;
-    padding: 0;
-  }
-   
-  .user-grid-item {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 16px;
-    background-color: white;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 19px;
+  list-style: none;
+  padding: 0;
+}
+
+.user-grid-item {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 16px;
+  background-color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .sortnfilter {
@@ -33,23 +32,22 @@
   align-items: center;
 }
 
-.filters select,
-.sort select {
-  width: auto; 
+.filters select, .sort select {
+  background-color: #eee;
+  width: auto;
   margin-left: 10px;
+  border-radius: 10px;
 }
 
 .filters label, .sort label {
   margin-right: 10px;
 }
 
-
-.search{
-  text-align: right; 
+.search {
+  text-align: right;
   display: flex;
   justify-content: space-between;
   padding: 10px;
-
 }
 
 .edit-modal {
@@ -78,10 +76,11 @@
 }
 
 .edit-modal input, .edit-modal textarea {
+  background-color: #eee;
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 10px;
   box-sizing: border-box;
   font-size: 1em;
   transition: border-color 0.3s;
@@ -92,16 +91,22 @@
   outline: none;
 }
 
-.edit-modal button {
-  margin-top: 15px;
-  padding: 10px 15px;
+button, .edit-modal button, .user-grid-item button.edit {
+  background-color: rgb(2, 2, 58);
+  color: white;
+  padding: 7px 10px;
   border: none;
-  background-color: #007BFF;
-  color: #fff;
-  border-radius: 4px;
   cursor: pointer;
+  border-radius: 10px;
   transition: background-color 0.3s;
 }
+
+button:hover, .edit-modal button:hover, .user-grid-item button.edit:hover {
+  background-color: darkblue;
+}
+
+/* ... rest of your styles remain unchanged ... */
+
 
 .user-grid-item button.edit {
   margin-right: 5px;
