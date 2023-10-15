@@ -7,14 +7,19 @@ export default function UserList() {
     const [users, setUsers] = useState([ 
       {id: 1, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
       {id: 2, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 3, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 4, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 5, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 6, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 7, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 8, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 9, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
+      {id: 3, name: 'John Ng', location:'Paya Lebar',noofskills:8,picture:'/images/avatar.png',skills:['javascript','golf','cooking','database design','French']},
+      {id: 4, name: 'Mary Lim', location:'Paya Lebar',noofskills:8,picture:'/images/avatar.png',skills:['javascript','golf','cooking','database design','French']},
+      {id: 5, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['java','golf','cooking','database design','French']},
+      {id: 6, name: 'Mary Lim', location:'Thompson',noofskills:8,picture:'/images/avatar.png',skills:['java','golf','cooking','database design','French']},
+      {id: 7, name: 'John Ng', location:'Thompson',noofskills:8,picture:'/images/avatar.png',skills:['c++','golf','cooking','database design','French']},
+      {id: 8, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['c++','golf','cooking','database design','French']},
+      {id: 9, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['c++','golf','cooking','database design','French']},
   ]);
+
+    const [searchTerm, setSearchTerm] = useState('');
+    const [selectedLocation, setSelectedLocation] = useState('');
+    const [selectedSkill, setSelectedSkill] = useState('');
+    
     const [editingUser, setEditingUser] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const userRole = localStorage.getItem('userRole');
@@ -40,18 +45,70 @@ export default function UserList() {
         setIsEditModalOpen(false);
     }
 
+
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    }
+
+    const handleLocationChange = (e) => {
+        setSelectedLocation(e.target.value);
+    }
+
+    const handleSkillChange = (e) => {
+        setSelectedSkill(e.target.value);
+    }
+
+
+
+    const displayedUsers = users.filter(user =>
+        user.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (selectedLocation === '' || user.location === selectedLocation) &&
+        (selectedSkill === '' || user.skills.includes(selectedSkill))
+    );
+
+
+
+
     return (
         <div className="userlist-wrapper">
             <SideNav />
 
             <h1>List of Users</h1>
             <div className="search">
-                <input type="text" placeholder="Search by user name" />
+                <input type="text" placeholder="Search by user name" value={searchTerm} onChange={handleSearchChange}/>
+            </div>
+
+            <div className="sortnfilter">
+                <div className="filters">
+                Filter By:
+                <select value={selectedLocation} onChange={handleLocationChange}>
+                    <option value="">Location</option>
+                    <option value="Hougang">Hougang</option>
+                    <option value="Paya Lebar">Paya Lebar</option>
+                    <option value="Thompson">Thompson</option>
+
+                </select>
+                <select value={selectedSkill} onChange={handleSkillChange}> 
+                    <option value="">Skills to Share</option>
+                    <option value="programming">Programming</option>
+                    <option value="javascript">Javascript</option>
+                    <option value="java">Java</option>
+                    <option value="c++">C++</option>
+
+                </select>
+
+                </div>
+                <div className="sort">
+                Sort By:
+                <select>
+                    <option value="SkillstoShare">No of Skills to Share</option>
+                </select>
+                </div>
             </div>
 
             <div className="user-grid">
                 {
-                    users.map(user => (
+                    displayedUsers.map(user => (
                         <div className="user-grid-item" key={user.id}>
                             <UserItem user={user} />
                             {userRole === 'admin' && (
