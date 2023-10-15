@@ -90,7 +90,7 @@ const Chats = () => {
         if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat)) return;
 
         const newMessage = {
-            senderId: 2, // Assuming 2 is your user ID
+            senderId: 2, // Assuming 2 is the user ID
             timestamp: new Date(),
             text: currentMessage
         };

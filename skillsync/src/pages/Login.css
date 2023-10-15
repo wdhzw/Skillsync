@@ -85,6 +85,7 @@ button[type="edit"]{
     margin-left: 5px;
     margin-top: 80px;
     height: 45px;
+    color: white;
 }
 
 img {
@@ -160,7 +161,7 @@ button:hover {
     margin-left: 17%;
   }
 
-  .button-link {
+  button[type="edit"] .button-link{
     text-decoration: none;
     color: rgb(255, 255, 255);
     font-weight:600;

@@ -240,3 +240,8 @@ body {
     margin: 20px;
     text-align: center;
 }
+
+.timestamp {
+    font-size: 0.7em;
+    color: #888;
+}
