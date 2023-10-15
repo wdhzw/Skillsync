@@ -60,10 +60,10 @@ Discover and showcase skills:
 Connect and communicate with other users:
 - Direct chat functionality.
 - View past chats and continue conversations.
-- Search for user using the search bar on top of the conversation list.
+- Search for user in the conversation list based on username using the search bar on top.
 - Navigate to the user profile page by clicking the small profile image in the chat header.
-- Block/Unblock User by clicking the Block/Unblock button. The user will be be able to view, send or receive the messages from the blocked user.
-- User Can start a SkillSync by click the Start SkillSync button in the chat header, then the button will become SkillSyncing... and a Rate button will show for user to rate others and leave comments.
+- Block/Unblock User by clicking the "Block"/"Unblock" button. The user will be be able to view, send or receive the messages from the blocked user.
+- User can start a SkillSync by click the "Start SkillSync" button in the chat header, then the button will become "SkillSyncing..." and a "Rate" button will show for user to rate others and leave comments.
 
 ## Invitations
 
