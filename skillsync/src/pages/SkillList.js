@@ -25,6 +25,7 @@ export default function SkillList() {
     const [editingSkill, setEditingSkill] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const userRole = localStorage.getItem('userRole');
+    const [searchTerm, setSearchTerm] = useState('');
 
     function handleEditClick(skill) {
         setEditingSkill(skill);
@@ -48,18 +49,27 @@ export default function SkillList() {
         setIsEditModalOpen(false);
     }
 
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
+    }
+
+    const displayedSkills = skills.filter(skill =>
+        skill.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+
+
     return (
         <div className="skilllist-wrapper">
             <SideNav />
 
             <h1>List of Skills</h1>
             <div className="search">
-                <input type="text" placeholder="Search by skill name" />
+                <input type="text" placeholder="Search by skill name" value={searchTerm} onChange={handleSearchChange}/>
             </div>
 
             <div className="skill-grid">
                 {
-                    skills.map(skill => (
+                    displayedSkills.map(skill => (
                         <div className="skill-grid-item" key={skill.id}>
                             <SkillItem skill={skill} />
                             {userRole === 'admin' && (
