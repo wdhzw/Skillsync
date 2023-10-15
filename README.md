@@ -1,7 +1,9 @@
 # course-project-team-13
+
 course-project-team-13 created by GitHub Classroom
 
 ## Please click into the skillsync folder for the project details
+
 # SkillSync
 
 SkillSync is a platform that allows users to showcase their skills, discover new ones, and connect with like-minded individuals.
@@ -38,45 +40,50 @@ Secure access for existing SkillSync members:
 Exclusive access for administrators:
 - Use the username `admin` and password `admin123` for admin access.
 - Upon successful login, an alert message indicates an admin login, and the system automatically navigates to the 'Users' page.
-- Admin privileges allow for the editing and deletion of user profiles and skills in the 'Users' and 'Skills' pages.
-
+- Admin privileges: 
+  - Skill Management: View, edit, and delete skills.
+  - User Management: View, edit (including username, password, gender, age, avatar picture, and neighborhood), reset passwords, delete accounts, and verify user certifications.
 
 ## Users
 
 Explore the SkillSync community:
-- View profiles of users who possess a particular skill.
-- Browse through their skill sets and other details.
+- View and filter profiles of users based on location and skills.
+- Search for users by username.
+- Sort user profiles based on various metrics.
+- View and edit own user profiles, including information like username, password, gender, age, avatar picture, neighborhood, skills, proficiency ratings, certificates, and desired skills.
+- Track successful SkillSync matches and submit reviews.
 
 ## Skills
 
 Discover and showcase skills:
-- Access a comprehensive list of available skills.
-- Efficiently search for specific skills.
-- View detailed information about each skill, including relevant courses and job opportunities.
-- Administrators have the ability to edit or delete skills.
+- Access and search a comprehensive list of available skills.
+- View detailed information about each skill, including skill profile, users with the skill, relevant courses, and job opportunities.
 
 ## Chats
 
 Connect and communicate with other users:
 - Direct chat functionality.
 - View past chats and continue conversations.
-- Search for user in the conversation list based on username using the search bar on top.
-- Navigate to the user profile page by clicking the small profile image in the chat header.
-- Block/Unblock User by clicking the "Block"/"Unblock" button. The user will be be able to view, send or receive the messages from the blocked user.
-- User can start a SkillSync by click the "Start SkillSync" button in the chat header, then the button will become "SkillSyncing..." and a "Rate" button will show for user to rate others and leave comments.
+- Search for user in the conversation list based on username.
+- Navigate to user profiles by clicking the small profile image.
+- Block/Unblock User functionality.
+- Initiate SkillSync and provide ratings/comments for skill exchanges.
 
 ## Invitations
 
 Build your network:
-- Send invitations to users to connect.
-- View and manage received invitations.
+- Send, view, and manage invitations to and from other users.
 - Accept or decline connection requests.
 
 ## Recommended Users
 
 Expand your circle:
-- Browse a curated list of users based on your preferences and interests.
-- Receive suggestions based on mutual skills or complementary skill sets.
+- Browse and receive curated user suggestions based on location, skills, and preferences.
+
+## Integration
+
+- SkillsFuture integration for job or course matches.
+- Google Maps API integration for in-person meetup locations.
 
 ## Getting Started
 
