@@ -173,7 +173,7 @@ const Chats = () => {
                     {/* SkillSync buttons */}
                     {!skillSyncingUsers.includes(selectedChat) && (
                         <button onClick={handleStartSkillSync} className="initiate-exchange-btn">
-                            SkillSync Start
+                            Start SkillSync
                         </button>
                     )}
                     {skillSyncingUsers.includes(selectedChat) && (
