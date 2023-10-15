@@ -1,11 +1,10 @@
 import React from 'react';
-import {Link, useMatch, useResolvedPath} from "react-router-dom";
+import {Link} from "react-router-dom";
 import pic from '../pic.jpg';
 import './Login.css';
 import MapContainer from './MapContainer';
 import GradeIcon from '@mui/icons-material/Grade';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import EditProfile from './EditProfile';
 
 import { Box, Typography, Grid, Slider } from '@mui/material';
 
@@ -141,29 +140,11 @@ const Profile = () => {
         </div>
         
         {isCurrentUser ? (
-        <button type='edit'><Link to="/EditProfile" className="button-link">Edit</Link></button>
+        <button type='btn'><Link to="/EditProfile" className="button-link">Edit</Link></button>
       ) : (
-        <button>Invite</button>
+        <button type='btn'>Invite</button>
       )}
-{/* 
-        <div class="grid-container">
-            <div class="grid-item">
-              <p className='item-text'>
-              <GradeIcon className='icon'/>
-                Rating:<br/> 
-                7/10
-              </p>
-          </div>
-        </div>
-        <div class="grid-container">
-            <div class="grid-item">
-              <p className='item-text'>
-              <ThumbUpIcon className='icon'/>
-                Match:<br/> 
-                16 times
-              </p>
-          </div>
-        </div> */}
+
       </div>
       <div className='grid'>
         <Grid container spacing={2}>
