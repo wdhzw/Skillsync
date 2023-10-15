@@ -18,8 +18,6 @@ SkillSync is a platform that allows users to showcase their skills, discover new
 - [Invitations](#invitations)
 - [Recommended Users](#recommended-users)
 - [Getting Started](#getting-started)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Register
 
