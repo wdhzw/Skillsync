@@ -85,14 +85,3 @@ Expand your circle:
 - SkillsFuture integration for job or course matches.
 - Google Maps API integration for in-person meetup locations.
 
-## Getting Started
-
-*Instructions on how to set up, install, and run the project locally.*
-
-## Contributing
-
-*Details about how others can contribute to this project.*
-
-## License
-
-*Information on the software license.*
