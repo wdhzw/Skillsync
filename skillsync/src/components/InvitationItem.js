@@ -1,6 +1,7 @@
 import React from 'react';
 import './InvitationItem.css';
- 
+import { Link } from 'react-router-dom';
+
 function InvitationItem({ invitation, user, type }) {
     if (!user) {
     return (
@@ -23,7 +24,9 @@ function InvitationItem({ invitation, user, type }) {
                     type === "sentinvitations" ? (
                         <>
                             {invitation.invite_accepted ? (
-                                <button className="chat-button">Start Chat</button>
+                                      <Link to="/Chats">
+                                      <button className="chat-button">Start Chat</button>
+                                      </Link>
                             ) : (
                                 <p>Pending Response</p>
                             )}
@@ -31,8 +34,10 @@ function InvitationItem({ invitation, user, type }) {
                         </>
                     ) : (
                         <>
+                            <Link to="/Chats">
                             <button className="chat-button">Accept Invite</button>
                             <p>Decline Invite</p>
+                            </Link>
                         </>
                     )
                 }
