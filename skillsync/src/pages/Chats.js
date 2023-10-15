@@ -182,7 +182,7 @@ const Chats = () => {
                                 Rate
                             </button>
                             <button className="skillsyncing-btn">
-                                SkillSyncing
+                                SkillSyncing...
                             </button>
                         </>
                     )}

@@ -74,7 +74,7 @@ button,input[type=file]::file-selector-button  {
   border-radius: 10px;
 }
 
-button[type="btn"]{
+button[type="edit"]{
     display: flex;
     flex-shrink: 0;
     background-color: rgb(2, 2, 58);

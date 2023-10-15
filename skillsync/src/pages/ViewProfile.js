@@ -140,9 +140,9 @@ const Profile = () => {
         </div>
         
         {isCurrentUser ? (
-        <button type='btn'><Link to="/EditProfile" className="button-link">Edit</Link></button>
+        <button type='edit'><Link to="/EditProfile" className="button-link">Edit</Link></button>
       ) : (
-        <button type='btn'>Invite</button>
+        <button type='invite'>Invite</button>
       )}
 
       </div>
