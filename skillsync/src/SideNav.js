@@ -7,6 +7,7 @@ import ListAltIcon from '@mui/icons-material/ListAlt';
 import PeopleIcon from '@mui/icons-material/People';
 import ChatIcon from '@mui/icons-material/Chat';
 import InsertInvitationIcon from '@mui/icons-material/InsertInvitation';
+import AssistantIcon from '@mui/icons-material/Assistant';
 
 const SideNav = () => {
     return (
@@ -22,13 +23,13 @@ const SideNav = () => {
           <Link to="/SkillList" className="nav-link">
             <ListAltIcon className="icon"/>
             Skills</Link>
-          <Link to="/SkillDetails" className="nav-link">
-            <ListAltIcon className="icon"/>
-            Individual Skill</Link>
+
           <Link to="/UserList" className="nav-link">
             <PeopleIcon className="icon"/>
             Users</Link>
-          <Link to="/RecUserList" className="nav-link">Recommended Users</Link>
+          <Link to="/RecUserList" className="nav-link">
+            <AssistantIcon className="icon"/>
+            Recommended Users</Link>
           <Link to="/Chats" className="nav-link">
             <ChatIcon className="icon"/>
             Chats</Link>

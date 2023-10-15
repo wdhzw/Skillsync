@@ -85,6 +85,12 @@ button:hover, .edit-modal button:hover, .user-grid-item button.edit:hover {
   background-color: darkblue;
 }
 
+.skill-grid-item:hover {
+  background-color: #f0f0f0;
+  cursor: pointer;
+}
+
+
 .skill-grid-item button {
   background-color: rgb(2, 2, 58);
   color: #fff; 

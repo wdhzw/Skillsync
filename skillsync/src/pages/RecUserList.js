@@ -36,6 +36,7 @@ export default function RecUserList() {
             {
               users.map(function(user) {
                 return (
+                  
                   <div className="user-grid-item">
                     <UserItem user={user} />
                   </div>

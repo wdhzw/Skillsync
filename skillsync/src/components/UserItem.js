@@ -1,8 +1,13 @@
 import React from 'react';
 import './UserItem.css';
- 
+import { Link } from 'react-router-dom';
+
 function UserItem({ user }) {
     return (
+                
+      <div>
+      <Link to="/ViewProfile">
+
       <div className="user-item">
         <img src={user.picture} width="100" height="50"/>
         <h2>{user.name}</h2>
@@ -16,6 +21,10 @@ function UserItem({ user }) {
             </div>
           ))}
         </div>
+        
+
+      </div>
+      </Link>
       </div>
     );
   }
