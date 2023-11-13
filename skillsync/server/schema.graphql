@@ -1,0 +1,65 @@
+type User {
+  id: ID!
+  username: String!
+  password: String!
+  gender: String!
+  email: String!
+  profile: UserProfile
+  suc_match: Int
+  invite_sent: [User]
+  invite_rec: [User]
+  rating: Int
+  review: Review
+}
+
+type UserProfile {
+  age: Int
+  location: String
+  userskill: [Skill]
+  wantedskill: [Skill]
+}
+
+input UserProfileInput {
+  age: Int
+  location: String
+}
+
+type Skill{
+  id: ID!
+  name: String!
+  description: String!
+  proficiency: Int
+  certificate: String!
+  pic: String!
+}
+
+type Review{
+  id: ID!
+  from: User
+  to: User
+  content: String!
+  rating: Int
+skillName: String
+}
+
+## Queries ##
+type Query {
+  #USV related  
+  getUserProfile: User
+   
+  #QSV related
+  getAllQuestions: [Question]
+}
+
+## Mutations ##
+type Mutation {
+  #USV Related  
+  signUpUser(name: String!, email: String!, profile: UserProfileInput!): User
+  updateUserProfile(email: String!, profile: UserProfileInput!): User
+  deregisterUser(email: String!): ID
+  
+  #QSV Related
+  addQuestion(title: String!, description: String!, complexity: String, email: String!): Question
+  deleteQuestion(id: ID!): ID
+  updateQuestion(id: ID!, title: String, description: String, complexity: String): Question
+}
