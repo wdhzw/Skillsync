@@ -83,3 +83,5 @@ Expand your circle:
 - SkillsFuture integration for job or course matches.
 - Google Maps API integration for in-person meetup locations.
 
+## Getting started
+Navigate to the skillsync folder and follow the steps
