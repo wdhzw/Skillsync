@@ -56,10 +56,10 @@ const Register = () => {
     setAge(newValue);
   };
 
-  const handleFormSubmit = (event) => {
+  const handleFormSubmit = async (event) => {
     event.preventDefault();
     validateForm();
-    const registerMutation=`
+    const registerMutation = `
       mutation register($username: String!, $password: String!) {
         register(username:$username, password:$password) {
           username
@@ -72,8 +72,9 @@ const Register = () => {
       password: password,
     };
     console.log(registerData); //success
+    
     try {
-      const data = graphQLFetch(registerMutation, registerData);
+      const data = await graphQLFetch(registerMutation, registerData);
       // this.setState({ user: data.register });
       if(data.register){
         alert("User signed up with username " + username);

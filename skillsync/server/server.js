@@ -34,6 +34,7 @@ const resolvers = {
   Mutation: {
     // User Service (USV) Resolvers
     register: registerResolver,
+    login: loginResolver,
     // updateUserProfile: updateUserProfileResolver,
   }
 };
@@ -42,10 +43,10 @@ const resolvers = {
 async function registerResolver(_, args) 
 {
   try {
-    const { name, password } = args;
-    console.log(name, password);
+    const { username, password } = args;
+    console.log(username, password);
     // Check if the user with the provided name already exists
-    const existingUser = await db.collection('users').findOne({ name });
+    const existingUser = await db.collection('users').findOne({ username });
     
     if (existingUser) {
       throw new Error('User with this username already exists.');
@@ -53,7 +54,7 @@ async function registerResolver(_, args)
 
     // Create a new user document
     const newUser = {
-      name,
+      username,
       password,
       id: await db.collection('users').countDocuments() + 1,
     };
@@ -70,132 +71,28 @@ async function registerResolver(_, args)
   }
 };
 
-async function updateUserProfileResolver(_, args) {
+
+async function loginResolver(_, args) 
+{
   try {
-    const { email, profile } = args;
-    console.log(" email detected is "+ email +" profile is " + profile.age);
+    const { username, password } = args;
+    console.log(username, password);
+    // Check if the user with the provided name already exists
+    const existingUser = await db.collection('users').findOne({ username });
     
-    const existingUser = await db.collection('users').findOne({ email });
-
     if (!existingUser) {
-      throw new Error('User with this email does not exist.');
+      throw new Error('User with this username does not exists.');
     }
-
-    existingUser.profile = profile;
-
-    await db.collection('users').updateOne({ email }, { $set: existingUser });
-
+    if(password != existingUser.password) {
+      existingUser = null;
+      throw new Error('Wrong Password!');
+    }
+    console.log(existingUser);
     return existingUser;
   } catch (error) {
-    throw new Error(`Error updating user profile: ${error.message}`);
+    throw new Error(`Error login user: ${error.message}`);
   }
-}
-
-async function deregisterUserResolver(_, args) {
-  try {
-    const { email } = args;
-
-    const existingUser = await db.collection('users').findOne({ email });
-
-    if (!existingUser) {
-      throw new Error('User with this email does not exist.');
-    }
-
-    await db.collection('users').deleteOne({ email });
-
-    return true;
-  } catch (error) {
-    throw new Error(`Error deregistering user: ${error.message}`);
-  }
-}
-
-async function addQuestionResolver(_, args) {
-  try {
-    const { title,
-      description,
-      complexity,
-      email} = args;
-
-    const questionExists = await db.collection('questions').findOne({ title });
-   
-    if (questionExists) {
-      throw new Error('Question with this title already exists.');
-    }
-
-    let maxId = await db.collection('questions').countDocuments() + 1;
-    let idExists = await db.collection('questions').findOne({ id:Number(maxId) });
-
-    while(idExists) {
-      maxId = maxId + 1;
-      idExists = await db.collection('questions').findOne({ id:Number(maxId) });
-    }
-    const newQuestion = {
-      id: maxId,
-      title,
-      description,
-      complexity,
-      email, // Use the user's email
-    };
-    const result = await db.collection('questions').insertOne(newQuestion);
-
-    const insertedQ = result.ops[0];
-    console.log(insertedQ);
-    return insertedQ;
-  } catch (error) {
-    throw new Error(`Error adding a new question: ${error.message}`);
-  }
-}
-
-async function getAllQuestionsResolver() {
-  try {
-    const questions = await db.collection('questions').find().toArray();
-    console.log("data get success!");
-    return questions;
-  } catch (error) {
-    throw new Error(`Error fetching questions: ${error.message}`);
-  }
-}
-
-async function deleteQuestionResolver(_, args) {
-  try {
-    const { id } = args;
-
-    console.log("id detected is : "+ id);
-
-    const existingQuestion = await db.collection('questions').findOne({ id:Number(id) });
-
-    if (!existingQuestion) {
-      throw new Error('Question with this id does not exist.');
-    }
-    await db.collection('questions').deleteOne({ id:Number(id) });
-    return id;
-  } catch (error) {
-    throw new Error(`Error deleting question: ${error.message}`);
-  }
-}
-
-async function updateQuestionResolver(_, args) {
-  try {
-    const { id, title, description, complexity } = args;
-    
-    const existingQuestion = await db.collection('questions').findOne({ id:Number(id) });
-
-    if (!existingQuestion) {
-      throw new Error('Question with this id does not exist.');
-    }
-    existingQuestion.title = title;
-    existingQuestion.description = description;
-    existingQuestion.complexity = complexity;
-
-    await db.collection('questions').updateOne({ id:Number(id) }, { $set: existingQuestion });
-
-    return existingQuestion;
-  } catch (error) {
-    throw new Error(`Error updating question details: ${error.message}`);
-  }
-}
-
-
+};
 
 /******************************************* 
 SERVER INITIALIZATION CODE

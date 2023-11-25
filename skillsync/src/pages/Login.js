@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
+import graphQLFetch from './api';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -8,9 +9,33 @@ export default function Login() {
   const [userRole, setUserRole] = useState('user'); // default to 'user'
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-  
+      const loginMutation = `
+      mutation login($username: String!, $password: String!) {
+        login(username: $username, password: $password) {
+          username
+          password
+        }
+      }
+    `;
+
+    const loginData = {
+      username: username,
+      password: password,
+    };
+    
+    try {
+      const data = await graphQLFetch(loginMutation, loginData);
+      // this.setState({ user: data.register });
+      if(data.login){
+        alert("User loggedin with username " + username);
+      }
+      console.log('User Logged in :', data);
+    } catch (error) {
+      console.error('Error logging in :', error);
+    };
+
     let role; // Define a local variable to determine the user role
   
     if (username === "admin" && password === "admin123") {

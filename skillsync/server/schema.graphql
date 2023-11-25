@@ -68,6 +68,7 @@ type Query {
 type Mutation {
   #USV Related  
   register(username: String!, password: String!): User
+  login(username: String!, password: String!): User
   #updateUserProfile(email: String!, profile: UserProfileInput!): User
   #deregisterUser(email: String!): ID
   
