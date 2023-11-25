@@ -14,7 +14,7 @@ let db;
 
 //Function to connect to the database
 async function connectToDb() {
-    const url = 'mongodb://localhost/assignment3db';
+    const url = 'mongodb://localhost/skillsync';
     const client = new MongoClient(url, { useNewUrlParser: true });
     await client.connect();
     console.log('Connected to MongoDB at', url);
@@ -29,41 +29,32 @@ const resolvers = {
     // User Service (USV) Resolvers
     // getUserProfile: getUserProfileResolver,
 
-    // Question Service (QSV) Resolvers
-    getAllQuestions: getAllQuestionsResolver,
+    // getAllQuestions: getAllQuestionsResolver,
   },
   Mutation: {
     // User Service (USV) Resolvers
-    signUpUser: signUpUserResolver,
-    updateUserProfile: updateUserProfileResolver,
-    deregisterUser: deregisterUserResolver,
-
-    // Question Service (QSV) Resolvers
-    addQuestion: addQuestionResolver,
-    deleteQuestion: deleteQuestionResolver,
-    updateQuestion: updateQuestionResolver,
-    //Question: QuestionResolver,
+    register: registerResolver,
+    // updateUserProfile: updateUserProfileResolver,
   }
 };
 
 // User Service (USV) Resolvers
-async function signUpUserResolver(_, args) 
+async function registerResolver(_, args) 
 {
   try {
-    const { name, email, profile } = args;
-    console.log(name, email, profile);
-    // Check if the user with the provided email already exists
-    const existingUser = await db.collection('users').findOne({ email });
+    const { name, password } = args;
+    console.log(name, password);
+    // Check if the user with the provided name already exists
+    const existingUser = await db.collection('users').findOne({ name });
     
     if (existingUser) {
-      throw new Error('User with this email already exists.');
+      throw new Error('User with this username already exists.');
     }
 
     // Create a new user document
     const newUser = {
       name,
-      email,
-      profile,
+      password,
       id: await db.collection('users').countDocuments() + 1,
     };
 

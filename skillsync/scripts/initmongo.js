@@ -2,7 +2,7 @@
 
 //To execute:
 //$systemctl start mongod
-//$mongo assignment3db initmongo.js 
+//$mongo skillsync initmongo.js 
 //Above command to be executed from the directory where initmongo.js is present
 
 //Perform a cleanup of existing data. 

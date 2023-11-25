@@ -3,6 +3,34 @@ import './Login.css';
 import SideNav from '../SideNav';
 import MapContainer from './MapContainer';
 
+// import graphQLFetch from './api';
+async function graphQLFetch(query, variables = {}) {
+  try {
+    const response = await fetch('/graphql', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({ query, variables })
+    });
+    const body = await response.text();
+    const result = JSON.parse(body);
+    /*
+    Check for errors in the GraphQL response
+    */
+    if (result.errors) {
+      const error = result.errors[0];
+      if (error.extensions.code === 'BAD_USER_INPUT') {
+        const details = error.extensions.exception.errors.join('\n ');
+        alert(`${error.message}:\n ${details}`);
+      } else {
+        alert(`${error.extensions.code}: ${error.message}`);
+      }
+    }
+    return result.data;
+  } catch (e) {
+    alert(`Error in sending data to server: ${e.message}`);
+  }
+}
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -31,6 +59,29 @@ const Register = () => {
   const handleFormSubmit = (event) => {
     event.preventDefault();
     validateForm();
+    const registerMutation=`
+      mutation register($username: String!, $password: String!) {
+        register(username:$username, password:$password) {
+          username
+          password
+        }
+      }`;
+      
+    const registerData = {
+      username: username,
+      password: password,
+    };
+    console.log(registerData); //success
+    try {
+      const data = graphQLFetch(registerMutation, registerData);
+      // this.setState({ user: data.register });
+      if(data.register){
+        alert("User signed up with username " + username);
+      }
+      console.log('User signed up:', data);
+    } catch (error) {
+      console.error('Error signing up:', error);
+    }
   };
 
   const validateForm = () => {
@@ -45,13 +96,13 @@ const Register = () => {
     if (password.length < 6) {
       errors.password = 'Password should be at least 6 characters long';
     }
-    if (postcode.length != 6) {
-      errors.postcode = 'Postcode should be at 6 digits';
-    }
-    // Validate age
-    if (parseInt(age) > 120) {
-      errors.age = 'Age must be a number less than 120';
-    }
+    // if (postcode.length != 6) {
+    //   errors.postcode = 'Postcode should be at 6 digits';
+    // }
+    // // Validate age
+    // if (parseInt(age) > 120) {
+    //   errors.age = 'Age must be a number less than 120';
+    // }
 
     setErrors(errors);
   };
@@ -74,7 +125,7 @@ const Register = () => {
        </label>
         <label>
           <p>Age</p>
-          <input type="text" value={age} onChange={handleAgeChange} required/>
+          <input type="text" value={age} onChange={handleAgeChange} />
           {errors.age && <span style={{ color: 'red' }}>{errors.age}</span>}
         </label>
 
@@ -95,7 +146,7 @@ const Register = () => {
         <label type="select">
             <p>Confident skills</p>
             <div>
-                <select id="skill" class = "skill" name="skill" type ="horizontal">
+                <select id="skill1" className = "skill" name="skill" type ="horizontal">
                     <option value="badminton">badminton</option>
                     <option value="tennis">tennis</option>
                     <option value="basketball">basketball</option>
@@ -107,7 +158,7 @@ const Register = () => {
         <label type="select">
             <p>Interested skills</p>
             <div>
-                <select id="skill" class = "skill" name="skill" type ="horizontal">
+                <select id="skill2" className = "skill" name="skill" type ="horizontal">
                     <option value="badminton">badminton</option>
                     <option value="tennis">tennis</option>
                     <option value="basketball">basketball</option>
@@ -120,7 +171,7 @@ const Register = () => {
         <label htmlFor="postalCode">
             <p>Postal Code</p>
         </label>
-        <input type="postcode" value={postcode} onChange={handlePostcodeChange} required/>
+        <input type="postcode" value={postcode} onChange={handlePostcodeChange} />
           {errors.postcode && <span style={{ color: 'red' }}>{errors.postcode}</span>}
        <MapContainer/>
         <div>
