@@ -19,31 +19,27 @@ db.users.insert({
   email: "johndoe@example.com",
   password: "123",
   gender: "male",
-  profile: UserProfile,
   suc_match: 0,
   invite_sent: [],
   invite_rec: [],
   rating: 0,
-  review: Review,
+  review: [],
   profile: {
     age: 30,
     location: "New York",
     userskill: [],
     wantedskill: []
-  }
+  },
+  chats:[]
 })
 
-// Create a collection for Question Service (QSV)
-db.createCollection("questions")
-// Optionally, you can define indexes or validations for the "questions" collection here
+db.createCollection("skills")
 
-// Insert a sample question with an "id" field
-db.questions.insert({
-  id: 1, // Unique ID for the question
-  title: "Sample Question",
-  description: "This is a sample interview question.",
-  complexity: "simple",
-  email: "abc@gmail.com",
-  // postedBy: "John Doe",
-  // tags: ["interview", "sample"],
+db.skills.insert({
+  id: 1, 
+  name: "Basketball",
+  description: "This is a sample skill.",
+  proficiency: 0,
+  certificate: "",
+  pic: ""
 })
