@@ -10,6 +10,19 @@ type User {
   invite_rec: [User]
   rating: Int
   review: Review
+  chats:[Chat]
+}
+
+type Chat {
+  messages:[Message]
+  participants:[User]
+}
+
+type Message {
+  content: String
+  timestamp: DateTime
+  sender: User
+  ## receiver: User ##
 }
 
 type UserProfile {
@@ -39,7 +52,7 @@ type Review{
   to: User
   content: String!
   rating: Int
-skillName: String
+  skillName: String
 }
 
 ## Queries ##
