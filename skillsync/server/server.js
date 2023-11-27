@@ -100,7 +100,7 @@ SERVER INITIALIZATION CODE
 const app = express();
 
 //Attaching a Static web server.
-app.use(express.static('public')); 
+app.use(express.static('build'));
 
 //Creating and attaching a GraphQL API server.
 const server = new ApolloServer({

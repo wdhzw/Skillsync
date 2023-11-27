@@ -1,3 +1,5 @@
+scalar DateTime
+
 type User {
   id: ID!
   username: String!
@@ -60,8 +62,6 @@ type Query {
   #USV related  
   getUserProfile: User
    
-  #QSV related
-  getAllQuestions: [Question]
 }
 
 ## Mutations ##
@@ -71,9 +71,4 @@ type Mutation {
   login(username: String!, password: String!): User
   #updateUserProfile(email: String!, profile: UserProfileInput!): User
   #deregisterUser(email: String!): ID
-  
-  #QSV Related
-  #addQuestion(title: String!, description: String!, complexity: String, email: String!): Question
-  #deleteQuestion(id: ID!): ID
-  #updateQuestion(id: ID!, title: String, description: String, complexity: String): Question
 }
