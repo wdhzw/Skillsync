@@ -7,6 +7,7 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [userRole, setUserRole] = useState('user'); // default to 'user'
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -29,34 +30,40 @@ export default function Login() {
       const data = await graphQLFetch(loginMutation, loginData);
       // this.setState({ user: data.register });
       if(data.login){
+        setLoggedInUser(data.login);
         alert("User loggedin with username " + username);
       }
-      console.log('User Logged in :', data);
+      console.log('User Logged in :', data.login);
+
+        
+      let role; // Define a local variable to determine the user role
+    
+      if (username === "admin" && password === "admin123") {
+        role = 'admin';
+        alert('Logged in as admin! Redirected to the Users page.'); 
+      } else {
+        role = 'user';
+      }
+    
+      // Now, update the local storage using the local variable
+      localStorage.setItem('userRole', role);
+    
+      // Also, update the state
+      setUserRole(role);
+    
+      if (role === 'admin') {
+        navigate("/UserList");
+      } else {
+        navigate("/ViewProfile", { state: { user: loggedInUser } });
+      }
+      
     } catch (error) {
+      alert(""+ error);
       console.error('Error logging in :', error);
     };
 
-    let role; // Define a local variable to determine the user role
-  
-    if (username === "admin" && password === "admin123") {
-      role = 'admin';
-      alert('Logged in as admin! Redirected to the Users page.'); 
-    } else {
-      role = 'user';
-    }
-  
-    // Now, update the local storage using the local variable
-    localStorage.setItem('userRole', role);
-  
-    // Also, update the state
-    setUserRole(role);
-  
-    if (role === 'admin') {
-      navigate("/UserList");
-    } else {
-      navigate("/ViewProfile");
-    }
   };
+
   return (
     <div className="login-wrapper">
       <h1>Welcome to SkillSync!</h1>

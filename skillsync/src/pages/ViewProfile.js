@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, useLocation } from "react-router-dom";
 import pic from '../pic.jpg';
 import './Login.css';
 import MapContainer from './MapContainer';
@@ -9,15 +9,18 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import { Box, Typography, Grid, Slider } from '@mui/material';
 
 const Profile = () => {
-  const user = {
-    username: 'JohnDoe',
-    gender: 'Male',
-    age: '21',
-    skills: ['React', 'JavaScript', 'CSS'],
-    interested:['Swimming','Soccer'],
-    neighborhood: 'Sample Neighborhood',
-    avatarUrl: '',
-};
+  const location = useLocation();
+  const user = location.state.user; 
+  console.log("profile: "+user);
+//   const user = {
+//     username: 'JohnDoe',
+//     gender: 'Male',
+//     age: '21',
+//     skills: ['React', 'JavaScript', 'CSS'],
+//     interested:['Swimming','Soccer'],
+//     neighborhood: 'Sample Neighborhood',
+//     avatarUrl: '',
+// };
   const getTagStyle = (skill) => {
     switch (skill) {
       case 'React':

@@ -97,13 +97,13 @@ const Register = () => {
     if (password.length < 6) {
       errors.password = 'Password should be at least 6 characters long';
     }
-    // if (postcode.length != 6) {
-    //   errors.postcode = 'Postcode should be at 6 digits';
-    // }
-    // // Validate age
-    // if (parseInt(age) > 120) {
-    //   errors.age = 'Age must be a number less than 120';
-    // }
+    if (postcode.length != 6) {
+      errors.postcode = 'Postcode should be at 6 digits';
+    }
+    // Validate age
+    if (parseInt(age) > 120) {
+      errors.age = 'Age must be a number less than 120';
+    }
 
     setErrors(errors);
   };
@@ -126,7 +126,7 @@ const Register = () => {
        </label>
         <label>
           <p>Age</p>
-          <input type="text" value={age} onChange={handleAgeChange} />
+          <input type="text" value={age} onChange={handleAgeChange} required/>
           {errors.age && <span style={{ color: 'red' }}>{errors.age}</span>}
         </label>
 
@@ -172,7 +172,7 @@ const Register = () => {
         <label htmlFor="postalCode">
             <p>Postal Code</p>
         </label>
-        <input type="postcode" value={postcode} onChange={handlePostcodeChange} />
+        <input type="postcode" value={postcode} onChange={handlePostcodeChange} required/>
           {errors.postcode && <span style={{ color: 'red' }}>{errors.postcode}</span>}
        <MapContainer/>
         <div>
