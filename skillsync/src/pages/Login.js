@@ -3,7 +3,7 @@ import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import graphQLFetch from './api';
 
-export default function Login() {
+export default function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [userRole, setUserRole] = useState('user'); // default to 'user'
@@ -34,8 +34,9 @@ export default function Login() {
         alert("User loggedin with username " + username);
       }
       console.log('User Logged in :', data.login);
+      onLogin(data.login);
 
-        
+      console.log("set onlogin");
       let role; // Define a local variable to determine the user role
     
       if (username === "admin" && password === "admin123") {

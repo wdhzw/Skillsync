@@ -1,6 +1,8 @@
 // import logo from './logo.svg';
 import './App.css';
 
+import React, { useState } from 'react';
+
 import Navbar from './Navbar';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -13,20 +15,26 @@ import Invitations from './pages/Invitations';
 import Chats from './pages/Chats';
 import SkillDetails from './pages/SkillDetails';
 import EditProfile from './pages/EditProfile';
+import graphQLFetch from './pages/api';
 
 
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Link
+  Link,
 } from 'react-router-dom';
 
 function MainContent() {
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const handleUser = async (loggedInUser) => {
+    setLoggedInUser(loggedInUser);
+  };
+
   return (
     <div className="main-content">
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Login onLogin={handleUser}/>} />
           <Route path="/UserList" element={<UserList />} />
           <Route path="/RecUserList" element={<RecUserList />} />
           <Route path="/SkillList" element={<SkillList />} />
@@ -34,8 +42,8 @@ function MainContent() {
           <Route path="/Invitations" element={<Invitations />} />
 
           <Route path="/Register" element={<Register />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/ViewProfile" element={<ViewProfile />} />
+          <Route path="/Login" element={<Login onLogin={handleUser}/>} />
+          <Route path="/ViewProfile" element={<ViewProfile user={loggedInUser}/>} />
           <Route path="/EditProfile" element={<EditProfile />} />
           <Route path="/Chats" element={<Chats />} />
         </Routes>
@@ -49,9 +57,9 @@ function App() {
   return (
     <>
       <Router>
-      <Navbar />
-      <MainContent />
-      <SideNav />
+        <Navbar />
+        <MainContent />
+        <SideNav />
       </Router>
 
     </>
