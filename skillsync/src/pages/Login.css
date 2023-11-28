@@ -6,6 +6,8 @@
 .register-wrapper {
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
+    padding: 10px;
     align-items:self-start;
     margin-left: 17%;
 }

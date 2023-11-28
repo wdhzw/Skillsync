@@ -105,7 +105,7 @@ async function getSkillResolver(_, args) {
   const { id } = args;
   return await db.collection('skills').findOne({ id: parseInt(id, 10) });
 }
-
+//test
 /******************************************* 
 SERVER INITIALIZATION CODE
 ********************************************/
@@ -124,7 +124,7 @@ const server = new ApolloServer({
   },
 });
 server.applyMiddleware({ app, path: '/graphql' });
-
+ 
 //Starting the server that runs forever.
   (async function () {
     try {

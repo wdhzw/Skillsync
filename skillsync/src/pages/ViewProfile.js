@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, useLocation } from "react-router-dom";
 import pic from '../pic.jpg';
 import './Login.css';
 import MapContainer from './MapContainer';
@@ -8,16 +8,22 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 import { Box, Typography, Grid, Slider } from '@mui/material';
 
-const Profile = () => {
-  const user = {
-    username: 'JohnDoe',
-    gender: 'Male',
-    age: '21',
-    skills: ['React', 'JavaScript', 'CSS'],
-    interested:['Swimming','Soccer'],
-    neighborhood: 'Sample Neighborhood',
-    avatarUrl: '',
-};
+const Profile = ({ user }) => {
+  // const location = useLocation();
+  // const user = location.state.user; 
+  if(!user) {
+    alert("Please Log in first!!!");
+  }
+  console.log("profile: "+ user.username);
+//   const user = {
+//     username: 'JohnDoe',
+//     gender: 'Male',
+//     age: '21',
+//     skills: ['React', 'JavaScript', 'CSS'],
+//     interested:['Swimming','Soccer'],
+//     neighborhood: 'Sample Neighborhood',
+//     avatarUrl: '',
+// };
   const getTagStyle = (skill) => {
     switch (skill) {
       case 'React':
@@ -91,23 +97,23 @@ const Profile = () => {
           </div>
           <div>
             <strong>My Skills: </strong>
-            <div>
+            {/* <div>
               {user.skills.map((skill, index) => (
                 <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
                   {skill}
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
           <div>
             <strong>Interests: </strong>
-            <div>
+            {/* <div>
               {user.interested.map((skill, index) => (
                 <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
                   {skill}
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
           
           <div>
