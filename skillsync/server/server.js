@@ -30,6 +30,9 @@ const resolvers = {
     // getUserProfile: getUserProfileResolver,
 
     // getAllQuestions: getAllQuestionsResolver,
+    getAllSkills: getAllSkillsResolver,
+    getSkill: getSkillResolver,
+
   },
   Mutation: {
     // User Service (USV) Resolvers
@@ -93,6 +96,15 @@ async function loginResolver(_, args)
     throw new Error(`Error login user: ${error.message}`);
   }
 };
+
+async function getAllSkillsResolver() {
+  return await db.collection('skills').find().toArray();
+}
+
+async function getSkillResolver(_, args) {
+  const { id } = args;
+  return await db.collection('skills').findOne({ id: parseInt(id, 10) });
+}
 
 /******************************************* 
 SERVER INITIALIZATION CODE

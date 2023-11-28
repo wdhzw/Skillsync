@@ -1,31 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SkillItem from '../components/SkillItem.js';
 import '../pages/SkillList.css'; 
 import SideNav from '../SideNav.js';
+import graphQLFetch from './api';
+import { Link } from 'react-router-dom'; 
+
 
 export default function SkillList() {
-  const [skills, setSkills] = useState([ 
-    {id: 1, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 2, name: 'Football', picture:'/images/skillavatar.png'},
-    {id: 3, name: 'Soccer', picture:'/images/skillavatar.png'},
-    {id: 4, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 5, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 6, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 7, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 8, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 9, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 10, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 11, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 12, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 13, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 14, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 15, name: 'Golf', picture:'/images/skillavatar.png'},
-    {id: 16, name: 'Golf', picture:'/images/skillavatar.png'},
-  ])
+    const [skills, setSkills] = useState([]);
     const [editingSkill, setEditingSkill] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const userRole = localStorage.getItem('userRole');
     const [searchTerm, setSearchTerm] = useState('');
+
+    useEffect(() => {
+        const fetchSkills = async () => {
+            const query = `query {
+                getAllSkills {
+                    id
+                    name
+                    description
+                    pic
+                }
+            }`;
+
+            const data = await graphQLFetch(query);
+            if (data) {
+                setSkills(data.getAllSkills);
+            }
+        };
+
+        fetchSkills();
+    }, []); 
 
     function handleEditClick(skill) {
         setEditingSkill(skill);
@@ -71,7 +77,13 @@ export default function SkillList() {
                 {
                     displayedSkills.map(skill => (
                         <div className="skill-grid-item" key={skill.id}>
+                        <Link to={{
+                            pathname: `/SkillDetails/${skill.id}`, 
+                            state: { skill } 
+                        }}>
+
                             <SkillItem skill={skill} />
+                        </Link>
                             {userRole === 'admin' && (
                                 <>
                                     <button onClick={() => handleEditClick(skill)}>Edit</button>
@@ -92,7 +104,7 @@ export default function SkillList() {
 
 function EditModal({ skill, onClose, onSave }) {
     const [name, setName] = useState(skill.name);
-    const [picture, setPicture] = useState(skill.picture);
+    const [picture, setPicture] = useState(skill.pic);
 
     return (
         <div className="edit-modal">
