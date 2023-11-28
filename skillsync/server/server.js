@@ -30,6 +30,9 @@ const resolvers = {
     // getUserProfile: getUserProfileResolver,
 
     // getAllQuestions: getAllQuestionsResolver,
+    getAllSkills: getAllSkillsResolver,
+    getSkill: getSkillResolver,
+
   },
   Mutation: {
     // User Service (USV) Resolvers
@@ -100,6 +103,15 @@ async function loginResolver(_, args)
   }
 };
 
+async function getAllSkillsResolver() {
+  return await db.collection('skills').find().toArray();
+}
+
+async function getSkillResolver(_, args) {
+  const { id } = args;
+  return await db.collection('skills').findOne({ id: parseInt(id, 10) });
+}
+//test
 /******************************************* 
 SERVER INITIALIZATION CODE
 ********************************************/
@@ -118,7 +130,7 @@ const server = new ApolloServer({
   },
 });
 server.applyMiddleware({ app, path: '/graphql' });
-
+ 
 //Starting the server that runs forever.
   (async function () {
     try {

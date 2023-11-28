@@ -53,8 +53,6 @@ type Skill{
   id: ID!
   name: String!
   description: String!
-  proficiency: Int
-  certificate: String!
   pic: String!
 }
 
@@ -71,7 +69,8 @@ type Review{
 type Query {
   #USV related  
   getUserProfile: User
-   
+  getAllSkills: [Skill]
+  getSkill(id: ID!): Skill
 }
 
 ## Mutations ##
