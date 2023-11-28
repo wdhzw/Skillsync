@@ -76,7 +76,6 @@ async function loginResolver(_, args)
 {
   try {
     const { username, password } = args;
-    console.log(username, password);
     // Check if the user with the provided name already exists
     const existingUser = await db.collection('users').findOne({ username });
     
