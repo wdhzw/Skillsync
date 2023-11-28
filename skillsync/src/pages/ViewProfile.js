@@ -13,11 +13,11 @@ const Profile = ({ user }) => {
   // const user = location.state.user; 
   
   const navigate = useNavigate();
-  
+
   if(!user) {
     alert("Please Log in first!!!");
-    navigate("/");
-  }
+    navigate("/Login");
+  } else {
 
   console.log("age is detected as " + user.profile);
   const getTagStyle = (skill) => {
@@ -93,23 +93,23 @@ const Profile = ({ user }) => {
           </div>
           <div>
             <strong>My Skills: </strong>
-            {/* <div>
-              {user.skills.map((skill, index) => (
+            <div>
+              {/* {user.userskill.map((skill, index) => (
                 <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
                   {skill}
                 </div>
-              ))}
-            </div> */}
+              ))} */}
+            </div>
           </div>
           <div>
             <strong>Interests: </strong>
-            {/* <div>
-              {user.interested.map((skill, index) => (
+            <div>
+              {/* {user.wantedskill.map((skill, index) => (
                 <div key={index} style={{ ...getTagStyle(skill), padding: '4px', margin: '2px', display: 'inline-block', borderRadius: '4px' }}>
                   {skill}
                 </div>
-              ))}
-            </div> */}
+              ))} */}
+            </div>
           </div>
           
           <div>
@@ -142,7 +142,11 @@ const Profile = ({ user }) => {
         </div>
         
         {isCurrentUser ? (
-        <button type='edit'><Link to="/EditProfile" className="button-link">Edit</Link></button>
+          <button type='edit'><Link to={{ pathname: "/EditProfile", state: { user: user } }} className="button-link">
+            Edit
+            </Link>
+          </button>
+        // <button type='edit'><Link to="/EditProfile" className="button-link">Edit</Link></button>
       ) : (
         <button type='invite'>Invite</button>
       )}
@@ -178,6 +182,7 @@ const Profile = ({ user }) => {
       </div>
     </div>
   );
+      }
 };
 
 export default Profile;

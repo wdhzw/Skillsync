@@ -38,6 +38,19 @@ const Register = () => {
   const [gender, setGender]= useState('');
   const [postcode, setPostcode] = useState('');
   const [errors, setErrors] = useState({});
+  const [skills, setSkills] = useState([{ id: 1, value: '' }]);
+
+  // const handleChange = (id, value) => {
+  //   const updatedSkills = skills.map(skill =>
+  //     skill.id === id ? { ...skill, value } : skill
+  //   );
+  //   setSkills(updatedSkills);
+  // };
+
+  const handleAddSkill = () => {
+    const newId = skills.length + 1;
+    setSkills([...skills, { id: newId, value: '' }]);
+  };
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -85,6 +98,7 @@ const Register = () => {
       profile:{
         age:age,
         location:postcode,
+        // userskill:skills,
       },
     };
     console.log(registerData); //success
@@ -96,6 +110,7 @@ const Register = () => {
         alert("User signed up with username " + username);
       }
       console.log('User signed up:', data);
+      console.log(skills);
     } catch (error) {
       console.error('Error signing up:', error);
     }
@@ -160,7 +175,27 @@ const Register = () => {
         </label>
         <input type="file" id="avatar" name="avatar"/><br />
 
-        <label type="select">
+        <div>
+          <p>Confident skills</p>
+          {skills.map(skill => (
+            <div key={skill.id}>
+              <select
+                className="skill"
+                name="skill"
+                value={skill.value}
+                // onChange={(e) => handleChange(skill.id, e.target.value)}
+              >
+                <option value="badminton">badminton</option>
+                <option value="tennis">tennis</option>
+                <option value="basketball">basketball</option>
+                <option value="Programming">Programming</option>
+              </select>
+            </div>
+          ))}
+          <button onClick={handleAddSkill}> + </button>
+    </div>
+
+        {/* <label type="select">
             <p>Confident skills</p>
             <div>
                 <select id="skill1" className = "skill" name="skill" type ="horizontal">
@@ -170,8 +205,9 @@ const Register = () => {
                     <option value="Programming">Programming</option>
                 </select>
             </div>
-            <button type="plus">+</button>
-        </label>
+            <button type="plus"> + </button>
+            
+        </label> */}
         <label type="select">
             <p>Interested skills</p>
             <div>

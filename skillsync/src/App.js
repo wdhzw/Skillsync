@@ -45,7 +45,7 @@ function MainContent() {
           <Route path="/Register" element={<Register />} />
           <Route path="/Login" element={<Login onLogin={handleUser}/>} />
           <Route path="/ViewProfile" element={<ViewProfile user={loggedInUser}/>} />
-          <Route path="/EditProfile" element={<EditProfile />} />
+          <Route path="/EditProfile" element={<EditProfile user={loggedInUser}/>} />
           <Route path="/Chats" element={<Chats />} />
         </Routes>
     </div>

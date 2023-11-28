@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import pic from '../pic.jpg';
 
-const EditProfile = () => {
-  const [user, setUser] = useState({
-    username: 'JohnDoe',
-    gender: 'Male',
-    age: '21',
-    skills: ['React', 'JavaScript', 'CSS'],
-    interested:['Swimming','Soccer'],
-    neighborhood: 'Sample Neighborhood',
-    avatarUrl: '',
-  });
+const EditProfile = ({ user }) => {
+  // const [user, setUser] = useState('');
+//     username: 'JohnDoe',
+//     gender: 'Male',
+//     age: '21',
+//     skills: ['React', 'JavaScript', 'CSS'],
+//     interested:['Swimming','Soccer'],
+//     neighborhood: 'Sample Neighborhood',
+//     avatarUrl: '',
+// });
+  const setUser = (newuser) => {
+    user = newuser;
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +61,7 @@ const EditProfile = () => {
       <div>
         <strong>Skills: </strong>
         <div>
-          {user.skills.map((skill, index) => (
+          {/* {user.userskill.map((skill, index) => (
             <div
               key={index}
               style={{
@@ -72,14 +75,14 @@ const EditProfile = () => {
             >
               {skill}
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
       
       <div>
         <strong>Interests: </strong>
         <div>
-          {user.interested.map((skill, index) => (
+          {/* {user.wantedskill.map((skill, index) => (
             <div
               key={index}
               style={{
@@ -93,7 +96,7 @@ const EditProfile = () => {
             >
               {skill}
             </div>
-          ))}
+          ))} */}
         </div>
       </div>
 
@@ -107,7 +110,7 @@ const EditProfile = () => {
         <input
           type="text"
           name="neighborhood"
-          value={user.neighborhood}
+          value={user.postcode}
           onChange={handleInputChange}
         />
       </div>
