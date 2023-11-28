@@ -35,6 +35,7 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [age, setAge] = useState('');
+  const [gender, setGender]= useState('');
   const [postcode, setPostcode] = useState('');
   const [errors, setErrors] = useState({});
 
@@ -50,6 +51,11 @@ const Register = () => {
     setPostcode(event.target.value);
   };
 
+  const handleGenderChange = (event) => {
+    console.log(event.target.value);
+    setGender(event.target.value);
+  };
+
   const handleAgeChange = (event) => {
     const value = event.target.value;
     const newValue = value.replace(/\D/g, '').slice(0, 3);
@@ -60,16 +66,26 @@ const Register = () => {
     event.preventDefault();
     validateForm();
     const registerMutation = `
-      mutation register($username: String!, $password: String!) {
-        register(username:$username, password:$password) {
+      mutation register($username: String!, $password: String!,$gender: String!,$profile:UserProfileInput) {
+        register(username:$username, password:$password,gender:$gender,profile:$profile) {
           username
           password
+          gender
+          profile{
+            age
+            location
+          }
         }
       }`;
       
     const registerData = {
       username: username,
       password: password,
+      gender: gender,
+      profile:{
+        age:age,
+        location:postcode,
+      },
     };
     console.log(registerData); //success
     
@@ -132,7 +148,7 @@ const Register = () => {
 
         <label>
             <p>Gender</p>
-            <select id="gender" name="gender">
+            <select id="gender" name="gender" onChange={handleGenderChange}>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>

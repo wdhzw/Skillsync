@@ -34,9 +34,19 @@ type UserProfile {
   wantedskill: [Skill]
 }
 
+input SkillInput{
+  name: String!
+  description: String!
+  proficiency: Int
+  certificate: String!
+  pic: String!
+}
+
 input UserProfileInput {
   age: Int
   location: String
+  userskill:[SkillInput]
+  wantedskill:[SkillInput]
 }
 
 type Skill{
@@ -67,7 +77,7 @@ type Query {
 ## Mutations ##
 type Mutation {
   #USV Related  
-  register(username: String!, password: String!): User
+  register(username: String!, password: String!,gender:String!,profile:UserProfileInput): User
   login(username: String!, password: String!): User
   #updateUserProfile(email: String!, profile: UserProfileInput!): User
   #deregisterUser(email: String!): ID

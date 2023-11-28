@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useLocation } from "react-router-dom";
+import {Link, useLocation,useNavigate} from "react-router-dom";
 import pic from '../pic.jpg';
 import './Login.css';
 import MapContainer from './MapContainer';
@@ -11,19 +11,15 @@ import { Box, Typography, Grid, Slider } from '@mui/material';
 const Profile = ({ user }) => {
   // const location = useLocation();
   // const user = location.state.user; 
+  
+  const navigate = useNavigate();
+  
   if(!user) {
     alert("Please Log in first!!!");
+    navigate("/");
   }
-  console.log("profile: "+ user.username);
-//   const user = {
-//     username: 'JohnDoe',
-//     gender: 'Male',
-//     age: '21',
-//     skills: ['React', 'JavaScript', 'CSS'],
-//     interested:['Swimming','Soccer'],
-//     neighborhood: 'Sample Neighborhood',
-//     avatarUrl: '',
-// };
+
+  console.log("age is detected as " + user.profile);
   const getTagStyle = (skill) => {
     switch (skill) {
       case 'React':
@@ -89,7 +85,7 @@ const Profile = ({ user }) => {
           </div>
           <div>
             <strong>Age: </strong>
-            {user.age}
+            {user.profile.age}
           </div>
           <div>
             <strong>Avatar: </strong>
@@ -118,7 +114,7 @@ const Profile = ({ user }) => {
           
           <div>
             <strong>Neighborhood: </strong>
-            {user.neighborhood}
+            {user.profile.location}
             <MapContainer/>
           </div>
 
@@ -131,7 +127,7 @@ const Profile = ({ user }) => {
               <p className='item-text'>
               <GradeIcon className='icon'/>
                 Rating:<br/> 
-                7/10
+                {user.rating}
               </p>
           </div>
         </div>
@@ -140,7 +136,7 @@ const Profile = ({ user }) => {
               <p className='item-text'>
               <ThumbUpIcon className='icon'/>
                 Match:<br/> 
-                16 times
+                {user.suc_match} times
               </p>
           </div>
         </div>

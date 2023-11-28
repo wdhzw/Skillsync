@@ -43,7 +43,7 @@ const resolvers = {
 async function registerResolver(_, args) 
 {
   try {
-    const { username, password } = args;
+    const { username, password, gender, profile } = args;
     console.log(username, password);
     // Check if the user with the provided name already exists
     const existingUser = await db.collection('users').findOne({ username });
@@ -56,7 +56,15 @@ async function registerResolver(_, args)
     const newUser = {
       username,
       password,
+      gender,
       id: await db.collection('users').countDocuments() + 1,
+      profile,
+      suc_match: 0,
+      invite_sent: [],
+      invite_rec: [],
+      rating: 0,
+      review: [],
+      chats:[],
     };
 
     // Insert the new user into the "users" collection
@@ -76,7 +84,6 @@ async function loginResolver(_, args)
 {
   try {
     const { username, password } = args;
-    // Check if the user with the provided name already exists
     const existingUser = await db.collection('users').findOne({ username });
     
     if (!existingUser) {

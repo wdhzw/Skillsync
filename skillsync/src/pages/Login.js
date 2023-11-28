@@ -17,6 +17,13 @@ export default function Login({ onLogin }) {
         login(username: $username, password: $password) {
           username
           password
+          gender
+          rating
+          suc_match
+          profile{
+            age
+            location
+          }
         }
       }
     `;
