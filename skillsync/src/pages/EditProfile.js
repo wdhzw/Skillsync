@@ -27,6 +27,8 @@ const [isValidAge, setValidAge] = useState(true);
 
 const username = user.username;
 
+const formData = new FormData();
+
 
   const setUser = (newuser) => {
     user = newuser;
@@ -56,6 +58,7 @@ const username = user.username;
 
   const handleAvatarChange = (event) => {
     const file = event.target.files[0];
+    formData.append('avatar', file);
     setAvatar(file);
   };
 
@@ -94,6 +97,7 @@ const username = user.username;
           profile{
             age
             location
+            avatar
           }
         }
       }`;

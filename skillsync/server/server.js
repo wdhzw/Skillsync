@@ -96,7 +96,6 @@ async function loginResolver(_, args)
       throw new Error('User with this username does not exists.');
     }
     if(password != existingUser.password) {
-      existingUser = null;
       throw new Error('Wrong Password!');
     }
     console.log(existingUser);
@@ -136,7 +135,9 @@ async function editProfileResolver(_, args) {
   }
   if (profile.avatar) {
     const avatarPath = `uploads/${username}_avatar.jpg`; 
-    fs.writeFileSync(avatarPath, profile.avatar);
+    console.log(avatarPath);
+    
+    // await fs.promises.writeFile(avatarPath, profile.avatar.buffer);
     existingUser.profile.avatar = avatarPath;
   }
     await db.collection('users').updateOne({ username }, { $set: existingUser });
