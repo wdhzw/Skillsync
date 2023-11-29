@@ -30,6 +30,7 @@ type Message {
 type UserProfile {
   age: Int
   location: String
+  avatar: String
   userskill: [Skill]
   wantedskill: [Skill]
 }
@@ -45,6 +46,7 @@ input SkillInput{
 input UserProfileInput {
   age: Int
   location: String
+  avatar: Upload
   userskill:[SkillInput]
   wantedskill:[SkillInput]
 }

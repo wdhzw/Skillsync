@@ -39,6 +39,7 @@ const Register = () => {
   const [postcode, setPostcode] = useState('');
   const [errors, setErrors] = useState({});
   const [skills, setSkills] = useState([{ id: 1, value: '' }]);
+  const [avatar, setAvatar] = useState(null);
 
   // const handleChange = (id, value) => {
   //   const updatedSkills = skills.map(skill =>
@@ -69,12 +70,16 @@ const Register = () => {
     setGender(event.target.value);
   };
 
+
   const handleAgeChange = (event) => {
     const value = event.target.value;
     const newValue = value.replace(/\D/g, '').slice(0, 3);
     setAge(newValue);
   };
-
+  const handleInputChange = (e) => {
+    const file = e.target.files[0];
+    setAvatar(file);
+  };
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     validateForm();

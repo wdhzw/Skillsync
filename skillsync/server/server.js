@@ -5,6 +5,8 @@ const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const { MongoClient } = require('mongodb');
 
+
+
 /******************************************* 
 DATABASE CONNECTION CODE
 ********************************************/
@@ -126,13 +128,17 @@ async function editProfileResolver(_, args) {
   }
   if(password!==""){ existingUser.password = password; }
   if(gender!==""){ existingUser.gender = gender; }
-  if(profile.age !=="") {
+  if(profile.age !==0) {
     existingUser.profile.age = profile.age;
   }
   if(profile.postcode !=="") {
     existingUser.profile.postcode = profile.postcode;
   }
-
+  if (profile.avatar) {
+    const avatarPath = `uploads/${username}_avatar.jpg`; 
+    fs.writeFileSync(avatarPath, profile.avatar);
+    existingUser.profile.avatar = avatarPath;
+  }
     await db.collection('users').updateOne({ username }, { $set: existingUser });
 
     return existingUser;
@@ -168,6 +174,8 @@ const server = new ApolloServer({
   },
 });
 server.applyMiddleware({ app, path: '/graphql' });
+
+app.use('/avatars', express.static('uploads'));
  
 //Starting the server that runs forever.
   (async function () {

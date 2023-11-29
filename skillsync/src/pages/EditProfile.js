@@ -19,6 +19,7 @@ const [password, setPassword] = useState('');
 const [age, setAge] = useState('');
 const [gender, setGender]= useState('');
 const [postcode, setPostcode] = useState('');
+const [avatar, setAvatar] = useState(null);
 const [errors, setErrors] = useState({});
 const [isValidPassword, setValidPassword] = useState(true);
 const [isValidPost, setValidPost] = useState(true);
@@ -53,6 +54,11 @@ const username = user.username;
     setPostcode(event.target.value);
   };
 
+  const handleAvatarChange = (event) => {
+    const file = event.target.files[0];
+    setAvatar(file);
+  };
+
   const handleGenderChange = (event) => {
     console.log(event.target.value);
     setGender(event.target.value);
@@ -67,13 +73,13 @@ const username = user.username;
   };
 
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
-  };
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUser((prevUser) => ({
+  //     ...prevUser,
+  //     [name]: value,
+  //   }));
+  // };
 
 
   const handleSave = async (event) => {
@@ -98,8 +104,9 @@ const username = user.username;
       password: !password? "" : password,
       gender: !gender? "" : gender,
       profile:{
-        age:!age? "" : age,
+        age:!age? 0 : age,
         location:!postcode? "" : postcode,
+        avatar: avatar,
         // userskill:skills,
       },
     };
@@ -213,8 +220,10 @@ const username = user.username;
 
       <div>
         <strong>Avatar: </strong>
-        <img src={pic} className="App-logo" alt="logo" />
-        <input type="file" id="avatar" name="avatar"/>
+        {avatar && <img src={URL.createObjectURL(avatar)} className="App-logo" alt="avatar" />}
+        <input type="file" id="avatar" name="avatar" onChange={handleAvatarChange} />
+        {/* <img src={pic} className="App-logo" alt="logo" />
+        <input type="file" id="avatar" name="avatar"/> */}
       </div>
       <div>
         <strong>Neighborhood: </strong>

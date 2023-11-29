@@ -17,7 +17,8 @@ const Profile = ({ user }) => {
   if(!user) {
     alert("Please Log in first!!!");
     navigate("/Login");
-  } else {
+    return null;
+  } 
 
   console.log("age is detected as " + user.profile);
   const getTagStyle = (skill) => {
@@ -89,7 +90,12 @@ const Profile = ({ user }) => {
           </div>
           <div>
             <strong>Avatar: </strong>
-            <img src={pic} className="App-logo" alt="logo" /> <br />
+            {user.profile.avatar ? (
+              <img src={`/uploads/${user.profile.avatar}`} className="App-logo" alt="avatar" />
+            ) : (
+              <span>No avatar available</span>
+            )}
+            {/* <img src={pic} className="App-logo" alt="logo" /> <br /> */}
           </div>
           <div>
             <strong>My Skills: </strong>
@@ -182,7 +188,7 @@ const Profile = ({ user }) => {
       </div>
     </div>
   );
-      }
+      
 };
 
 export default Profile;
