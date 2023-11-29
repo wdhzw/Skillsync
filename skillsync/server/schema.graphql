@@ -78,6 +78,7 @@ type Mutation {
   #USV Related  
   register(username: String!, password: String!,gender:String!,profile:UserProfileInput): User
   login(username: String!, password: String!): User
-  #updateUserProfile(email: String!, profile: UserProfileInput!): User
+  editProfile(username: String!, newusername: String,password: String,gender:String,profile:UserProfileInput): User
+  
   #deregisterUser(email: String!): ID
 }

@@ -38,6 +38,7 @@ const resolvers = {
     // User Service (USV) Resolvers
     register: registerResolver,
     login: loginResolver,
+    editProfile: editProfileResolver,
     // updateUserProfile: updateUserProfileResolver,
   }
 };
@@ -102,6 +103,43 @@ async function loginResolver(_, args)
     throw new Error(`Error login user: ${error.message}`);
   }
 };
+
+async function editProfileResolver(_, args) {
+  try {
+
+    const { username,newusername, password, gender,profile } = args;
+    
+    const existingUser = await db.collection('users').findOne({ username });
+
+    if (!existingUser) {
+      throw new Error('User with this username does not exist.');
+    }
+
+    if(newusername!==username && newusername!=="") {
+      const existUsername = await db.collection('users').findOne({ newusername });
+
+      if (existUsername) {
+        throw new Error('New username is used by others already.');
+      } else {
+        existingUser.username = newusername;
+      }
+  }
+  if(password!==""){ existingUser.password = password; }
+  if(gender!==""){ existingUser.gender = gender; }
+  if(profile.age !=="") {
+    existingUser.profile.age = profile.age;
+  }
+  if(profile.postcode !=="") {
+    existingUser.profile.postcode = profile.postcode;
+  }
+
+    await db.collection('users').updateOne({ username }, { $set: existingUser });
+
+    return existingUser;
+  } catch (error) {
+    throw new Error(`Error updating user profile: ${error.message}`);
+  }
+}
 
 async function getAllSkillsResolver() {
   return await db.collection('skills').find().toArray();

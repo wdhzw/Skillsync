@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import pic from '../pic.jpg';
+import graphQLFetch from './api';
+import './Login.css';
 
 const EditProfile = ({ user }) => {
   // const [user, setUser] = useState('');
@@ -11,9 +13,59 @@ const EditProfile = ({ user }) => {
 //     neighborhood: 'Sample Neighborhood',
 //     avatarUrl: '',
 // });
+
+const [newusername, setNewUsername] = useState('');
+const [password, setPassword] = useState('');
+const [age, setAge] = useState('');
+const [gender, setGender]= useState('');
+const [postcode, setPostcode] = useState('');
+const [errors, setErrors] = useState({});
+const [isValidPassword, setValidPassword] = useState(true);
+const [isValidPost, setValidPost] = useState(true);
+const [isValidAge, setValidAge] = useState(true);
+
+const username = user.username;
+
+
   const setUser = (newuser) => {
     user = newuser;
   };
+
+  
+  const handleUsernameChange = (event) => {
+    // console.log(event.target.value);
+    setNewUsername(event.target.value);
+  };
+
+  const handlePasswordChange = (event) => {
+    
+    const value = event.target.value;
+    const isValidPassword = value.length >= 6; 
+    setValidPassword(isValidPassword);
+    setPassword(event.target.value);
+  };
+
+  const handlePostcodeChange = (event) => {
+    
+    const value = event.target.value;
+    const isValidPost = value.length == 6; 
+    setValidPost(isValidPost);
+    setPostcode(event.target.value);
+  };
+
+  const handleGenderChange = (event) => {
+    console.log(event.target.value);
+    setGender(event.target.value);
+  };
+
+  const handleAgeChange = (event) => {
+    const value = event.target.value;
+    const isValidAge = parseInt(value) <= 120; 
+    setValidAge(isValidAge);
+    const newValue = value.replace(/\D/g, '').slice(0, 3);
+    setAge(newValue);
+  };
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -23,10 +75,57 @@ const EditProfile = ({ user }) => {
     }));
   };
 
-  const handleSave = () => {
-    // Implement save functionality here (e.g., make API request to save the updated profile)
-    console.log('Profile saved:', user);
+
+  const handleSave = async (event) => {
+    event.preventDefault();
+    validateForm();
+    const editProfileMutation = `
+      mutation editProfile($username: String!, $newusername: String, $password: String, $gender: String,$profile:UserProfileInput) {
+        editProfile(username:$username, newusername:$newusername, password:$password,gender:$gender,profile:$profile) {
+          username
+          password
+          gender
+          profile{
+            age
+            location
+          }
+        }
+      }`;
+      
+    const editData = {
+      username: username,
+      newusername: !newusername ? "" : newusername,
+      password: !password? "" : password,
+      gender: !gender? "" : gender,
+      profile:{
+        age:!age? "" : age,
+        location:!postcode? "" : postcode,
+        // userskill:skills,
+      },
+    };
+    console.log(editData); //success
+    
+    try {
+      const data = await graphQLFetch(editProfileMutation, editData);
+      if(data.editProfile){
+        alert("Profile updated " + username);
+      }
+      console.log('Profile updated:', data);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+    }
   };
+
+  const validateForm = () => {
+    const errors = {};
+
+    // Validate username
+    if (username.trim() === '') {
+      errors.username = 'Username is required';
+    }
+    setErrors(errors);
+  };
+
 
   return (
     <div className="register-wrapper">
@@ -36,27 +135,39 @@ const EditProfile = ({ user }) => {
         <input
           type="text"
           name="username"
-          value={user.username}
-          onChange={handleInputChange}
+          value={newusername}
+          onChange={handleUsernameChange}
         />
+        {errors.username && <span style={{ color: 'red' }}>{errors.username}</span>}
       </div>
       <div>
-        <strong>Gender: </strong>
+        <strong>Password: </strong>
         <input
-          type="text"
-          name="gender"
-          value={user.gender}
-          onChange={handleInputChange}
+          type="password"
+          name="password"
+          value={password}
+          onChange={handlePasswordChange}
         />
+         {!isValidPassword && <p className="error-message">Password must be at least 6 characters long.</p>}
+      </div>
+      
+      <div>
+        <strong>Gender: </strong>
+        <select id="gender" name="gender" onChange={handleGenderChange}>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+        </select>
       </div>
       <div>
         <strong>Age: </strong>
         <input
           type="text"
           name="age"
-          value={user.age}
-          onChange={handleInputChange}
+          value={age}
+          onChange={handleAgeChange}
         />
+        {!isValidAge && <p className="error-message">Age must be a number less than 120</p>}
       </div>
       <div>
         <strong>Skills: </strong>
@@ -109,11 +220,12 @@ const EditProfile = ({ user }) => {
         <strong>Neighborhood: </strong>
         <input
           type="text"
-          name="neighborhood"
-          value={user.postcode}
-          onChange={handleInputChange}
+          name="postcode"
+          value={postcode}
+          onChange={handlePostcodeChange}
         />
-      </div>
+         {!isValidPost && <p className="error-message">Postcode must be 6 characters long.</p>}
+     </div>
 
       <button onClick={handleSave}>Save Profile</button>
     </div>
