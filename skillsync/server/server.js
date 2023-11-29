@@ -28,10 +28,9 @@ GraphQL CODE
 ********************************************/  
 const resolvers = {
   Query: {
-    // User Service (USV) Resolvers
     // getUserProfile: getUserProfileResolver,
 
-    // getAllQuestions: getAllQuestionsResolver,
+    getAllUsers: getAllUsersResolver,
     getAllSkills: getAllSkillsResolver,
     getSkill: getSkillResolver,
 
@@ -41,7 +40,6 @@ const resolvers = {
     register: registerResolver,
     login: loginResolver,
     editProfile: editProfileResolver,
-    // updateUserProfile: updateUserProfileResolver,
   }
 };
 
@@ -145,6 +143,15 @@ async function editProfileResolver(_, args) {
     return existingUser;
   } catch (error) {
     throw new Error(`Error updating user profile: ${error.message}`);
+  }
+}
+async function getAllUsersResolver() {
+  try {
+    const users = await db.collection('users').find().toArray();
+    console.log("data get success!");
+    return users;
+  } catch (error) {
+    throw new Error(`Error fetching users: ${error.message}`);
   }
 }
 

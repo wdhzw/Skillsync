@@ -1,20 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect  } from 'react';
 import UserItem from '../components/UserItem.js';
 import '../pages/UserList.css'; 
 import SideNav from '../SideNav.js';
+import graphQLFetch from './api';
 
 export default function UserList() {
-    const [users, setUsers] = useState([ 
-      {id: 1, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 2, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-      {id: 3, name: 'John Ng', location:'Paya Lebar',noofskills:8,picture:'/images/avatar.png',skills:['javascript','golf','cooking','database design','French']},
-      {id: 4, name: 'Mary Lim', location:'Paya Lebar',noofskills:8,picture:'/images/avatar.png',skills:['javascript','golf','cooking','database design','French']},
-      {id: 5, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['java','golf','cooking','database design','French']},
-      {id: 6, name: 'Mary Lim', location:'Thompson',noofskills:8,picture:'/images/avatar.png',skills:['java','golf','cooking','database design','French']},
-      {id: 7, name: 'John Ng', location:'Thompson',noofskills:8,picture:'/images/avatar.png',skills:['c++','golf','cooking','database design','French']},
-      {id: 8, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['c++','golf','cooking','database design','French']},
-      {id: 9, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['c++','golf','cooking','database design','French']},
-  ]);
+    const [users, setUsers] = useState([]);
 
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedLocation, setSelectedLocation] = useState('');
@@ -23,6 +14,33 @@ export default function UserList() {
     const [editingUser, setEditingUser] = useState(null);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const userRole = localStorage.getItem('userRole');
+
+    function getUsers() {
+        const getAllUsersQuery = `
+          query getAllUsers {
+            getAllUsers {
+                username
+                password
+                gender
+                rating
+                suc_match
+                profile{
+                    age
+                    location
+                }
+            }
+          }
+      `;
+
+        graphQLFetch(getAllUsersQuery)
+          .then((data) => {
+            setUsers(data.getAllUsers);
+            console.log(users);
+          })
+          .catch((error) => {
+            console.error('Error fetching Users:', error);
+          });
+      }
 
     function handleEditClick(user) {
         setEditingUser(user);
@@ -58,16 +76,15 @@ export default function UserList() {
         setSelectedSkill(e.target.value);
     }
 
+    // const displayedUsers = users.filter(user =>
+    //     user.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
+    //     (selectedLocation === '' || user.location === selectedLocation) &&
+    //     (selectedSkill === '' || user.skills.includes(selectedSkill))
+    // );
 
-
-    const displayedUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
-        (selectedLocation === '' || user.location === selectedLocation) &&
-        (selectedSkill === '' || user.skills.includes(selectedSkill))
-    );
-
-
-
+    useEffect(() => {
+        getUsers();
+    }, []);
 
     return (
         <div className="userlist-wrapper">
@@ -108,7 +125,7 @@ export default function UserList() {
 
             <div className="user-grid">
                 {
-                    displayedUsers.map(user => (
+                    users.map(user => (
                         <div className="user-grid-item" key={user.id}>
                             <UserItem user={user} />
                             {userRole === 'admin' && (

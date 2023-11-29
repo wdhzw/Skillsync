@@ -69,8 +69,8 @@ type Review{
 
 ## Queries ##
 type Query {
-  #USV related  
   getUserProfile: User
+  getAllUsers: [User]
   getAllSkills: [Skill]
   getSkill(id: ID!): Skill
 }
