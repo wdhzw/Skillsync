@@ -33,6 +33,7 @@ const resolvers = {
     getAllUsers: getAllUsersResolver,
     getAllSkills: getAllSkillsResolver,
     getSkill: getSkillResolver,
+    usersBySkill: usersBySkillResolver,
 
   },
   Mutation: {
@@ -163,7 +164,19 @@ async function getSkillResolver(_, args) {
   const { id } = args;
   return await db.collection('skills').findOne({ id: parseInt(id, 10) });
 }
-//test
+
+async function usersBySkillResolver(_, args) {
+  try {
+    const { skillId } = args;
+    const users = await db.collection('users').find({ "profile.skills.skill_id": skillId }).toArray();
+    return users;
+  } catch (error) {
+    throw new Error(`Error fetching users by skill: ${error.message}`);
+  }
+}
+
+
+
 /******************************************* 
 SERVER INITIALIZATION CODE
 ********************************************/

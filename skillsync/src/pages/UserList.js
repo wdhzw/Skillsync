@@ -19,15 +19,21 @@ export default function UserList() {
         const getAllUsersQuery = `
           query getAllUsers {
             getAllUsers {
+                id
                 username
                 password
                 gender
                 rating
                 suc_match
-                profile{
+                profile {
                     age
                     location
-                }
+                    avatar
+                    skills {
+                      skill_id
+                      level
+                    }
+                  }
             }
           }
       `;

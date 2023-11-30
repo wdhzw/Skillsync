@@ -26,12 +26,141 @@ db.users.insert({
   review: [],
   profile: {
     age: 30,
-    location: "New York",
-    userskill: [],
-    wantedskill: []
+    avatar:"/images/john.png",
+    location: "Kallang",
+    skills: [
+      { skill_id: 1, level: "Beginner" },
+      { skill_id: 2, level: "Advanced" }
+    ],
+    wanted_skills: [5] 
   },
   chats:[]
 })
+
+db.users.insertMany([
+  {
+    id: 2, // Unique ID for the user
+    username: "Mary Tan",
+    email: "marytan@example.com",
+    password: "123",
+    gender: "female",
+    suc_match: 0,
+    invite_sent: [],
+    invite_rec: [],
+    rating: 0,
+    review: [],
+    profile: {
+      age: 40,
+      location: "Ang Mo Kio",
+      avatar:"/images/mary.png",
+      skills: [
+        { skill_id: 3, level: "Beginner" },
+        { skill_id: 8, level: "Intermediate" },
+        { skill_id: 5, level: "Advanced" }
+      ],
+      wanted_skills: [9,10] 
+    },
+    chats:[]
+  },
+  {
+    id: 3, // Unique ID for the user
+    username: "Jane Lin",
+    email: "janelin@example.com",
+    password: "123",
+    gender: "female",
+    suc_match: 0,
+    invite_sent: [],
+    invite_rec: [],
+    rating: 0,
+    review: [],
+    profile: {
+      age: 22,
+      location: "Jurong",
+      avatar:"/images/jane.png",
+      skills: [
+        { skill_id: 1, level: "Beginner" },
+        { skill_id: 2, level: "Advanced" },
+        { skill_id: 3, level: "Advanced" }
+
+      ],
+      wanted_skills: [4,5,6] 
+    },
+    chats:[]
+  },
+  {
+    id: 4, // Unique ID for the user
+    username: "Harry Lee",
+    email: "harrylee@example.com",
+    password: "123",
+    gender: "male",
+    suc_match: 0,
+    invite_sent: [],
+    invite_rec: [],
+    rating: 0,
+    review: [],
+    profile: {
+      age: 44,
+      location: "Orchard",
+      avatar:"/images/harry.png",
+      skills: [
+        { skill_id: 9, level: "Beginner" },
+        { skill_id: 10, level: "Advanced" },
+        { skill_id: 11, level: "Intermediate" }
+      ],
+      wanted_skills: [1,2,3] 
+    },
+    chats:[]
+  },
+  {
+    id: 5, // Unique ID for the user
+    username: "Richard Lee",
+    email: "richardlee@example.com",
+    password: "123",
+    gender: "male",
+    suc_match: 0,
+    invite_sent: [],
+    invite_rec: [],
+    rating: 0,
+    review: [],
+    profile: {
+      age: 77,
+      location: "Marine Parade",
+      avatar:"/images/richard.png",
+      skills: [
+        { skill_id: 7, level: "Beginner" },
+        { skill_id: 8, level: "Beginner" },
+        { skill_id: 9, level: "Advanced" }
+      ],
+      wanted_skills: [3,6,10] 
+    },
+    chats:[]
+  },
+  {
+    id: 6, // Unique ID for the user
+    username: "Minne Tan",
+    email: "minnetan@example.com",
+    password: "123",
+    gender: "female",
+    suc_match: 0,
+    invite_sent: [],
+    invite_rec: [],
+    rating: 0,
+    review: [],
+    profile: {
+      age: 18,
+      location: "Pasir Ris",
+      avatar:"/images/minnie.png",
+      skills: [
+        { skill_id: 1, level: "Intermediate" },
+        { skill_id: 2, level: "Intermediate" },
+        { skill_id: 3, level: "Advanced" }
+      ],
+      wanted_skills: [5,6,7] 
+    },
+    chats:[]
+  },  
+])
+
 
 db.createCollection("skills")
 
