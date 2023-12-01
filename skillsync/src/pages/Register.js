@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect  } from 'react';
 import './Login.css';
 import SideNav from '../SideNav';
 import MapContainer from './MapContainer';
@@ -31,6 +31,7 @@ async function graphQLFetch(query, variables = {}) {
   }
 }
 
+
 const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -38,8 +39,10 @@ const Register = () => {
   const [gender, setGender]= useState('');
   const [postcode, setPostcode] = useState('');
   const [errors, setErrors] = useState({});
-  const [skills, setSkills] = useState([{ id: 1, value: '' }]);
   const [avatar, setAvatar] = useState(null);
+  const [skills, setSkills] = useState([]);
+  const [selectedSkills, setSelectedSkills] = useState([{id:1,value:''}]);
+  const [skillstoadd, setSkillstoadd] = useState([]);
 
   // const handleChange = (id, value) => {
   //   const updatedSkills = skills.map(skill =>
@@ -48,10 +51,39 @@ const Register = () => {
   //   setSkills(updatedSkills);
   // };
 
-  const handleAddSkill = () => {
-    const newId = skills.length + 1;
-    setSkills([...skills, { id: newId, value: '' }]);
-  };
+  useEffect(() => {
+    const fetchSkills = async () => {
+        const query = `query {
+            getAllSkills {
+                id
+                name
+                description
+                pic
+            }
+        }`;
+
+        const data = await graphQLFetch(query);
+        if (data) {
+            setSkills(data.getAllSkills);
+        }
+    };
+
+    fetchSkills();
+}, []); 
+
+   const handleAddSkill = () => {
+    const newId = selectedSkills.length + 1;
+      setSelectedSkills([
+        ...selectedSkills,
+        { id: newId, name: '', proficiency: 'beginner' },
+      ]);
+    };
+  // const handleAddSelectedSkill = (selectedSkillName) => {
+  //   const newId = selectedSkills.length + 1;
+  //   if (selectedSkillName) {
+  //     setSelectedSkills([...skills, { id: newId, value: selectedSkillName }]);
+  //   }
+  // };
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -80,13 +112,43 @@ const Register = () => {
     const file = e.target.files[0];
     setAvatar(file);
   };
+
+  const handleProficiencyChange = (index, proficiency) => {
+    setSelectedSkills((prevSelectedSkills) => {
+      const updatedSkills = [...prevSelectedSkills];
+      updatedSkills[index] = {
+        ...updatedSkills[index],
+        proficiency: proficiency,
+      };
+      return updatedSkills;
+    });
+  };
+
+  const handleSkillNameChange = (index, skillName) => {
+    setSelectedSkills((prevSelectedSkills) => {
+      const updatedSkills = [...prevSelectedSkills];
+      updatedSkills[index] = {
+        ...updatedSkills[index],
+        name: skillName,
+      };
+      return updatedSkills;
+    });
+  };
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     validateForm();
-    if(Object.keys(errors).length === 0) {
+    if(Object.keys(errors).length != 0) {
       alert("Please fill in the fields according to the requirements!");
       return;
     }
+
+    const skillsToAdd = selectedSkills.map((selectedSkill) => ({
+      name: selectedSkill.name,
+      proficiency: selectedSkill.proficiency,
+    }));
+
+    setSkillstoadd([...skills, ...skillsToAdd]);
+
     const registerMutation = `
       mutation register($username: String!, $password: String!,$gender: String!,$profile:UserProfileInput) {
         register(username:$username, password:$password,gender:$gender,profile:$profile) {
@@ -96,6 +158,10 @@ const Register = () => {
           profile{
             age
             location
+            userskill{
+              name
+              proficiency
+            }
           }
         }
       }`;
@@ -107,14 +173,13 @@ const Register = () => {
       profile:{
         age:age,
         location:postcode,
-        // userskill:skills,
+        userskill:skillstoadd,
       },
     };
     console.log(registerData); //success
     
     try {
       const data = await graphQLFetch(registerMutation, registerData);
-      // this.setState({ user: data.register });
       if(data.register){
         alert("User signed up with username " + username);
       }
@@ -187,37 +252,36 @@ const Register = () => {
 
         <div>
           <p>Confident skills</p>
-          {skills.map(skill => (
-            <div key={skill.id}>
+          {selectedSkills.map((skill,index) => (
+            <div key={index}>
+            <select
+              className="skill"
+              name="skill"
+              value={skill.name}
+              onChange={(e) => handleSkillNameChange(index, e.target.value)}
+            >
+              {skills.map((optionSkill) => (
+                <option key={optionSkill.id} value={optionSkill.name}>
+                  {optionSkill.name}
+                </option>
+              ))}
+            </select>
+
               <select
-                className="skill"
-                name="skill"
-                value={skill.value}
-                // onChange={(e) => handleChange(skill.id, e.target.value)}
+                className="proficiency"
+                name="proficiency"
+                value={skill.proficiency}
+                onChange={(e) => handleProficiencyChange(index, e.target.value)}
               >
-                <option value="badminton">badminton</option>
-                <option value="tennis">tennis</option>
-                <option value="basketball">basketball</option>
-                <option value="Programming">Programming</option>
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
               </select>
             </div>
           ))}
           <button onClick={handleAddSkill}> + </button>
     </div>
 
-        {/* <label type="select">
-            <p>Confident skills</p>
-            <div>
-                <select id="skill1" className = "skill" name="skill" type ="horizontal">
-                    <option value="badminton">badminton</option>
-                    <option value="tennis">tennis</option>
-                    <option value="basketball">basketball</option>
-                    <option value="Programming">Programming</option>
-                </select>
-            </div>
-            <button type="plus"> + </button>
-            
-        </label> */}
         <label type="select">
             <p>Interested skills</p>
             <div>
