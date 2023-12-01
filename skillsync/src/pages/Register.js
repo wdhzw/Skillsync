@@ -169,6 +169,7 @@ const Register = () => {
         <label>
             <p>Gender</p>
             <select id="gender" name="gender" onChange={handleGenderChange}>
+                <option value="NA">-Select-</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
