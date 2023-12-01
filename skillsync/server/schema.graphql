@@ -31,9 +31,15 @@ type UserProfile {
   age: Int
   location: String
   avatar: String
-  userskill: [Skill]
-  wantedskill: [Skill]
+  skills: [UserSkill]
+  wanted_skills: [Int]
 }
+
+type UserSkill {
+  skill_id: Int
+  level: String
+}
+
 
 input SkillInput{
   name: String!
@@ -73,6 +79,8 @@ type Query {
   getAllUsers: [User]
   getAllSkills: [Skill]
   getSkill(id: ID!): Skill
+  usersBySkill(skillId: Int!): [User]
+
 }
 
 ## Mutations ##

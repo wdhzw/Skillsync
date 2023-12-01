@@ -33,6 +33,7 @@ const resolvers = {
     getAllUsers: getAllUsersResolver,
     getAllSkills: getAllSkillsResolver,
     getSkill: getSkillResolver,
+    usersBySkill: usersBySkillResolver,
 
   },
   Mutation: {
@@ -163,7 +164,19 @@ async function getSkillResolver(_, args) {
   const { id } = args;
   return await db.collection('skills').findOne({ id: parseInt(id, 10) });
 }
-//test
+
+async function usersBySkillResolver(_, args) {
+  try {
+    const { skillId } = args;
+    const users = await db.collection('users').find({ "profile.skills.skill_id": skillId }).toArray();
+    return users;
+  } catch (error) {
+    throw new Error(`Error fetching users by skill: ${error.message}`);
+  }
+}
+
+
+
 /******************************************* 
 SERVER INITIALIZATION CODE
 ********************************************/
@@ -196,3 +209,50 @@ app.use('/avatars', express.static('uploads'));
       console.log('ERROR:', err);
     }
   })();
+
+
+  
+/******************************************* 
+CONNECTION TO SSG
+********************************************/
+
+const axios = require('axios');
+
+app.get('/api/skillsfuture', async (req, res) => {
+  try {
+    const id = 'da013a8a894d40048241933d3bcc0b8b';
+    const secret = 'YjU4OGNiMTQtMWE2Ni00ZTUwLWE2ZGQtMzAxMjBiYTQxMzNm';
+    const credentials = Buffer.from(`${id}:${secret}`).toString('base64');
+
+    // Getting the token
+    const tokenResponse = await axios.post('https://public-api.ssg-wsg.sg/dp-oauth/oauth/token', 'grant_type=client_credentials', {
+      headers: {
+        'Authorization': `Basic ${credentials}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      }
+    });
+
+    const token = tokenResponse.data.access_token;
+
+    // Making the actual request to the SkillsFuture API
+    const response = await axios.get('https://public-api.ssg-wsg.sg/courses/directory', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        pageSize: 9,
+        page: 0,
+        keyword: req.query.keyword, 
+      }
+    });
+
+    res.json(response.data);
+    
+    console.log("data request from ssg success");
+    console.log(response.data);
+  } catch (error) {
+    console.log("data request error");
+    console.error('Error in proxy endpoint', error);
+    res.status(500).send('Error in proxy request');
+  }
+});
