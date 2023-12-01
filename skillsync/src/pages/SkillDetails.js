@@ -13,6 +13,7 @@ export default function SkillDetails() {
   const location = useLocation();
   const [skill, setSkill] = useState(location.state?.skill || null);
   const [usersWithSkill, setUsersWithSkill] = useState([]);
+  const [courses, setCourses] = useState([]); // State to store courses
 
 
   useEffect(() => {
@@ -63,40 +64,48 @@ export default function SkillDetails() {
       fetchUsersBySkill();
   }, [id]);
 
+
+  
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch(`/api/skillsfuture?keyword=${encodeURIComponent(skill.name)}`);
+        const data = await response.json();
+        
+        if (data && data.data && data.data.courses) {
+          console.log("set courses success");
+          setCourses(data.data.courses);
+          console.log(data.data.courses);
+        } else {
+          console.log("set courses fail");
+          setCourses([]); // Set an empty array if the data is not as expected
+        }
+        
+      } catch (error) {
+        console.error('Error fetching courses', error);
+      }
+    };
+
+    if (skill && skill.name) {
+      fetchCourses();
+    }
+  }, [skill]);
+
   if (!skill) {
     return <p>Loading skill details...</p>;
   }
 
 
-const courses = [ 
-  {id: 1, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
-  {id: 2, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
-  {id: 3, name: 'Database for Dummies', provider:'National University of Singapore', picture:'/images/coursethumb.jpg', description:'With the advent of digitalization of functions in organizations, increasingly more and more digital data are created and stored. Data is now the oil that drives organizational business intelligence for greater value. It is collected, stored, extracted, analysed and reported. Traditionally, database systems have been used to store them for these purposes. With the advancement in database technologies'},
-];
 
-/*
-const jobs = [ 
-  {id: 1, name: 'Database Analyst', employer:'Google', emppicture:'/images/empthumb.PNG', description:'This role is in the data science division of Google Singapore. The role focuses on analytics to improve the range of Google Dashboards in SouthEast Asia.'},
-  {id: 2, name: 'Database Analyst', employer:'Google', emppicture:'/images/empthumb.PNG', description:'This role is in the data science division of Google Singapore. The role focuses on analytics to improve the range of Google Dashboards in SouthEast Asia.'},
-  {id: 3, name: 'Database Analyst', employer:'Google', emppicture:'/images/empthumb.PNG', description:'This role is in the data science division of Google Singapore. The role focuses on analytics to improve the range of Google Dashboards in SouthEast Asia.'},
-];
 
-          <h1>Jobs to take with this skill</h1>
-          <div className="skillsfuture">
-          <p>External data pulled from SkillsFuture</p>
 
-          <div className="jobs-grid">
-            {
-              jobs.map(function(job) {
-                return (
-                    <JobItem job={job} />
-                );
-              })
-            }
-          </div>
-          
-          </div>
-*/
+
+
+
+
+
+
+
 
       return (
         <div className="skills-wrapper">
@@ -116,21 +125,24 @@ const jobs = [
           ))}
           </div>
 
-          <h1>Courses to help you learn the skill</h1>
+          <h1>Courses Pulled from SkillsFuture to help you learn the skill</h1>
           <div className="skillsfuture">
           <p>External data pulled from SkillsFuture</p>
+            <div className="courses-grid">
+            {courses.map((course, index) => (
+            <CourseItem 
+              key={index}
+              image={course.detailImageURL}
+              title={course.title}
+              content={course.content}
+              provider={course.trainingProviderAlias}
 
-          <div className="courses-grid">
-            {
-              courses.map(function(course) {
-                return (
-                    <CourseItem course={course} />
-                );
-              })
-            }
+            />
+
+            ))}
+            </div>
           </div>
 
-          </div>
 
           
 
