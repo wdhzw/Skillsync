@@ -83,6 +83,10 @@ const Register = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
     validateForm();
+    if(Object.keys(errors).length === 0) {
+      alert("Please fill in the fields according to the requirements!");
+      return;
+    }
     const registerMutation = `
       mutation register($username: String!, $password: String!,$gender: String!,$profile:UserProfileInput) {
         register(username:$username, password:$password,gender:$gender,profile:$profile) {
@@ -162,7 +166,7 @@ const Register = () => {
        </label>
         <label>
           <p>Age</p>
-          <input type="text" value={age} onChange={handleAgeChange} required/>
+          <input type="age" value={age} onChange={handleAgeChange} required/>
           {errors.age && <span style={{ color: 'red' }}>{errors.age}</span>}
         </label>
 
