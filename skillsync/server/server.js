@@ -32,6 +32,7 @@ const resolvers = {
 
     getAllUsers: getAllUsersResolver,
     getAllSkills: getAllSkillsResolver,
+    getUserById: getUserByIdResolver,
     getSkill: getSkillResolver,
     usersBySkill: usersBySkillResolver,
 
@@ -162,6 +163,22 @@ async function getAllUsersResolver() {
     throw new Error(`Error fetching users: ${error.message}`);
   }
 }
+
+
+async function getUserByIdResolver(_, args) {
+  try {
+    const userId = args.id; 
+    const user = await db.collection('users').findOne({ id: parseInt(userId, 10) });
+    if (!user) {
+      throw new Error(`User with ID ${userId} not found`);
+    }
+    console.log("User data retrieval successful!");
+    return user;
+  } catch (error) {
+    throw new Error(`Error fetching user by ID: ${error.message}`);
+  }
+}
+
 
 
 async function getAllSkillsResolver() {

@@ -15,6 +15,7 @@ export default function Login({ onLogin }) {
       const loginMutation = `
       mutation login($username: String!, $password: String!) {
         login(username: $username, password: $password) {
+          id
           username
           password
           gender
@@ -35,6 +36,7 @@ export default function Login({ onLogin }) {
     
     try {
       const data = await graphQLFetch(loginMutation, loginData);
+      console.log(data);
       // this.setState({ user: data.register });
       if(data.login){
         setLoggedInUser(data.login);
@@ -55,7 +57,8 @@ export default function Login({ onLogin }) {
     
       // Now, update the local storage using the local variable
       localStorage.setItem('userRole', role);
-    
+      localStorage.setItem('userid', parseInt(data.login.id,10));
+
       // Also, update the state
       setUserRole(role);
     

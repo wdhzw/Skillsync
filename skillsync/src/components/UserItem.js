@@ -29,7 +29,7 @@ function UserItem({ user }) {
 
   return (
     <div>
-      <Link to="/ViewProfile">
+<Link to={`/ViewProfile?userId=${user.id}`}>
         <div className="user-item">
           <img src={user.profile.avatar} width="100" height="50" /> 
           <h2>{user.username}</h2>
@@ -44,7 +44,7 @@ function UserItem({ user }) {
             ))}
           </div>
         </div>
-      </Link>
+        </Link>
     </div>
   );
 }
