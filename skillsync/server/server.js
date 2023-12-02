@@ -132,7 +132,7 @@ async function editProfileResolver(_, args) {
       if (profile.location !== undefined) existingUser.profile.location = profile.location;
       if (profile.avatar) {
         // Handle avatar logic
-        // existingUser.profile.avatar = avatarPath;
+         existingUser.profile.avatar = avatarPath;
       }
       if (profile.skills) {
         existingUser.profile.skills = profile.skills.map(skill => ({

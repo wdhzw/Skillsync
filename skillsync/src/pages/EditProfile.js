@@ -1,18 +1,9 @@
-import React, { useState } from 'react';
-import pic from '../pic.jpg';
+import React, { useState, useEffect } from 'react';
+// import pic from '../pic.jpg';
 import graphQLFetch from './api';
 import './Login.css';
 
 const EditProfile = ({ user }) => {
-  // const [user, setUser] = useState('');
-//     username: 'JohnDoe',
-//     gender: 'Male',
-//     age: '21',
-//     skills: ['React', 'JavaScript', 'CSS'],
-//     interested:['Swimming','Soccer'],
-//     neighborhood: 'Sample Neighborhood',
-//     avatarUrl: '',
-// });
 
 const [newusername, setNewUsername] = useState('');
 const [password, setPassword] = useState('');
@@ -25,18 +16,88 @@ const [isValidPassword, setValidPassword] = useState(true);
 const [isValidPost, setValidPost] = useState(true);
 const [isValidAge, setValidAge] = useState(true);
 
+const [skills, setSkills] = useState([]);
+const [selectedSkills, setSelectedSkills] = useState([{ id: 1, name: '', proficiency: 'beginner' }]);
+const [interestedSkills, setInterestedSkills] = useState([]);
+const [district, setDistrict] = useState('');
+const avatarPath = undefined;
+
+const districts = [
+  "Ang Mo Kio", "Bedok", "Bishan", "Bukit Batok", "Bukit Merah",
+  "Choa Chu Kang", "Clementi", "Geylang", "Hougang", "Jurong East",
+  "Jurong West", "Kallang", "Marine Parade", "Orchard", "Pasir Ris",
+  "Punggol", "Queenstown", "Sembawang", "Sengkang", "Serangoon",
+  "Tampines", "Toa Payoh", "Woodlands", "Yishun", "Jurong",
+  "Bukit Timah", "Novena", "Tanglin", "Rochor"];
+
+
+useEffect(() => {
+  const fetchSkills = async () => {
+      const query = `query {
+          getAllSkills {
+              id
+              name
+              description
+              pic
+          }
+      }`;
+
+      const data = await graphQLFetch(query);
+      if (data) {
+          setSkills(data.getAllSkills);
+      }
+  };
+
+  fetchSkills();
+}, []); 
+
+const handleAddSkill = () => {
+  setSelectedSkills([...selectedSkills, { id: 1, name: '', proficiency: 'beginner' }]);
+};
+const handleInputChange = (e) => {
+  const file = e.target.files[0];
+  setAvatar(file);
+};
+
+const handleProficiencyChange = (index, proficiency) => {
+  setSelectedSkills((prevSelectedSkills) => {
+    const updatedSkills = [...prevSelectedSkills];
+    updatedSkills[index] = {
+      ...updatedSkills[index],
+      proficiency: proficiency,
+    };
+    return updatedSkills;
+  });
+};
+
+const handleSkillNameChange = (index, skillName) => {
+  setSelectedSkills(prevSelectedSkills => {
+    const updatedSkills = [...prevSelectedSkills];
+    if (skillName === '') {
+      updatedSkills[index] = { ...updatedSkills[index], id: 1, name: '' };
+    } else {
+      const foundSkill = skills.find(s => s.name === skillName);
+      updatedSkills[index] = {
+        ...updatedSkills[index],
+        id: foundSkill ? parseInt(foundSkill.id) : null,
+        name: skillName,
+      };
+    }
+    return updatedSkills;
+  });
+};
+
+const transformSkillsForSubmission = () => {
+  return selectedSkills.map(skill => {
+    return { skill_id: skill.id, level: skill.proficiency };
+  });
+};
+
 const username = user.username;
 
 const formData = new FormData();
 
-
-  const setUser = (newuser) => {
-    user = newuser;
-  };
-
-  
   const handleUsernameChange = (event) => {
-    // console.log(event.target.value);
     setNewUsername(event.target.value);
   };
 
@@ -56,11 +117,11 @@ const formData = new FormData();
     setPostcode(event.target.value);
   };
 
-  const handleAvatarChange = (event) => {
-    const file = event.target.files[0];
-    formData.append('avatar', file);
-    setAvatar(file);
-  };
+  // const handleAvatarChange = (event) => {
+  //   const file = event.target.files[0];
+  //   formData.append('avatar', file);
+  //   setAvatar(file);
+  // };
 
   const handleGenderChange = (event) => {
     console.log(event.target.value);
@@ -75,56 +136,96 @@ const formData = new FormData();
     setAge(newValue);
   };
 
+  const handleAddInterestedSkill = () => {
+    setInterestedSkills([...interestedSkills, '']); // Adds an empty placeholder for a new skill
+  };
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setUser((prevUser) => ({
-  //     ...prevUser,
-  //     [name]: value,
-  //   }));
-  // };
+  const handleInterestedSkillChange = (index, newSkillId) => {
+    setInterestedSkills(interestedSkills.map((skillId, idx) => idx === index ? newSkillId : skillId));
+  };
+
+  const handleDistrictChange = (event) => {
+    setDistrict(event.target.value);
+  };
 
 
   const handleSave = async (event) => {
     event.preventDefault();
     validateForm();
-    const editProfileMutation = `
-      mutation editProfile($username: String!, $newusername: String, $password: String, $gender: String,$profile:UserProfileInput) {
-        editProfile(username:$username, newusername:$newusername, password:$password,gender:$gender,profile:$profile) {
-          username
-          password
-          gender
-          profile{
-            age
-            location
-            avatar
-          }
+    const transformedSkills = transformSkillsForSubmission();
+    const transformedInterestedSkills = interestedSkills.filter(id => id !== '').map(Number);
+
+    if (avatar) {
+      console.log("avatar loading");
+      const formData = new FormData();
+      formData.append('avatar', avatar);
+  
+      try {
+        const uploadResponse = await fetch('/upload-avatar', {
+          method: 'POST',
+          body: formData,
+        });
+        const uploadResult = await uploadResponse.json();
+  
+        if (uploadResponse.ok) {
+          alert("upload avatar success!");
+          avatarPath = uploadResult.path;
+        } else {
+          throw new Error('Failed to upload avatar.');
         }
-      }`;
-      
-    const editData = {
-      username: username,
-      newusername: !newusername ? "" : newusername,
-      password: !password? "" : password,
-      gender: !gender? "" : gender,
-      profile:{
-        age:!age? 0 : age,
-        location:!postcode? "" : postcode,
-        avatar: avatar,
-        // userskill:skills,
-      },
-    };
-    console.log(editData); //success
-    
-    try {
-      const data = await graphQLFetch(editProfileMutation, editData);
-      if(data.editProfile){
-        alert("Profile updated " + username);
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        return;
       }
-      console.log('Profile updated:', data);
-    } catch (error) {
-      console.error('Error updating profile:', error);
     }
+          
+          const editProfileMutation = `
+            mutation editProfile($username: String!, $newusername: String, $password: String, $gender: String,$profile:UserProfileInput) {
+              editProfile(username:$username, newusername:$newusername, password:$password,gender:$gender,profile:$profile) {
+                username
+                password
+                gender
+                profile{
+                  age
+                  postal
+                  location
+                  avatar
+                  skills{
+                    skill_id
+                    level
+                  }
+                  wanted_skills
+                }
+              }
+            }`;
+            
+          const editData = {
+            username: username,
+            newusername: newusername,
+            password: password,
+            gender: gender,
+            profile:{
+              age: parseInt(age),
+              location: district,
+              postal: parseInt(postcode),
+              avatar: avatarPath,
+              skills: transformedSkills,
+              wanted_skills:transformedInterestedSkills,
+            },
+          };
+          console.log(editData); //success
+          
+          try {
+            const data = await graphQLFetch(editProfileMutation, editData);
+            if(data.editProfile){
+              alert("Profile updated " + username);
+            }
+            console.log('Profile updated:', data);
+          } catch (error) {
+            console.error('Error updating profile:', error);
+          }
+        
+      
   };
 
   const validateForm = () => {
@@ -181,55 +282,80 @@ const formData = new FormData();
         />
         {!isValidAge && <p className="error-message">Age must be a number less than 120</p>}
       </div>
-      <div>
-        <strong>Skills: </strong>
-        <div>
-          {/* {user.userskill.map((skill, index) => (
-            <div
-              key={index}
-              style={{
-                backgroundColor: getColorForSkill(skill),
-                color: 'white',
-                padding: '4px',
-                margin: '2px',
-                display: 'inline-block',
-                borderRadius: '4px',
-              }}
-            >
-              {skill}
-            </div>
-          ))} */}
-        </div>
-      </div>
-      
-      <div>
-        <strong>Interests: </strong>
-        <div>
-          {/* {user.wantedskill.map((skill, index) => (
-            <div
-              key={index}
-              style={{
-                backgroundColor: getColorForSkill(skill),
-                color: 'white',
-                padding: '4px',
-                margin: '2px',
-                display: 'inline-block',
-                borderRadius: '4px',
-              }}
-            >
-              {skill}
-            </div>
-          ))} */}
-        </div>
-      </div>
+      <label htmlFor="avatar">
+            <p>Avatar</p>
+        </label>
+        <input type="file" id="avatar" name="avatar" onChange={handleInputChange} /><br />
 
-      <div>
-        <strong>Avatar: </strong>
-        {avatar && <img src={URL.createObjectURL(avatar)} className="App-logo" alt="avatar" />}
-        <input type="file" id="avatar" name="avatar" onChange={handleAvatarChange} />
-        {/* <img src={pic} className="App-logo" alt="logo" />
-        <input type="file" id="avatar" name="avatar"/> */}
-      </div>
+        <div>
+          <p>Confident skills</p>
+          {selectedSkills.map((skill,index) => (
+            <div key={index}>
+            <select
+              className="skill"
+              name="skill"
+              value={skill.name}
+              onChange={(e) => handleSkillNameChange(index, e.target.value)}
+            >
+              {skills.map((optionSkill) => (
+                <option key={optionSkill.id} value={optionSkill.name}>
+                  {optionSkill.name}
+                </option>
+              ))}
+            </select>
+
+              <select
+                className="proficiency"
+                name="proficiency"
+                value={skill.proficiency}
+                onChange={(e) => handleProficiencyChange(index, e.target.value)}
+              >
+                <option value="beginner">Beginner</option>
+                <option value="intermediate">Intermediate</option>
+                <option value="advanced">Advanced</option>
+              </select>
+            </div>
+          ))}
+          <button onClick={handleAddSkill}> + </button>
+    </div>
+
+    <label>
+    <p>Interested skills</p>
+    {interestedSkills.map((skillId, index) => (
+        <div key={index}>
+            <select
+                value={skillId}
+                onChange={(e) => handleInterestedSkillChange(index, e.target.value)}
+                className="skill"
+            >
+                <option value="">Select a Skill</option>
+                {skills.map((optionSkill) => (
+                    <option key={optionSkill.id} value={optionSkill.id}>
+                        {optionSkill.name}
+                    </option>
+                ))}
+            </select>
+        </div>
+    ))}
+    <button type="button" onClick={handleAddInterestedSkill}>+</button>
+</label>
+
+
+    <label htmlFor="district">
+          <p>District</p>
+          <select 
+            id="district" 
+            value={district} 
+            onChange={handleDistrictChange} 
+            required
+          >
+            <option value="">Select a District</option>
+            {districts.map((d, index) => (
+              <option key={index} value={d}>{d}</option>
+            ))}
+          </select>
+        </label>
+
       <div>
         <strong>Neighborhood: </strong>
         <input
