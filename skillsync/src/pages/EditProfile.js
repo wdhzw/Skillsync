@@ -88,7 +88,7 @@ const handleSkillNameChange = (index, skillName) => {
 };
 
 const transformSkillsForSubmission = () => {
-  return selectedSkills.map(skill => {
+  return selectedSkills.filter(id => id !== '').map(skill => {
     return { skill_id: skill.id, level: skill.proficiency };
   });
 };
@@ -291,8 +291,8 @@ const formData = new FormData();
               value={skill.name}
               onChange={(e) => handleSkillNameChange(index, e.target.value)}
             > 
-              <option value=''>
-                  No change
+              <option value="">
+                  Select to update your skills
               </option>
               {skills.map((optionSkill) => (
                 <option key={optionSkill.id} value={optionSkill.name}>
