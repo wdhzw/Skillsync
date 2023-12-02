@@ -130,3 +130,13 @@ button:hover, .edit-modal button:hover, .user-grid-item button.edit:hover {
 .edit-modal button:last-child:hover {
   background-color: #aaa;
 }
+.dropdown-container {
+  display: block;
+  margin-top: 10px; 
+}
+
+.dropdown-container select {
+  width: 100%; 
+  padding: 8px; 
+  margin-top: 5px; 
+}

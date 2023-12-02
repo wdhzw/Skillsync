@@ -163,6 +163,7 @@ async function getAllUsersResolver() {
   }
 }
 
+
 async function getAllSkillsResolver() {
   return await db.collection('skills').find().toArray();
 }

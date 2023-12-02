@@ -1,51 +1,134 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import UserItem from '../components/UserItem.js';
-import '../pages/UserList.css'; 
+import '../pages/UserList.css';
 import SideNav from '../SideNav.js';
-
+import graphQLFetch from './api';
 
 export default function RecUserList() {
-    const users = [ 
-    {id: 1, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 2, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 3, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 4, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 5, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 6, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 7, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 8, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 9, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 10, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 11, name: 'Mary Lim', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
-    {id: 12, name: 'John Ng', location:'Hougang',noofskills:8,picture:'/images/avatar.png',skills:['programming','golf','cooking','database design','French']},
+  const [users, setUsers] = useState([]);
+  const [skillsList, setSkillsList] = useState([]);
+  const [skillNameToId, setSkillNameToId] = useState({});
+  const [selectedUserId, setSelectedUserId] = useState(null); 
 
-  ];
+  const loggedInUserId = 1
 
-      return (
+  useEffect(() => {
+    const fetchSkills = async () => {
+      const query = `query {
+          getAllSkills {
+              id
+              name
+              description
+              pic
+          }
+      }`;
 
-        <div className="userlist-wrapper">
-        <SideNav/>
+      try {
+        const data = await graphQLFetch(query);
+        if (data) {
+          const skillsMapping = {};
+          data.getAllSkills.forEach(skill => {
+            skillsMapping[skill.name] = parseInt(skill.id, 10);
+          });
+          setSkillsList(data.getAllSkills);
+          setSkillNameToId(skillsMapping);
+        }
+      } catch (error) {
+        console.error('Error fetching skills:', error);
+      }
+    };
 
-          <h1>Top 12 Recommended Users</h1>
-          <div className="search">
-            <p>Users here are recommended based on the closest match between the skills you have, the skills you want to learn, age, location and gender. Users you have already sent an invitation to, or have initiated a chat with, are not shown. </p>
+    const getUsers = async () => {
+      const getAllUsersQuery = `
+        query getAllUsers {
+          getAllUsers {
+              id
+              username
+              password
+              gender
+              rating
+              suc_match
+              profile {
+                  age
+                  location
+                  avatar
+                  skills {
+                    skill_id
+                    level
+                  }
+                  wanted_skills
+                }
+          }
+        }
+      `;
+
+      try {
+        const data = await graphQLFetch(getAllUsersQuery);
+        if (data) {
+          setUsers(data.getAllUsers);
+        }
+      } catch (error) {
+        console.error('Error fetching Users:', error);
+      }
+    };
+
+    fetchSkills();
+    getUsers();
+  }, []);
+
+  const handleUserSelection = (event) => {
+    const newSelectedUserId = parseInt(event.target.value, 10);
+    console.log("Selected User ID:", newSelectedUserId);
+    setSelectedUserId(newSelectedUserId);
+  };
+
+
+
+  const filteredUsers = selectedUserId
+  ? users.filter(user => {
+      if (parseInt(user.id,10) === parseInt(selectedUserId,10)) {
+        return false; 
+      }
+      const selectedUser = users.find(u => parseInt(u.id,10) === parseInt(selectedUserId,10));
+      if (!selectedUser || !selectedUser.profile.wanted_skills.length) {
+        return false;
+      }
+
+      return selectedUser.profile.wanted_skills.some(wantedSkill => {
+        const match = user.profile.skills.some(skill => {
+          return skill.skill_id === wantedSkill;
+        });
+        return match;
+      });
+    })
+  : [];
+
+  
+
+  return (
+    <div className="userlist-wrapper">
+      <SideNav />
+      <h1>Top Recommended Users</h1>
+      <div className="search">
+        <p>Users here are recommended based matching between the skills that a user has and the skills that a user wants to learn. Pick a user (or pick yourself) to find other users matching this user's skills preference!</p>
+
+      </div>
+      <div className="dropdown-container">
+    <select onChange={handleUserSelection} value={selectedUserId || ""}>
+      <option value="">Select a user</option>
+      {users.map(user => (
+        <option key={user.id} value={user.id}>{user.username}</option>
+      ))}
+    </select>
+  </div>
+
+      <div className="user-grid">
+        {filteredUsers.map(user => (
+          <div className="user-grid-item" key={user.id}>
+            <UserItem user={user} />
           </div>
-
-
-          <div className="user-grid">
-            {
-              users.map(function(user) {
-                return (
-                  
-                  <div className="user-grid-item">
-                    <UserItem user={user} />
-                  </div>
-                );
-              })
-            }
-          </div>
-
-        </div>
-      );
-        
-  }
+        ))}
+      </div>
+    </div>
+  );
+}
