@@ -4,7 +4,7 @@ const { ApolloServer, UserInputError } = require('apollo-server-express');
 const { GraphQLScalarType } = require('graphql');
 const { Kind } = require('graphql/language');
 const { MongoClient } = require('mongodb');
-
+const cors = require('cors');
 
 
 
@@ -380,7 +380,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(express.static('public'));
-
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 app.post('/upload-avatar', upload.single('avatar'), (req, res) => {
   if (req.file) {
     const avatarPath = `/uploads/${req.file.filename}`; // Adjust the path according to your setup

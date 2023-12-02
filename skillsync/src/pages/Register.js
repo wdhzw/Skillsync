@@ -3,7 +3,7 @@ import './Login.css';
 import SideNav from '../SideNav';
 import {Link, useLocation,useNavigate} from "react-router-dom";
 import MapContainer from './MapContainer';
-
+import graphQLFetch from './api';
 
 
 const Profile = ({ user }) => {
@@ -17,35 +17,6 @@ const Profile = ({ user }) => {
   } 
 
   };
-
-// import graphQLFetch from './api';
-async function graphQLFetch(query, variables = {}) {
-  try {
-    const response = await fetch('/graphql', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ query, variables })
-    });
-    const body = await response.text();
-    const result = JSON.parse(body);
-    /*
-    Check for errors in the GraphQL response
-    */
-    if (result.errors) {
-      const error = result.errors[0];
-      if (error.extensions.code === 'BAD_USER_INPUT') {
-        const details = error.extensions.exception.errors.join('\n ');
-        alert(`${error.message}:\n ${details}`);
-      } else {
-        alert(`${error.extensions.code}: ${error.message}`);
-      }
-    }
-    return result.data;
-  } catch (e) {
-    alert(`Error in sending data to server: ${e.message}`);
-  }
-}
-
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -206,12 +177,12 @@ const handleAddSkill = () => {
       formData.append('avatar', avatar);
   
       try {
-        const uploadResponse = await fetch('/upload-avatar', {
+        const uploadResponse = await fetch('http://localhost:8000/upload-avatar', {
           method: 'POST',
           body: formData,
         });
         const uploadResult = await uploadResponse.json();
-  
+
         if (uploadResponse.ok) {
           const avatarPath = uploadResult.path;
 
