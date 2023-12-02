@@ -33,9 +33,7 @@ const SideNav = () => {
           <Link to="/Chats" className="nav-link">
             <ChatIcon className="icon"/>
             Chats</Link>
-          <Link to="/Invitations" className="nav-link">
-            <InsertInvitationIcon className="icon"/>
-            Invitations</Link>
+
       </div>
     )
 }

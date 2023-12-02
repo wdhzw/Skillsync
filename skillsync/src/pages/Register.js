@@ -41,8 +41,19 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [avatar, setAvatar] = useState(null);
   const [skills, setSkills] = useState([]);
-  const [selectedSkills, setSelectedSkills] = useState([{id:1,value:''}]);
+  const [selectedSkills, setSelectedSkills] = useState([{ id: 1, name: '', proficiency: 'beginner' }]);
   const [skillstoadd, setSkillstoadd] = useState([]);
+  const [interestedSkills, setInterestedSkills] = useState([]);
+  const [district, setDistrict] = useState('');
+
+  const districts = [
+    "Ang Mo Kio", "Bedok", "Bishan", "Bukit Batok", "Bukit Merah",
+    "Choa Chu Kang", "Clementi", "Geylang", "Hougang", "Jurong East",
+    "Jurong West", "Kallang", "Marine Parade", "Orchard", "Pasir Ris",
+    "Punggol", "Queenstown", "Sembawang", "Sengkang", "Serangoon",
+    "Tampines", "Toa Payoh", "Woodlands", "Yishun", "Jurong",
+    "Bukit Timah", "Novena", "Tanglin", "Rochor"];
+  
 
   // const handleChange = (id, value) => {
   //   const updatedSkills = skills.map(skill =>
@@ -71,13 +82,9 @@ const Register = () => {
     fetchSkills();
 }, []); 
 
-   const handleAddSkill = () => {
-    const newId = selectedSkills.length + 1;
-      setSelectedSkills([
-        ...selectedSkills,
-        { id: newId, name: '', proficiency: 'beginner' },
-      ]);
-    };
+const handleAddSkill = () => {
+  setSelectedSkills([...selectedSkills, { id: 1, name: '', proficiency: 'beginner' }]);
+};
   // const handleAddSelectedSkill = (selectedSkillName) => {
   //   const newId = selectedSkills.length + 1;
   //   if (selectedSkillName) {
@@ -125,22 +132,46 @@ const Register = () => {
   };
 
   const handleSkillNameChange = (index, skillName) => {
-    setSelectedSkills((prevSelectedSkills) => {
+    setSelectedSkills(prevSelectedSkills => {
       const updatedSkills = [...prevSelectedSkills];
-      updatedSkills[index] = {
-        ...updatedSkills[index],
-        name: skillName,
-      };
+      if (skillName === '') {
+        // Set default skill ID and name
+        updatedSkills[index] = { ...updatedSkills[index], id: 1, name: '' };
+      } else {
+        const foundSkill = skills.find(s => s.name === skillName);
+        updatedSkills[index] = {
+          ...updatedSkills[index],
+          id: foundSkill ? parseInt(foundSkill.id) : null,
+          name: skillName,
+        };
+      }
       return updatedSkills;
     });
   };
+  
+
+
+  const transformSkillsForSubmission = () => {
+    return selectedSkills.map(skill => {
+      return { skill_id: skill.id, level: skill.proficiency };
+    });
+  };
+
+
   const handleFormSubmit = async (event) => {
     event.preventDefault();
-    validateForm();
-    if(Object.keys(errors).length != 0) {
+    const formErrors = validateForm();
+    setErrors(formErrors);
+    console.log("form submitting");
+
+    if (Object.keys(formErrors).length !== 0) {
       alert("Please fill in the fields according to the requirements!");
-      return;
+      return; // Stop the form submission
     }
+  
+    console.log("no errors found");
+
+    console.log(avatar);
 
     const skillsToAdd = selectedSkills.map((selectedSkill) => ({
       name: selectedSkill.name,
@@ -149,45 +180,87 @@ const Register = () => {
 
     setSkillstoadd([...skills, ...skillsToAdd]);
 
-    const registerMutation = `
-      mutation register($username: String!, $password: String!,$gender: String!,$profile:UserProfileInput) {
-        register(username:$username, password:$password,gender:$gender,profile:$profile) {
-          username
-          password
-          gender
-          profile{
-            age
-            location
-            userskill{
-              name
-              proficiency
-            }
-          }
+    const transformedSkills = transformSkillsForSubmission();
+    const transformedInterestedSkills = interestedSkills.filter(id => id !== '').map(Number);
+
+
+
+    if (avatar) {
+      console.log("avatar loading");
+      const formData = new FormData();
+      formData.append('avatar', avatar);
+  
+      try {
+        const uploadResponse = await fetch('/upload-avatar', {
+          method: 'POST',
+          body: formData,
+        });
+        const uploadResult = await uploadResponse.json();
+  
+        if (uploadResponse.ok) {
+          const avatarPath = uploadResult.path;
+
+                      const registerData = {
+                        username: username,
+                        password: password,
+                        gender: gender,
+                        profile: {
+                          age: parseInt(age),
+                          postal: parseInt(postcode),
+                          location: district,
+                          avatar: avatarPath, 
+                          skills: transformedSkills,
+                          wanted_skills: transformedInterestedSkills
+                    }
+                      };
+                  
+                      const registerMutation = `
+                      mutation register($username: String!, $password: String!, $gender: String!, $profile: UserProfileInput) {
+                        register(username: $username, password: $password, gender: $gender, profile: $profile) {
+                          username
+                          password
+                          gender
+                          profile {
+                            age
+                            postal
+                            location
+                            avatar
+                            skills {
+                              skill_id
+                              level
+                            }
+                            wanted_skills
+                          }
+                        }
+                      }
+                    `;                 
+                  
+                      console.log(registerData); //success
+                    
+                      try {
+                        const data = await graphQLFetch(registerMutation, registerData);
+                        if(data.register){
+                          alert("User signed up with username " + username);
+                        }
+                        console.log('User signed up:', data);
+                        console.log(skills);
+                      } catch (error) {
+                        console.error('Error signing up:', error);
+                      }
+
+
+        } else {
+          throw new Error('Failed to upload avatar.');
         }
-      }`;
-      
-    const registerData = {
-      username: username,
-      password: password,
-      gender: gender,
-      profile:{
-        age:age,
-        location:postcode,
-        userskill:skillstoadd,
-      },
-    };
-    console.log(registerData); //success
-    
-    try {
-      const data = await graphQLFetch(registerMutation, registerData);
-      if(data.register){
-        alert("User signed up with username " + username);
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        return;
       }
-      console.log('User signed up:', data);
-      console.log(skills);
-    } catch (error) {
-      console.error('Error signing up:', error);
     }
+  
+
+
+    
   };
 
   const validateForm = () => {
@@ -198,6 +271,7 @@ const Register = () => {
       errors.username = 'Username is required';
     }
 
+    
     // Validate password length
     if (password.length < 6) {
       errors.password = 'Password should be at least 6 characters long';
@@ -209,8 +283,20 @@ const Register = () => {
     if (parseInt(age) > 120) {
       errors.age = 'Age must be a number less than 120';
     }
+    return errors;
 
-    setErrors(errors);
+  };
+
+  const handleAddInterestedSkill = () => {
+    setInterestedSkills([...interestedSkills, '']); // Adds an empty placeholder for a new skill
+};
+
+const handleInterestedSkillChange = (index, newSkillId) => {
+  setInterestedSkills(interestedSkills.map((skillId, idx) => idx === index ? newSkillId : skillId));
+};
+
+  const handleDistrictChange = (event) => {
+    setDistrict(event.target.value);
   };
 
   return(
@@ -248,7 +334,7 @@ const Register = () => {
         <label htmlFor="avatar">
             <p>Avatar</p>
         </label>
-        <input type="file" id="avatar" name="avatar"/><br />
+        <input type="file" id="avatar" name="avatar" onChange={handleInputChange} /><br />
 
         <div>
           <p>Confident skills</p>
@@ -282,18 +368,45 @@ const Register = () => {
           <button onClick={handleAddSkill}> + </button>
     </div>
 
-        <label type="select">
-            <p>Interested skills</p>
-            <div>
-                <select id="skill2" className = "skill" name="skill" type ="horizontal">
-                    <option value="badminton">badminton</option>
-                    <option value="tennis">tennis</option>
-                    <option value="basketball">basketball</option>
-                    <option value="Programming">Programming</option>
-                </select>
-            </div>
-            <button type="plus">+</button>
+    <label>
+    <p>Interested skills</p>
+    {interestedSkills.map((skillId, index) => (
+        <div key={index}>
+            <select
+                value={skillId}
+                onChange={(e) => handleInterestedSkillChange(index, e.target.value)}
+                className="skill"
+            >
+                <option value="">Select a Skill</option>
+                {skills.map((optionSkill) => (
+                    <option key={optionSkill.id} value={optionSkill.id}>
+                        {optionSkill.name}
+                    </option>
+                ))}
+            </select>
+        </div>
+    ))}
+    <button type="button" onClick={handleAddInterestedSkill}>+</button>
+</label>
+
+
+    <label htmlFor="district">
+          <p>District</p>
+          <select 
+            id="district" 
+            value={district} 
+            onChange={handleDistrictChange} 
+            required
+          >
+            <option value="">Select a District</option>
+            {districts.map((d, index) => (
+              <option key={index} value={d}>{d}</option>
+            ))}
+          </select>
         </label>
+
+
+
 
         <label htmlFor="postalCode">
             <p>Postal Code</p>

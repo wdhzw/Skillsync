@@ -45,14 +45,10 @@ const resolvers = {
 };
 
 // User Service (USV) Resolvers
-async function registerResolver(_, args) 
-{
+async function registerResolver(_, { username, password, gender, profile }) {
   try {
-    const { username, password, gender, profile } = args;
-    console.log(username, password);
     // Check if the user with the provided name already exists
     const existingUser = await db.collection('users').findOne({ username });
-    
     if (existingUser) {
       throw new Error('User with this username already exists.');
     }
@@ -63,19 +59,24 @@ async function registerResolver(_, args)
       password,
       gender,
       id: await db.collection('users').countDocuments() + 1,
-      profile,
+      profile: {
+        ...profile,
+        skills: profile.skills.map(skill => ({
+          skill_id: skill.skill_id,
+          level: skill.level
+        })),
+        wanted_skills: profile.wanted_skills
+      },
       suc_match: 0,
       invite_sent: [],
       invite_rec: [],
       rating: 0,
       review: [],
-      chats:[],
+      chats: [],
     };
 
-    // Insert the new user into the "users" collection
     const result = await db.collection('users').insertOne(newUser);
 
-    // Get the inserted user document
     const insertedUser = result.ops[0];
     console.log(insertedUser);
     return insertedUser;
@@ -106,39 +107,43 @@ async function loginResolver(_, args)
 
 async function editProfileResolver(_, args) {
   try {
+    const { username, newusername, password, gender, profile } = args;
 
-    const { username,newusername, password, gender,profile } = args;
-    
     const existingUser = await db.collection('users').findOne({ username });
-
     if (!existingUser) {
       throw new Error('User with this username does not exist.');
     }
 
-    if(newusername!==username && newusername!=="") {
-      const existUsername = await db.collection('users').findOne({ newusername });
-
+    if (newusername && newusername !== username) {
+      const existUsername = await db.collection('users').findOne({ username: newusername });
       if (existUsername) {
         throw new Error('New username is used by others already.');
       } else {
         existingUser.username = newusername;
       }
-  }
-  if(password!==""){ existingUser.password = password; }
-  if(gender!==""){ existingUser.gender = gender; }
-  if(profile.age !==0) {
-    existingUser.profile.age = profile.age;
-  }
-  if(profile.postcode !=="") {
-    existingUser.profile.postcode = profile.postcode;
-  }
-  if (profile.avatar) {
-    const avatarPath = `uploads/${username}_avatar.jpg`; 
-    console.log(avatarPath);
-    
-    // await fs.promises.writeFile(avatarPath, profile.avatar.buffer);
-    existingUser.profile.avatar = avatarPath;
-  }
+    }
+
+    if (password) existingUser.password = password;
+    if (gender) existingUser.gender = gender;
+
+    if (profile) {
+      if (profile.age !== undefined) existingUser.profile.age = profile.age;
+      if (profile.location !== undefined) existingUser.profile.location = profile.location;
+      if (profile.avatar) {
+        // Handle avatar logic
+        // existingUser.profile.avatar = avatarPath;
+      }
+      if (profile.skills) {
+        existingUser.profile.skills = profile.skills.map(skill => ({
+          skill_id: skill.skill_id,
+          level: skill.level
+        }));
+      }
+      if (profile.wanted_skills) {
+        existingUser.profile.wanted_skills = profile.wanted_skills;
+      }
+    }
+
     await db.collection('users').updateOne({ username }, { $set: existingUser });
 
     return existingUser;
@@ -146,6 +151,8 @@ async function editProfileResolver(_, args) {
     throw new Error(`Error updating user profile: ${error.message}`);
   }
 }
+
+
 async function getAllUsersResolver() {
   try {
     const users = await db.collection('users').find().toArray();
@@ -196,7 +203,7 @@ const server = new ApolloServer({
 });
 server.applyMiddleware({ app, path: '/graphql' });
 
-app.use('/avatars', express.static('uploads'));
+//app.use('/avatars', express.static('uploads'));
  
 //Starting the server that runs forever.
   (async function () {
@@ -254,5 +261,30 @@ app.get('/api/skillsfuture', async (req, res) => {
     console.log("data request error");
     console.error('Error in proxy endpoint', error);
     res.status(500).send('Error in proxy request');
+  }
+});
+
+const multer = require('multer');
+const path = require('path');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/uploads/'); // Adjust the path according to your setup
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname)); // Append original file extension
+  }
+});
+
+const upload = multer({ storage: storage });
+
+app.use(express.static('public'));
+
+app.post('/upload-avatar', upload.single('avatar'), (req, res) => {
+  if (req.file) {
+    const avatarPath = `/uploads/${req.file.filename}`; // Adjust the path according to your setup
+    res.json({ path: avatarPath });
+  } else {
+    res.status(400).send('No file uploaded.');
   }
 });

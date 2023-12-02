@@ -24,13 +24,13 @@ type Message {
   content: String
   timestamp: DateTime
   sender: User
-  # receiver: User
 }
 
 type UserProfile {
   age: Int
   location: String
   avatar: String
+  postal:Int
   skills: [UserSkill]
   wanted_skills: [Int]
 }
@@ -40,24 +40,21 @@ type UserSkill {
   level: String
 }
 
-
-input SkillInput{
-  name: String!
-  description: String!
-  proficiency: Int
-  certificate: String!
-  pic: String!
-}
-
 input UserProfileInput {
   age: Int
   location: String
-  avatar: Upload
-  userskill:[SkillInput]
-  wantedskill:[SkillInput]
+  avatar: String
+  postal:Int
+  skills:[UserSkillInput] 
+  wanted_skills: [Int]    
 }
 
-type Skill{
+input UserSkillInput {
+  skill_id: Int           
+  level: String
+}
+
+type Skill {
   id: ID!
   name: String!
   proficiency: String
@@ -65,7 +62,7 @@ type Skill{
   pic: String
 }
 
-type Review{
+type Review {
   id: ID!
   from: User
   to: User
@@ -81,15 +78,14 @@ type Query {
   getAllSkills: [Skill]
   getSkill(id: ID!): Skill
   usersBySkill(skillId: Int!): [User]
-
 }
 
 ## Mutations ##
 type Mutation {
   #USV Related  
-  register(username: String!, password: String!,gender:String!,profile:UserProfileInput): User
+  register(username: String!, password: String!, gender: String!, profile: UserProfileInput): User
   login(username: String!, password: String!): User
-  editProfile(username: String!, newusername: String,password: String,gender:String,profile:UserProfileInput): User
+  editProfile(username: String!, newusername: String, password: String, gender: String, profile: UserProfileInput): User
   
   #deregisterUser(email: String!): ID
 }

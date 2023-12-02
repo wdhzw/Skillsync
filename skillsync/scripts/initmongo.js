@@ -27,6 +27,7 @@ db.users.insert({
   profile: {
     age: 30,
     avatar:"/images/john.png",
+    postal:339155,
     location: "Kallang",
     skills: [
       { skill_id: 1, level: "Beginner" },
@@ -51,6 +52,7 @@ db.users.insertMany([
     review: [],
     profile: {
       age: 40,
+      postal:560101,
       location: "Ang Mo Kio",
       avatar:"/images/mary.png",
       skills: [
@@ -75,6 +77,7 @@ db.users.insertMany([
     review: [],
     profile: {
       age: 22,
+      postal:540563,
       location: "Jurong",
       avatar:"/images/jane.png",
       skills: [
@@ -100,6 +103,7 @@ db.users.insertMany([
     review: [],
     profile: {
       age: 44,
+      postal:238823,
       location: "Orchard",
       avatar:"/images/harry.png",
       skills: [
@@ -124,6 +128,7 @@ db.users.insertMany([
     review: [],
     profile: {
       age: 77,
+      postal:449269,
       location: "Marine Parade",
       avatar:"/images/richard.png",
       skills: [
@@ -148,6 +153,7 @@ db.users.insertMany([
     review: [],
     profile: {
       age: 18,
+      postal:510258,
       location: "Pasir Ris",
       avatar:"/images/minnie.png",
       skills: [
