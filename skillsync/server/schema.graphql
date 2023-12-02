@@ -1,7 +1,7 @@
 scalar DateTime
 
 type User {
-  id: ID!
+  id: Int!
   username: String!
   password: String!
   gender: String
@@ -16,11 +16,13 @@ type User {
 }
 
 type Chat {
+  id: Int!
   messages:[Message]
-  participants:[User]
+  participants: [User]
 }
 
 type Message {
+  id: ID!
   content: String
   timestamp: DateTime
   sender: User
@@ -79,6 +81,10 @@ type Query {
   getAllSkills: [Skill]
   getSkill(id: ID!): Skill
   usersBySkill(skillId: Int!): [User]
+  
+  getChat(chatId: ID!): Chat
+  getUserChats(userId: ID!): [Chat]
+  getChatMessages(chatId: ID!): [Message]
 }
 
 ## Mutations ##
@@ -88,5 +94,10 @@ type Mutation {
   login(username: String!, password: String!): User
   editProfile(username: String!, newusername: String, password: String, gender: String, profile: UserProfileInput): User
   
-  #deregisterUser(email: String!): ID
+  #deregisterUser(email: String!): Int
+
+
+  createChat(participants: Int!): Chat
+  sendMessage(chatId: ID!, content: String!, senderId: ID!): Message
+  deleteMessage(messageId: ID!): ID
 }

@@ -1,6 +1,6 @@
 // import logo from './logo.svg';
 import './App.css';
-
+import { AuthProvider } from './AuthContext.js';
 import React, { useState } from 'react';
 
 import Navbar from './Navbar';
@@ -57,12 +57,13 @@ function MainContent() {
 function App() {
   return (
     <>
-      <Router>
+    <AuthProvider>
+         <Router>
         <Navbar />
         <MainContent />
         <SideNav />
-      </Router>
-
+      </Router>   
+    </AuthProvider>
     </>
     // <div className="App">
     //   <header className="App-header">

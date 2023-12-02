@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import graphQLFetch from './api';
-
+import { AuthContext } from '../AuthContext.js';
 export default function Login({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [userRole, setUserRole] = useState('user'); // default to 'user'
-  const [loggedInUser, setLoggedInUser] = useState(null);
+  // const [loggedInUser, setLoggedInUser] = useState(null);
   const navigate = useNavigate();
+  const { loggedInUser, setLoggedInUser } = useContext(AuthContext);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,16 +18,26 @@ export default function Login({ onLogin }) {
         login(username: $username, password: $password) {
           id
           username
-          password
+          email
           gender
           rating
           suc_match
-          profile{
+          profile {
             age
             location
+            avatar
+            postal
+            skills {
+              skill_id
+              level
+            }
+            wanted_skills
+          }
+          chats {
+            id
           }
         }
-      }
+      }      
     `;
 
     const loginData = {
@@ -40,6 +51,7 @@ export default function Login({ onLogin }) {
       // this.setState({ user: data.register });
       if(data.login){
         setLoggedInUser(data.login);
+        console.log('Updated loggedInUser:', loggedInUser);
         alert("User loggedin with username " + username);
       }
       console.log('User Logged in :', data.login);

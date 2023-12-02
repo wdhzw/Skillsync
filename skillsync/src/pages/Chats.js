@@ -1,49 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { AuthContext } from '../AuthContext'; // Adjust this path based on your project structure
+import graphQLFetch from './api'; // Adjust this path based on your project structure
 import { Link } from 'react-router-dom';
 import './Chats.css';
 import '../Modal.css';
-
-const conversations = [
-    {id: 1, name: "John Doe", profileImage: "/images/john-doe.png"},
-    {id: 2, name: "Jane Smith", profileImage: "/images/jane-smith.png"},
-];
-
-const sampleMessages = {
-    1: [ // Messages for conversation with John Doe (id: 1)
-        {
-            senderId: 1,
-            timestamp: new Date('2023-10-13T12:00:00'),
-            text: "Hi there! I noticed you're skilled in React development. Could you help me out with some concepts?"
-        },
-        {
-            senderId: 2, // Assuming 2 is your user ID
-            timestamp: new Date('2023-10-13T12:05:00'),
-            text: "Of course, John! Which concepts are you struggling with?"
-        },
-        {
-            senderId: 1,
-            timestamp: new Date('2023-10-13T12:10:00'),
-            text: "I'm having trouble understanding hooks, especially useEffect. Can we schedule a call?"
-        }
-    ],
-    2: [ // Messages for conversation with Jane Smith (id: 3)
-        {
-            senderId: 2,
-            timestamp: new Date('2023-10-14T09:00:00'),
-            text: "Hey Jane! I saw you're proficient in Graphic Design. I'm trying to learn the basics, got any tips?"
-        },
-        {
-            senderId: 3,
-            timestamp: new Date('2023-10-14T09:20:00'),
-            text: "Sure! Start with the basic tools and get hands-on practice. Would you like some resources?"
-        }
-    ]
-};
-
 const Chats = () => {
-
-    const [selectedChat, setSelectedChat] = useState(conversations[0].id);
-    const [messages, setMessages] = useState(sampleMessages);
+    const { loggedInUser } = useContext(AuthContext);
+    useEffect(() => {
+    console.log('Current loggedInUser:', loggedInUser);
+    }, [loggedInUser]);
+    const [chats, setChats] = useState([]);
+    const [selectedChat, setSelectedChat] = useState(null);
+    const [messages, setMessages] = useState();
     const [currentMessage, setCurrentMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [showBlockModal, setShowBlockModal] = useState(false);
@@ -86,22 +54,76 @@ const Chats = () => {
         setShowRateModal(false);
     };
 
-    const handleSendMessage = () => {
-        if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat)) return;
-
-        const newMessage = {
-            senderId: 2, // Assuming 2 is the user ID
-            timestamp: new Date(),
-            text: currentMessage
+    const handleSendMessage = async () => {
+        if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat.id)) return;
+      
+        const mutation = `
+          mutation sendMessage($chatId: ID!, $content: String!, $senderId: ID!) {
+            sendMessage(chatId: $chatId, content: $content, senderId: $senderId) {
+              id
+              content
+              timestamp
+            }
+          }
+        `;
+      
+        const vars = {
+          chatId: selectedChat.id,
+          content: currentMessage,
+          senderId: loggedInUser.id  // Make sure loggedInUser.id is the correct ID of the logged-in user
         };
-
-        setMessages(prevMessages => ({
-            ...prevMessages,
-            [selectedChat]: [...(prevMessages[selectedChat] || []), newMessage]
-        }));
-
+      
+        try {
+          await graphQLFetch(mutation, vars);
+          // Optionally, you can handle the response here, like updating the UI
+        } catch (error) {
+          console.error('Error sending message:', error);
+          // Handle error
+        }
+      
         setCurrentMessage("");
+      };
+      
+    const fetchChats = async () => {
+        if (loggedInUser && loggedInUser.id) {
+            console.log("Fetching chats for user:", loggedInUser.id)
+            const query = `query getUserChats($userId: ID!) {
+                getUserChats(userId: $userId) {
+                    id
+                    messages {
+                        id
+                        content
+                        timestamp
+                        sender {
+                            id
+                            username
+                        }
+                    }
+                    participants{
+                        id
+                        username
+                        profile {
+                            avatar
+                        }
+                    }
+                }
+            }`;
+
+            const data = await graphQLFetch(query, { userId: loggedInUser.id });
+            console.log("Fetched chats:", data);
+            if (data) {
+                setChats(data.getUserChats);
+                if (data.getUserChats.length > 0) {
+                    setSelectedChat(data.getUserChats[0]);
+                }
+            }
+        }
     };
+
+    useEffect(() => {
+        fetchChats();
+    }, [loggedInUser]);
+
     return (
         <div className="chat-container">
 
@@ -147,29 +169,41 @@ const Chats = () => {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />
                 </div>
-                {conversations.filter(convo => convo.name.toLowerCase().includes(searchTerm.toLowerCase())).map(conversation => (
+                {chats.filter(chat => 
+                    chat.participants.some(participant => 
+                        participant.username.toLowerCase().includes(searchTerm.toLowerCase()) &&
+                        participant.id !== loggedInUser.id
+                    )
+                ).map(chat => (
                     <div 
-                        key={conversation.id} 
-                        className={`conversation-item ${selectedChat === conversation.id ? 'active' : ''}`}
-                        onClick={() => {
-                            setSelectedChat(conversation.id);
-                            setCurrentMessage("");
-                        }}
+                        key={chat.id} 
+                        className={`conversation-item ${selectedChat?.id === chat.id ? 'active' : ''}`}
+                        onClick={() => setSelectedChat(chat)}
                     >
-                        <img src={conversation.profileImage} className="small-profile-img" alt={conversation.name} />
-                        {conversation.name}
+                        {/* Render participant info here */}
+                        {chat.participants.find(p => p.id !== loggedInUser.id).username}
                     </div>
                 ))}
+
             </div>
+
     
             {/* Chat Content */}
             <div className="chat-content">
                 <div className="chat-header">
                     <Link to="/ViewProfile">
-                        <img src={selectedChat ? conversations.find(c => c.id === selectedChat).profileImage : "#"} className="profile-img" alt="profile" />
+                        {selectedChat && (
+                            <img 
+                                src={selectedChat.participants.find(p => p.id !== loggedInUser.id).profile.avatar} 
+                                className="profile-img" 
+                                alt="Profile" 
+                            />
+                        )}
                     </Link>
-                    {selectedChat ? conversations.find(c => c.id === selectedChat).name : "[Select a chat]"}
-    
+                    {selectedChat 
+                        ? selectedChat.participants.find(p => p.id !== loggedInUser.id).username 
+                        : "[Select a chat]"
+    }
                     {/* SkillSync buttons */}
                     {!skillSyncingUsers.includes(selectedChat) && (
                         <button onClick={handleStartSkillSync} className="initiate-exchange-btn">
@@ -193,19 +227,22 @@ const Chats = () => {
                     </button>
                 </div>
     
-                <div className="chat-body">
-                    {blockedUsers.includes(selectedChat) ? (
-                        <div className="blocked-message">
-                            You have blocked this user. To view messages and interact, unblock them.
-                        </div>
-                    ) : (
-                        (messages[selectedChat] || []).map((message, idx) => (
-                            <div key={idx} className={`message ${message.senderId === 2 ? 'self' : 'user'}`}>
-                                {message.text}
+                    <div className="chat-body">
+                        {selectedChat && selectedChat.messages.map((message, idx) => (
+                            <div 
+                                key={idx} 
+                                className={`message ${message.sender.id === loggedInUser.id ? 'self' : 'other'}`}
+                            >
+                                {message.content}
                             </div>
-                        ))
-                    )}
-                </div>
+                        ))}
+                        {blockedUsers.includes(selectedChat) && (
+                            <div className="blocked-message">
+                                You have blocked this user. To view messages and interact, unblock them.
+                            </div>
+                        )}
+                    </div>
+
     
                 <div className="chat-input">
                     <input 
@@ -214,8 +251,14 @@ const Chats = () => {
                         value={currentMessage}
                         onChange={(e) => setCurrentMessage(e.target.value)}
                     />
-                    <button onClick={handleSendMessage} disabled={!currentMessage || !selectedChat || blockedUsers.includes(selectedChat)}>Send</button>
+                    <button 
+                        onClick={handleSendMessage} 
+                        disabled={!currentMessage || !selectedChat || blockedUsers.includes(selectedChat)}
+                    >
+                        Send
+                    </button>
                 </div>
+
             </div>
         </div>
     );

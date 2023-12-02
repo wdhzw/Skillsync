@@ -7,6 +7,8 @@ const { MongoClient } = require('mongodb');
 
 
 
+
+
 /******************************************* 
 DATABASE CONNECTION CODE
 ********************************************/
@@ -35,13 +37,18 @@ const resolvers = {
     getUserById: getUserByIdResolver,
     getSkill: getSkillResolver,
     usersBySkill: usersBySkillResolver,
-
+    getChat: getChatResolver,
+    getUserChats: getUserChatsResolver,
+    getChatMessages: getChatMessagesResolver,
   },
   Mutation: {
     // User Service (USV) Resolvers
     register: registerResolver,
     login: loginResolver,
     editProfile: editProfileResolver,
+    createChat: createChatResolver,
+    sendMessage: sendMessageResolver,
+    deleteMessage: deleteMessageResolver,
   }
 };
 
@@ -200,7 +207,83 @@ async function usersBySkillResolver(_, args) {
   }
 }
 
+// Resolver to get a single chat by its ID
+async function getChatResolver(_, args) {
+  const { chatId } = args;
+  return await db.collection('chats').findOne({ id: parseInt(chatId, 10) });
+}
 
+// Resolver to get all chats for a specific user
+async function getUserChatsResolver(_, args) {
+  const { userId } = args;
+  
+  // Convert userId to the appropriate type if necessary. 
+  // Here, we're assuming it needs to be an integer.
+  const userIdInt = parseInt(userId, 10);
+
+  // Use the $elemMatch operator to check if any element in the 
+  // participants array matches the given userId.
+  return await db.collection('chats').find({ 
+    "participants.id": userIdInt
+  }).toArray();
+}
+
+// Resolver to get all messages in a specific chat
+async function getChatMessagesResolver(_, args) {
+  const { chatId } = args;
+  const chat = await db.collection('chats').findOne({ id: parseInt(chatId, 10) });
+  return chat ? chat.messages : [];async function getUserChatsResolver(_, args) {
+    const { userId } = args;
+    //return await db.collection('chats').find().toArray();
+    return await db.collection('chats').find({ "participants.id": parseInt(userId,10)}).toArray();
+  }
+}
+async function createChatResolver(_, args) {
+  const { participants } = args;
+
+  const newChat = {
+    id: await db.collection('chats').countDocuments() + 1, // Generates a new ID
+    participants: participants,
+    messages: [] // Initially, the chat will have no messages
+  };
+
+  await db.collection('chats').insertOne(newChat);
+  return newChat;
+}
+
+
+// Resolver to send a new message
+async function sendMessageResolver(_, args) {
+  const { chatId, content, senderId } = args;
+
+  const newMessage = {
+    id: new Date().getTime(), // Timestamp-based unique ID
+    content: content,
+    timestamp: new Date(),
+    sender: senderId
+  };
+
+  await db.collection('chats').updateOne(
+    { id: chatId },
+    { $push: { messages: newMessage } }
+  );
+
+  return newMessage;
+}
+
+
+
+// Resolver to delete a message
+async function deleteMessageResolver(_, args) {
+  const { chatId, messageId } = args;
+
+  await db.collection('chats').updateOne(
+    { id: chatId },
+    { $pull: { messages: { id: messageId } } } // Removes the message with the specified ID
+  );
+
+  return messageId; // Returns the ID of the deleted message
+}
 
 /******************************************* 
 SERVER INITIALIZATION CODE
@@ -208,7 +291,7 @@ SERVER INITIALIZATION CODE
 const app = express();
 
 //Attaching a Static web server.
-app.use(express.static('build'));
+// app.use(express.static('build'));
 
 //Creating and attaching a GraphQL API server.
 const server = new ApolloServer({
@@ -227,8 +310,8 @@ server.applyMiddleware({ app, path: '/graphql' });
   (async function () {
     try {
       await connectToDb();
-      app.listen(3000, function () {
-        console.log('App started on port 3000');
+      app.listen(8000, function () {
+        console.log('App started on port 8000');
       });
     } catch (err) {
       console.log('ERROR:', err);
