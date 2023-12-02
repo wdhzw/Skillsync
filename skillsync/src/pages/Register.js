@@ -1,7 +1,22 @@
 import React, { useState , useEffect  } from 'react';
 import './Login.css';
 import SideNav from '../SideNav';
+import {Link, useLocation,useNavigate} from "react-router-dom";
 import MapContainer from './MapContainer';
+
+
+
+const Profile = ({ user }) => {
+  
+  const navigate = useNavigate();
+
+  if(user) {
+    alert("You are already logged in. Bringing you to your Profile page");
+    navigate("/ViewProfile");
+    return null;
+  } 
+
+  };
 
 // import graphQLFetch from './api';
 async function graphQLFetch(query, variables = {}) {

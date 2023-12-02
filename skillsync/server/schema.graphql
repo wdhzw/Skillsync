@@ -77,6 +77,7 @@ type Review {
 type Query {
   getUserProfile: User
   getAllUsers: [User]
+  getUserById(id: Int!): User
   getAllSkills: [Skill]
   getSkill(id: ID!): Skill
   usersBySkill(skillId: Int!): [User]
