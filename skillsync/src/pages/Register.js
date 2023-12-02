@@ -5,7 +5,6 @@ import {Link, useLocation,useNavigate} from "react-router-dom";
 import MapContainer from './MapContainer';
 import graphQLFetch from './api';
 
-
 const Profile = ({ user }) => {
   
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ const Register = () => {
   const [avatar, setAvatar] = useState(null);
   const [skills, setSkills] = useState([]);
   const [selectedSkills, setSelectedSkills] = useState([{ id: 1, name: '', proficiency: 'beginner' }]);
-  const [skillstoadd, setSkillstoadd] = useState([]);
   const [interestedSkills, setInterestedSkills] = useState([]);
   const [district, setDistrict] = useState('');
 
@@ -40,13 +38,6 @@ const Register = () => {
     "Tampines", "Toa Payoh", "Woodlands", "Yishun", "Jurong",
     "Bukit Timah", "Novena", "Tanglin", "Rochor"];
   
-
-  // const handleChange = (id, value) => {
-  //   const updatedSkills = skills.map(skill =>
-  //     skill.id === id ? { ...skill, value } : skill
-  //   );
-  //   setSkills(updatedSkills);
-  // };
 
   useEffect(() => {
     const fetchSkills = async () => {
@@ -66,17 +57,11 @@ const Register = () => {
     };
 
     fetchSkills();
-}, []); 
+  }, []); 
 
-const handleAddSkill = () => {
-  setSelectedSkills([...selectedSkills, { id: 1, name: '', proficiency: 'beginner' }]);
-};
-  // const handleAddSelectedSkill = (selectedSkillName) => {
-  //   const newId = selectedSkills.length + 1;
-  //   if (selectedSkillName) {
-  //     setSelectedSkills([...skills, { id: newId, value: selectedSkillName }]);
-  //   }
-  // };
+  const handleAddSkill = () => {
+    setSelectedSkills([...selectedSkills, { id: 1, name: '', proficiency: 'beginner' }]);
+  };
 
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
@@ -121,7 +106,6 @@ const handleAddSkill = () => {
     setSelectedSkills(prevSelectedSkills => {
       const updatedSkills = [...prevSelectedSkills];
       if (skillName === '') {
-        // Set default skill ID and name
         updatedSkills[index] = { ...updatedSkills[index], id: 1, name: '' };
       } else {
         const foundSkill = skills.find(s => s.name === skillName);
@@ -135,8 +119,6 @@ const handleAddSkill = () => {
     });
   };
   
-
-
   const transformSkillsForSubmission = () => {
     return selectedSkills.map(skill => {
       return { skill_id: skill.id, level: skill.proficiency };
@@ -159,17 +141,8 @@ const handleAddSkill = () => {
 
     console.log(avatar);
 
-    const skillsToAdd = selectedSkills.map((selectedSkill) => ({
-      name: selectedSkill.name,
-      proficiency: selectedSkill.proficiency,
-    }));
-
-    setSkillstoadd([...skills, ...skillsToAdd]);
-
     const transformedSkills = transformSkillsForSubmission();
     const transformedInterestedSkills = interestedSkills.filter(id => id !== '').map(Number);
-
-
 
     if (avatar) {
       console.log("avatar loading");
@@ -256,8 +229,6 @@ const handleAddSkill = () => {
     if (username.trim() === '') {
       errors.username = 'Username is required';
     }
-
-    
     // Validate password length
     if (password.length < 6) {
       errors.password = 'Password should be at least 6 characters long';

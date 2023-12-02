@@ -135,19 +135,19 @@ async function editProfileResolver(_, args) {
     if (gender) existingUser.gender = gender;
 
     if (profile) {
-      if (profile.age !== undefined) existingUser.profile.age = profile.age;
+      if (profile.age) existingUser.profile.age = profile.age;
       if (profile.location !== undefined) existingUser.profile.location = profile.location;
       if (profile.avatar) {
         // Handle avatar logic
-        // existingUser.profile.avatar = avatarPath;
+         existingUser.profile.avatar = avatarPath;
       }
-      if (profile.skills) {
+      if (Array.isArray(profile.skills) && profile.skills.length > 0) {
         existingUser.profile.skills = profile.skills.map(skill => ({
           skill_id: skill.skill_id,
           level: skill.level
         }));
       }
-      if (profile.wanted_skills) {
+      if (Array.isArray(profile.wanted_skills) && profile.wanted_skills.length > 0) {
         existingUser.profile.wanted_skills = profile.wanted_skills;
       }
     }
