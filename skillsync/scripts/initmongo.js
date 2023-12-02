@@ -11,7 +11,8 @@ db.dropDatabase()
 // Create a collection for User Service (USV)
 db.createCollection("users")
 // Optionally, you can define indexes or validations for the "users" collection here
-
+// Create a collection for Chats
+db.createCollection("chats")
 // Insert a sample user with an "id" field
 db.users.insert({
   id: 1, // Unique ID for the user
@@ -182,4 +183,30 @@ db.skills.insertMany([
   { id: 9, name: "Digital Marketing", description: "Digital Marketing encompasses all marketing efforts that use an electronic device or the internet. Businesses leverage digital channels to connect with current and prospective customers.", pic: "/images/skill-digitalmarketing.png" },
   { id: 10, name: "Cybersecurity", description: "Cybersecurity is the practice of protecting systems, networks, and programs from digital attacks. These cyberattacks are usually aimed at accessing, changing, or destroying sensitive information.", pic: "/images/skill-cybersecurity.png" },
   { id: 11, name: "Blockchain", description: "Blockchain technology offers a way for untrusted parties to reach agreement on a common digital history. It is the foundation for cryptocurrencies like Bitcoin.", pic: "/images/skill-blockchain.png" },
+]);
+
+
+// Create a collection for Chats
+db.createCollection("chats")
+const user1 = db.users.findOne({ id: 1 });
+const user2 = db.users.findOne({ id: 2 });
+db.chats.insertMany([
+  {
+    id: 1,
+    participants: [user1, user2],
+    messages: [
+      {
+        id: new Date('2023-01-01T10:00:00Z').getTime(),
+        content: "Hi Mary, how are you?",
+        timestamp: new Date('2023-01-01T10:00:00Z'),
+        sender: user1
+      },
+      {
+        id: new Date('2023-01-01T10:05:00Z').getTime(),
+        content: "Hi John! I'm good, thanks for asking.",
+        timestamp: new Date('2023-01-01T10:05:00Z'),
+        sender: user2
+      }
+    ]
+  },
 ]);
