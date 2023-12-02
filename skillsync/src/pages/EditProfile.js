@@ -117,12 +117,6 @@ const formData = new FormData();
     setPostcode(event.target.value);
   };
 
-  // const handleAvatarChange = (event) => {
-  //   const file = event.target.files[0];
-  //   formData.append('avatar', file);
-  //   setAvatar(file);
-  // };
-
   const handleGenderChange = (event) => {
     console.log(event.target.value);
     setGender(event.target.value);
@@ -296,7 +290,10 @@ const formData = new FormData();
               name="skill"
               value={skill.name}
               onChange={(e) => handleSkillNameChange(index, e.target.value)}
-            >
+            > 
+              <option value=''>
+                  No change
+              </option>
               {skills.map((optionSkill) => (
                 <option key={optionSkill.id} value={optionSkill.name}>
                   {optionSkill.name}
