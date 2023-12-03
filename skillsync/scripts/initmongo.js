@@ -168,6 +168,32 @@ db.users.insertMany([
   },  
 ])
 
+// Define an admin user without skills
+const adminUser = {
+  id: 0,
+  username: "admin",
+  email: "admin@example.com",
+  password: "admin123",
+  gender: "Other",
+  suc_match: 0,
+  invite_sent: [],
+  invite_rec: [],
+  rating: 0,
+  review: [],
+  profile: {
+    age: 35,
+    avatar: "/images/avatar.png",
+    postal: 123456,
+    location: "Central Admin Office",
+    skills: [], // No skills for admin
+    wanted_skills: []
+  },
+  chats: [],
+  role: 'admin'
+};
+
+// Insert the admin user into the database
+db.users.insert(adminUser);
 
 db.createCollection("skills")
 
@@ -186,10 +212,13 @@ db.skills.insertMany([
 ]);
 
 
-// Create a collection for Chats
-db.createCollection("chats")
+// Retrieve user documents for the chat participants.
 const user1 = db.users.findOne({ id: 1 });
 const user2 = db.users.findOne({ id: 2 });
+const user3 = db.users.findOne({ id: 3 });
+const user4 = db.users.findOne({ id: 4 });
+
+// Insert chats with personalized messages and between different users.
 db.chats.insertMany([
   {
     id: 1,
@@ -197,16 +226,54 @@ db.chats.insertMany([
     messages: [
       {
         id: new Date('2023-01-01T10:00:00Z').getTime(),
-        content: "Hi Mary, how are you?",
+        content: `Hi ${user2.username}, how are you?`,
         timestamp: new Date('2023-01-01T10:00:00Z'),
         sender: user1
       },
       {
         id: new Date('2023-01-01T10:05:00Z').getTime(),
-        content: "Hi John! I'm good, thanks for asking.",
+        content: `Hi ${user1.username}! I'm good, thanks for asking. How about you?`,
         timestamp: new Date('2023-01-01T10:05:00Z'),
         sender: user2
-      }
+      },
+    ]
+  },
+  {
+    id: 2,
+    participants: [user2, user3],
+    messages: [
+      {
+        id: new Date('2023-02-02T09:00:00Z').getTime(),
+        content: `Hey ${user3.username}, have you started the project?`,
+        timestamp: new Date('2023-02-02T09:00:00Z'),
+        sender: user2
+      },
+      {
+        id: new Date('2023-02-02T09:15:00Z').getTime(),
+        content: `Not yet, ${user2.username}. Do you want to work on it together?`,
+        timestamp: new Date('2023-02-02T09:15:00Z'),
+        sender: user3
+      },
+    ]
+  },
+  {
+    id: 3,
+    participants: [user3, user4],
+    messages: [
+      {
+        id: new Date('2023-03-03T15:00:00Z').getTime(),
+        content: `${user4.username}, I heard you're good with React. Can you help me?`,
+        timestamp: new Date('2023-03-03T15:00:00Z'),
+        sender: user3
+      },
+      {
+        id: new Date('2023-03-03T15:20:00Z').getTime(),
+        content: `Sure ${user3.username}, what do you need help with?`,
+        timestamp: new Date('2023-03-03T15:20:00Z'),
+        sender: user4
+      },
     ]
   },
 ]);
+
+// ... rest of the script ...
