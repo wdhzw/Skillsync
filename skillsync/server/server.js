@@ -329,7 +329,9 @@ async function deleteMessageResolver(_, args) {
 SERVER INITIALIZATION CODE
 ********************************************/
 const app = express();
-
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 //Attaching a Static web server.
 // app.use(express.static('build'));
 
@@ -420,9 +422,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 app.use(express.static('public'));
-app.use(cors({
-  origin: 'http://localhost:3000'
-}));
 app.post('/upload-avatar', upload.single('avatar'), (req, res) => {
   if (req.file) {
     const avatarPath = `/uploads/${req.file.filename}`; // Adjust the path according to your setup
