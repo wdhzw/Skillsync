@@ -232,12 +232,9 @@ async function getUserChatsResolver(_, args) {
 async function getChatMessagesResolver(_, args) {
   const { chatId } = args;
   const chat = await db.collection('chats').findOne({ id: parseInt(chatId, 10) });
-  return chat ? chat.messages : [];async function getUserChatsResolver(_, args) {
-    const { userId } = args;
-    //return await db.collection('chats').find().toArray();
-    return await db.collection('chats').find({ "participants.id": parseInt(userId,10)}).toArray();
-  }
+  return chat ? chat.messages : [];
 }
+
 async function createChatResolver(_, args) {
   const { participants } = args;
 
@@ -254,17 +251,17 @@ async function createChatResolver(_, args) {
 
 // Resolver to send a new message
 async function sendMessageResolver(_, args) {
-  const { chatId, content, senderId } = args;
+  const { chatId, content, sender } = args;
 
   const newMessage = {
     id: new Date().getTime(), // Timestamp-based unique ID
     content: content,
     timestamp: new Date(),
-    sender: senderId
+    sender: sender
   };
 
   await db.collection('chats').updateOne(
-    { id: chatId },
+    { id: parseInt(chatId, 10) },
     { $push: { messages: newMessage } }
   );
 

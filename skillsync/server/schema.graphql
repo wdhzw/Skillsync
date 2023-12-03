@@ -25,7 +25,7 @@ type Message {
   id: ID!
   content: String
   timestamp: DateTime
-  sender: User
+  sender: ID
 }
 
 type UserProfile {
@@ -98,6 +98,6 @@ type Mutation {
 
 
   createChat(participants: Int!): Chat
-  sendMessage(chatId: ID!, content: String!, senderId: ID!): Message
+  sendMessage(chatId: ID!, content: String!, sender: ID!): Message
   deleteMessage(messageId: ID!): ID
 }

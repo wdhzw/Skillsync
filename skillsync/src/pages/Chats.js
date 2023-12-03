@@ -11,7 +11,7 @@ const Chats = () => {
     }, [loggedInUser]);
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
-    const [messages, setMessages] = useState();
+    const [messages, setMessages] = useState([]); // Initialize as an array
     const [currentMessage, setCurrentMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [showBlockModal, setShowBlockModal] = useState(false);
@@ -55,34 +55,50 @@ const Chats = () => {
     };
 
     const handleSendMessage = async () => {
-        if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat.id)) return;
-      
-        const mutation = `
-          mutation sendMessage($chatId: ID!, $content: String!, $senderId: ID!) {
-            sendMessage(chatId: $chatId, content: $content, senderId: $senderId) {
-              id
-              content
-              timestamp
-            }
-          }
-        `;
-      
-        const vars = {
-          chatId: selectedChat.id,
-          content: currentMessage,
-          senderId: loggedInUser.id  // Make sure loggedInUser.id is the correct ID of the logged-in user
-        };
-      
-        try {
-          await graphQLFetch(mutation, vars);
-          // Optionally, you can handle the response here, like updating the UI
-        } catch (error) {
-          console.error('Error sending message:', error);
-          // Handle error
+        console.log('handleSendMessage called'); // Log when function is called
+    
+        // Check if there's a current message and a selected chat, and the chat is not blocked
+        if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat.id)) {
+            console.log('Message sending conditions not met'); // Log condition failure
+            return;
         }
-      
-        setCurrentMessage("");
-      };
+    
+        // Define the GraphQL mutation
+        const mutation = `
+            mutation sendMessage($chatId: ID!, $content: String!, $sender: ID!) {
+                sendMessage(chatId: $chatId, content: $content, sender: $sender) {
+                    id
+                    content
+                    timestamp
+                }
+            }
+        `;
+    
+        // Variables for the GraphQL query
+        const vars = {
+            chatId: selectedChat.id, // Ensure this is a string if your server expects IDs to be strings
+            content: currentMessage,
+            sender: loggedInUser.id // Again, ensure this is a string if needed
+          };
+    
+        try {
+            console.log('Sending message:', vars); // Log the variables being sent
+    
+            const response = await graphQLFetch(mutation, vars);
+            console.log('Message sent:', response); // Log the response
+    
+            // No need to manually add the message to the chat since the server does it
+            // Instead, we refetch the chat messages to get the latest messages including the one just sent
+            await fetchChats();
+    
+        } catch (error) {
+            console.error('Error sending message:', error); // Log any errors
+        }
+    
+        setCurrentMessage(""); // Reset the input field
+    };
+    
+    
       
     const fetchChats = async () => {
         if (loggedInUser && loggedInUser.id) {
@@ -94,10 +110,7 @@ const Chats = () => {
                         id
                         content
                         timestamp
-                        sender {
-                            id
-                            username
-                        }
+                        sender
                     }
                     participants{
                         id
@@ -233,7 +246,7 @@ const Chats = () => {
                         {selectedChat && selectedChat.messages.map((message, idx) => (
                             <div 
                                 key={idx} 
-                                className={`message ${message.sender.id === loggedInUser.id ? 'self' : 'other'}`}
+                                className={`message ${String(message.sender) === String(loggedInUser.id)? 'self' : 'other'}`}
                             >
                                 {message.content}
                             </div>

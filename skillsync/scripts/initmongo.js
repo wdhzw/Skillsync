@@ -228,13 +228,13 @@ db.chats.insertMany([
         id: new Date('2023-01-01T10:00:00Z').getTime(),
         content: `Hi ${user2.username}, how are you?`,
         timestamp: new Date('2023-01-01T10:00:00Z'),
-        sender: user1
+        sender: user1.id
       },
       {
         id: new Date('2023-01-01T10:05:00Z').getTime(),
         content: `Hi ${user1.username}! I'm good, thanks for asking. How about you?`,
         timestamp: new Date('2023-01-01T10:05:00Z'),
-        sender: user2
+        sender: user2.id
       },
     ]
   },
@@ -246,13 +246,13 @@ db.chats.insertMany([
         id: new Date('2023-02-02T09:00:00Z').getTime(),
         content: `Hey ${user3.username}, have you started the project?`,
         timestamp: new Date('2023-02-02T09:00:00Z'),
-        sender: user2
+        sender: user2.id
       },
       {
         id: new Date('2023-02-02T09:15:00Z').getTime(),
         content: `Not yet, ${user2.username}. Do you want to work on it together?`,
         timestamp: new Date('2023-02-02T09:15:00Z'),
-        sender: user3
+        sender: user3.id
       },
     ]
   },
@@ -264,13 +264,13 @@ db.chats.insertMany([
         id: new Date('2023-03-03T15:00:00Z').getTime(),
         content: `${user4.username}, I heard you're good with React. Can you help me?`,
         timestamp: new Date('2023-03-03T15:00:00Z'),
-        sender: user3
+        sender: user3.id
       },
       {
         id: new Date('2023-03-03T15:20:00Z').getTime(),
         content: `Sure ${user3.username}, what do you need help with?`,
         timestamp: new Date('2023-03-03T15:20:00Z'),
-        sender: user4
+        sender: user4.id
       },
     ]
   },
