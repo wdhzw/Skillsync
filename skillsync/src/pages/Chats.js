@@ -1,10 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useParams } from 'react-router-dom';
 import { AuthContext } from '../AuthContext'; // Adjust this path based on your project structure
 import graphQLFetch from './api'; // Adjust this path based on your project structure
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import './Chats.css';
 import '../Modal.css';
 const Chats = () => {
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const profileChatId = queryParams.get('profileChatId'); // '4' if the URL is '/Chats?chatId=4'
+    
     const { loggedInUser } = useContext(AuthContext);
     useEffect(() => {
     console.log('Current loggedInUser:', loggedInUser);
@@ -16,43 +22,43 @@ const Chats = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [showBlockModal, setShowBlockModal] = useState(false);
     const [blockedUsers, setBlockedUsers] = useState([]);
-    const [skillSyncingUsers, setSkillSyncingUsers] = useState([]);
-    const [showConfirmSkillSyncModal, setShowConfirmSkillSyncModal] = useState(false);
-    const [showRateModal, setShowRateModal] = useState(false);
-    const [rating, setRating] = useState('');
-    const [comment, setComment] = useState('');
+    // const [skillSyncingUsers, setSkillSyncingUsers] = useState([]);
+    // const [showConfirmSkillSyncModal, setShowConfirmSkillSyncModal] = useState(false);
+    // const [showRateModal, setShowRateModal] = useState(false);
+    // const [rating, setRating] = useState('');
+    // const [comment, setComment] = useState('');
 
-    const handleStartSkillSync = () => {
-        setShowConfirmSkillSyncModal(true);
-    };
+    // const handleStartSkillSync = () => {
+    //     setShowConfirmSkillSyncModal(true);
+    // };
 
-    const confirmSkillSync = () => {
-        if (!skillSyncingUsers.includes(selectedChat)) {
-            setSkillSyncingUsers([...skillSyncingUsers, selectedChat]);
-        }
-        setShowConfirmSkillSyncModal(false);
-    };
+    // const confirmSkillSync = () => {
+    //     if (!skillSyncingUsers.includes(selectedChat)) {
+    //         setSkillSyncingUsers([...skillSyncingUsers, selectedChat]);
+    //     }
+    //     setShowConfirmSkillSyncModal(false);
+    // };
 
-    const handleBlock = () => {
-        if (blockedUsers.includes(selectedChat)) {
-            setBlockedUsers(blockedUsers.filter(id => id !== selectedChat));
-        } else {
-            setShowBlockModal(true);
-        }
-    };
+    // const handleBlock = () => {
+    //     if (blockedUsers.includes(selectedChat)) {
+    //         setBlockedUsers(blockedUsers.filter(id => id !== selectedChat));
+    //     } else {
+    //         setShowBlockModal(true);
+    //     }
+    // };
 
-    const confirmBlock = () => {
-        setBlockedUsers([...blockedUsers, selectedChat]);
-        setShowBlockModal(false);
-    }
+    // const confirmBlock = () => {
+    //     setBlockedUsers([...blockedUsers, selectedChat]);
+    //     setShowBlockModal(false);
+    // }
 
-    const handleRate = () => {
-        setShowRateModal(true);
-    };
+    // const handleRate = () => {
+    //     setShowRateModal(true);
+    // };
 
-    const submitRating = () => {
-        setShowRateModal(false);
-    };
+    // const submitRating = () => {
+    //     setShowRateModal(false);
+    // };
 
     const handleSendMessage = async () => {
         console.log('handleSendMessage called'); // Log when function is called
@@ -102,7 +108,7 @@ const Chats = () => {
       
     const fetchChats = async () => {
         if (loggedInUser && loggedInUser.id) {
-            console.log("Fetching chats for user:", loggedInUser.id)
+            console.log("Fetching chats for user:", loggedInUser.id);
             const query = `query getUserChats($userId: ID!) {
                 getUserChats(userId: $userId) {
                     id
@@ -121,26 +127,66 @@ const Chats = () => {
                     }
                 }
             }`;
-
+    
             const data = await graphQLFetch(query, { userId: loggedInUser.id });
             console.log("Fetched chats:", data);
             if (data) {
                 setChats(data.getUserChats);
-                if (data.getUserChats.length > 0) {
-                    setSelectedChat(data.getUserChats[0]);
-                }
             }
         }
     };
-
+    const handleDeleteChat = async (chatId) => {
+        if (window.confirm('Are you sure you want to delete this chat?')) {
+            const deleteChatMutation = `
+                mutation deleteChat($chatId: ID!) {
+                    deleteChat(chatId: $chatId)
+                }
+            `;
+    
+            try {
+                const vars = { chatId };
+                const response = await graphQLFetch(deleteChatMutation, vars);
+                if (response.deleteChat) {
+                    // Remove the chat from the local state to update the UI
+                    setChats(chats.filter(chat => chat.id !== chatId));
+                    if (selectedChat?.id === chatId) {
+                        setSelectedChat(null); // Clear selection if the deleted chat was selected
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting chat:', error);
+            }
+        }
+    };
+    
     useEffect(() => {
         fetchChats();
     }, [loggedInUser]);
+    
+// This useEffect will run after 'chats' has been updated
+useEffect(() => {
+    if (profileChatId) {
+        // Ensure profileChatId is the same type as chat.id
+        const chatIdToFind = typeof chats[0]?.id === 'number' ? Number(profileChatId) : profileChatId;
+        console.log("profildid, ",  chatIdToFind)
+        console.log("chat, ", chats)
+        const foundChat = chats.find(chat => chat.id === chatIdToFind);
+        console.log("found", foundChat)
+        if (foundChat) {
+            setSelectedChat(foundChat);
+        }
+    } else if (chats.length > 0) {
+        // Select the first chat by default if no specific chat ID is given
+        setSelectedChat(chats[0]);
+    }
+}, [chats, profileChatId]); // This effect depends on 'chats' and 'profileChatId'
+
+    
 
     return (
         <div className="chat-container">
 
-            {showConfirmSkillSyncModal && (
+            {/* {showConfirmSkillSyncModal && (
                 <div className="modal">
                     <div className="modal-content">
                         <p>Are you sure you want to initiate SkillSync with this user?</p>
@@ -148,9 +194,9 @@ const Chats = () => {
                         <button className="cancel-btn" onClick={() => setShowConfirmSkillSyncModal(false)}>No</button>
                     </div>
                 </div>
-            )}
+            )} */}
 
-            {showRateModal && (
+            {/* {showRateModal && (
                 <div className="modal">
                     <div className="modal-content">
                         <p>Rate this user:</p>
@@ -160,9 +206,9 @@ const Chats = () => {
                         <button className="cancel-btn" onClick={() => setShowRateModal(false)}>Cancel</button>
                     </div>
                 </div>
-            )}
+            )} */}
 
-            {showBlockModal && (
+            {/* {showBlockModal && (
                 <div className="modal">
                     <div className="modal-content">
                         <p>Are you sure you want to block this user?</p>
@@ -170,7 +216,7 @@ const Chats = () => {
                         <button className="cancel-btn" onClick={() => setShowBlockModal(false)}>No</button>
                     </div>
                 </div>
-            )}
+            )} */}
     
             {/* Conversations List */}
             <div className="conversations-list">
@@ -195,6 +241,9 @@ const Chats = () => {
                     >
                         {/* Render participant info here */}
                         {chat.participants.find(p => p.id !== loggedInUser.id).username}
+                        <button onClick={() => handleDeleteChat(chat.id)} className="delete-chat-btn">
+                            Delete
+                        </button>
                     </div>
                 ))}
 
@@ -220,7 +269,7 @@ const Chats = () => {
                         : "[Select a chat]"
                     }
                     {/* SkillSync buttons */}
-                    {!skillSyncingUsers.includes(selectedChat) && (
+                    {/* {!skillSyncingUsers.includes(selectedChat) && (
                         <button onClick={handleStartSkillSync} className="initiate-exchange-btn">
                             Start SkillSync
                         </button>
@@ -234,12 +283,12 @@ const Chats = () => {
                                 SkillSyncing...
                             </button>
                         </>
-                    )}
+                    )} */}
 
                     {/* Block user button */}
-                    <button onClick={handleBlock} className="block-btn">
+                    {/* <button onClick={handleBlock} className="block-btn">
                         {blockedUsers.includes(selectedChat) ? 'Unblock User' : 'Block User'}
-                    </button>
+                    </button> */}
                 </div>
     
                     <div className="chat-body">
