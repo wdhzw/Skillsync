@@ -48,7 +48,6 @@ export default function Login({ onLogin }) {
     try {
       const data = await graphQLFetch(loginMutation, loginData);
       console.log(data);
-      // this.setState({ user: data.register });
       if(data.login){
         setLoggedInUser(data.login);
         console.log('Updated loggedInUser:', loggedInUser);
