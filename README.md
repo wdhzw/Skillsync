@@ -2,86 +2,58 @@
 
 course-project-team-13 created by GitHub Classroom
 
-## Please click into the skillsync folder for the project details
-
-# SkillSync
+## SkillSync
 
 SkillSync is a platform that allows users to showcase their skills, discover new ones, and connect with like-minded individuals.
 
 ## Table of Contents
 
-- [Register](#register)
-- [Login](#login)
-- [Users](#users)
-- [Skills](#skills)
-- [Chats](#chats)
-- [Invitations](#invitations)
-- [Recommended Users](#recommended-users)
+- [List of Implemented Features](#list-of-implemented-features)
 - [Getting Started](#getting-started)
 
-## Register
+## List of Implemented Features
 
-This page allows new users to join SkillSync:
-- Provide personal details, including username, age, gender, postcode (Integrated with Google map API), skills of confidence and interest.
-- Upload a personal avatar.
+### Register
+- New users can join SkillSync by providing personal details, including their personal information, the skills they want to share and learn.
+- Postcode integration with Google Maps API (currently inactive due to billing requirements).
+- Users can upload a personal avatar.
 
-## Login
-
-Secure access for existing SkillSync members:
-- Log in using the username and password.
-- Navigate to Register Page by clicking the "Doesn't have an account? Sign up here".
-- Error handling with informative messages for unsuccessful login attempts.
-- Automatically navigates to ViewProfile page after successful login.
+### Login
+- Existing users log in using their username and password.
+- Redirects to ViewProfile page after successful login.
+- Error handling for unsuccessful login attempts.
 
 ### Admin Login
+- Special login for administrators with username `admin` and password `admin123`.
+- Admin privileges include user and skill management. If admin login, can see the hidden edit button and a hidden delete button for each skill in the skill list, and can see a hidden edit button for every user in the userlist.
 
-Exclusive access for administrators:
-- Use the username `admin` and password `admin123` for admin access.
-- Upon successful login, an alert message indicates an admin login, and the system automatically navigates to the 'Users' page.
-- Admin privileges: 
-  - Skill Management: View, edit, and delete skills.
-  - User Management: View, edit (including username, password, gender, age, avatar picture, and neighborhood), reset passwords, delete accounts, and verify user certifications.
+### Users
+- User can see a list of users with their name, location, avatar and skills to share and learn.
+- Browse user profiles in the SkillSync community.
+- Filter, search, and sort user profiles.
+- View and edit personal user profiles.
 
-## Users
+### Skills
+- Access a list of skills.
+- View detailed information about each skill.
+- Integration with mySkillsFuture API for skill-related career information.
 
-Explore the SkillSync community:
-- View and filter profiles of users based on location and skills.
-- Search for users by username.
-- Sort user profiles based on various metrics.
-- View and edit own user profiles, including information like username, password, gender, age, avatar picture, neighborhood, skills, proficiency ratings, certificates, and desired skills.
-- Track successful SkillSync matches and submit reviews.
-
-## Skills
-
-Discover and showcase skills:
-- Access and search a comprehensive list of available skills.
-- View detailed information about each skill, including skill profile, users with the skill, relevant courses, and job opportunities.
-
-## Chats
-
-Connect and communicate with other users:
-- Direct chat functionality.
+### Chats
+- Direct chat functionality with other users.
+- Start a new chat by clicking the chat button when viewing that user's profile.
 - View past chats and continue conversations.
-- Search for user in the conversation list based on username.
-- Navigate to user profiles by clicking the small profile image.
-- Block/Unblock User functionality.
-- Initiate SkillSync and provide ratings/comments for skill exchanges.
+- Search functionality for finding users in chat.
+- Navigate to user profiles from chats by clicking small user avatar on the chat header.
 
-## Invitations
 
-Build your network:
-- Send, view, and manage invitations to and from other users.
-- Accept or decline connection requests.
+### Recommended Users
+- Receive user suggestions based on skills and preferences.
+- Algorithmic recommendations for expanding personal networks.
 
-## Recommended Users
+### Integration
+- SkillsFuture integration for career and course suggestions.
+- Google Maps API integration for location-based features (currently inactive).
 
-Expand your circle:
-- Browse and receive curated user suggestions based on location, skills, and preferences.
+## Getting Started
 
-## Integration
-
-- SkillsFuture integration for job or course matches.
-- Google Maps API integration for in-person meetup locations.
-
-## Getting started
-Navigate to the skillsync folder and follow the steps
+Navigate to the skillsync folder and follow the instructions provided to set up and run the project.
