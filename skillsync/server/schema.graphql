@@ -97,7 +97,7 @@ type Mutation {
   #deregisterUser(email: String!): Int
 
 
-  createChat(participants: Int!): Chat
+  getOrCreateChat(participant1: ID!, participant2: ID!): Chat
   sendMessage(chatId: ID!, content: String!, sender: ID!): Message
   deleteMessage(messageId: ID!): ID
 }

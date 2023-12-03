@@ -46,7 +46,7 @@ const resolvers = {
     register: registerResolver,
     login: loginResolver,
     editProfile: editProfileResolver,
-    createChat: createChatResolver,
+    getOrCreateChat: getOrCreateChatResolver,
     sendMessage: sendMessageResolver,
     deleteMessage: deleteMessageResolver,
   }
@@ -235,18 +235,45 @@ async function getChatMessagesResolver(_, args) {
   return chat ? chat.messages : [];
 }
 
-async function createChatResolver(_, args) {
-  const { participants } = args;
+async function getOrCreateChatResolver(_, { participant1, participant2 }) {
+  // Convert IDs to integers if they are passed as strings
+  const participant1Id = parseInt(participant1, 10);
+  const participant2Id = parseInt(participant2, 10);
 
-  const newChat = {
-    id: await db.collection('chats').countDocuments() + 1, // Generates a new ID
-    participants: participants,
-    messages: [] // Initially, the chat will have no messages
-  };
+  // Retrieve the full User objects for both participants
+  const user1 = await db.collection('users').findOne({ id: participant1Id });
+  const user2 = await db.collection('users').findOne({ id: participant2Id });
 
-  await db.collection('chats').insertOne(newChat);
-  return newChat;
+  // If either user is not found, throw an error or handle as needed
+  if (!user1 || !user2) {
+    throw new Error('One or both users not found');
+  }
+
+  let chat = await db.collection('chats').findOne({
+    $or: [
+      { "participants.id": { $all: [participant1Id, participant2Id] } },
+      { "participants.id": { $all: [participant2Id, participant1Id] } }
+    ]
+  });
+  
+  // If a chat exists, return it
+  if (chat) {
+    return chat;
+  }
+
+// If not, create a new chat with the User objects as participants
+const newChatCount = await db.collection('chats').countDocuments();
+const newChat = {
+  id: newChatCount + 1, // assuming id is a sequence number
+  participants: [user1, user2],
+  messages: []
+};
+
+const result = await db.collection('chats').insertOne(newChat);
+return result.ops[0]; // Return the newly created chat
 }
+
+
 
 
 // Resolver to send a new message

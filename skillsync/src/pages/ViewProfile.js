@@ -112,7 +112,33 @@ const fetchSkills = async () => {
 
   
   //const isCurrentUser = user.username === user.username;
-
+  const handleChatButtonClick = async () => {
+    const getOrCreateChatMutation = `
+      mutation getOrCreateChat($participant1: ID!, $participant2: ID!) {
+        getOrCreateChat(participant1: $participant1, participant2: $participant2) {
+          id
+        }
+      }
+    `;
+  
+    const variables = {
+      participant1: loggedinuserId,
+      participant2: userId
+    };
+  
+    try {
+      const data = await graphQLFetch(getOrCreateChatMutation, variables);
+      if (data && data.getOrCreateChat) {
+        // Navigate to chat page with the chat
+        navigate(`/Chats?profileChatId=${data.getOrCreateChat.id}`);
+      }
+    } catch (error) {
+      console.error('Error fetching or creating chat:', error);
+    }
+  };
+  
+  // Attach this function to the onClick event of the "Chat" button
+ 
   return (
     <div>
       <div className='whole'>
@@ -189,7 +215,7 @@ const fetchSkills = async () => {
       </Link>
     </button>
   ) : (
-    <button type='edit'>Chat</button>
+    <button onClick={handleChatButtonClick}>Chat</button> 
   )
 }
 
