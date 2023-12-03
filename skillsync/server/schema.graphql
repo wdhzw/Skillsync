@@ -95,6 +95,7 @@ type Mutation {
   editProfile(username: String!, newusername: String, password: String, gender: String, profile: UserProfileInput): User
   
   #deregisterUser(email: String!): Int
+  deleteChat(chatId: ID!): Boolean
 
 
   getOrCreateChat(participant1: ID!, participant2: ID!): Chat

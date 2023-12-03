@@ -135,6 +135,29 @@ const Chats = () => {
             }
         }
     };
+    const handleDeleteChat = async (chatId) => {
+        if (window.confirm('Are you sure you want to delete this chat?')) {
+            const deleteChatMutation = `
+                mutation deleteChat($chatId: ID!) {
+                    deleteChat(chatId: $chatId)
+                }
+            `;
+    
+            try {
+                const vars = { chatId };
+                const response = await graphQLFetch(deleteChatMutation, vars);
+                if (response.deleteChat) {
+                    // Remove the chat from the local state to update the UI
+                    setChats(chats.filter(chat => chat.id !== chatId));
+                    if (selectedChat?.id === chatId) {
+                        setSelectedChat(null); // Clear selection if the deleted chat was selected
+                    }
+                }
+            } catch (error) {
+                console.error('Error deleting chat:', error);
+            }
+        }
+    };
     
     useEffect(() => {
         fetchChats();
@@ -218,6 +241,9 @@ useEffect(() => {
                     >
                         {/* Render participant info here */}
                         {chat.participants.find(p => p.id !== loggedInUser.id).username}
+                        <button onClick={() => handleDeleteChat(chat.id)} className="delete-chat-btn">
+                            Delete
+                        </button>
                     </div>
                 ))}
 

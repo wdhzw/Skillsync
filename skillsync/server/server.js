@@ -49,6 +49,7 @@ const resolvers = {
     getOrCreateChat: getOrCreateChatResolver,
     sendMessage: sendMessageResolver,
     deleteMessage: deleteMessageResolver,
+    deleteChat: deleteChatResolver,
   }
 };
 
@@ -296,6 +297,20 @@ async function sendMessageResolver(_, args) {
 }
 
 
+async function deleteChatResolver(_, { chatId }) {
+  // Convert chatId to the type expected by your database if necessary (e.g., a number or MongoDB ObjectID)
+  const chatIdToDelete = parseInt(chatId, 10);
+
+  // Access the database and delete the chat
+  const result = await db.collection('chats').deleteOne({ id: chatIdToDelete });
+
+  // The deleteOne method returns an object that contains a property 'deletedCount' which is 1 if the document was deleted
+  if (result.deletedCount === 1) {
+    return true; // Indicates the chat was successfully deleted
+  } else {
+    throw new Error('Chat not found.'); // Indicates the chat was not found and hence not deleted
+  }
+}
 
 // Resolver to delete a message
 async function deleteMessageResolver(_, args) {
