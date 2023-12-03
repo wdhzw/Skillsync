@@ -2,10 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import { AuthContext } from '../AuthContext'; // Adjust this path based on your project structure
 import graphQLFetch from './api'; // Adjust this path based on your project structure
-import { Link } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './Chats.css';
 import '../Modal.css';
+
 const Chats = () => {
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
@@ -13,63 +13,21 @@ const Chats = () => {
     
     const { loggedInUser } = useContext(AuthContext);
     useEffect(() => {
-    console.log('Current loggedInUser:', loggedInUser);
+        console.log('Current loggedInUser:', loggedInUser);
     }, [loggedInUser]);
     const [chats, setChats] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
-    const [messages, setMessages] = useState([]); // Initialize as an array
     const [currentMessage, setCurrentMessage] = useState("");
     const [searchTerm, setSearchTerm] = useState("");
     const [showBlockModal, setShowBlockModal] = useState(false);
     const [blockedUsers, setBlockedUsers] = useState([]);
-    // const [skillSyncingUsers, setSkillSyncingUsers] = useState([]);
-    // const [showConfirmSkillSyncModal, setShowConfirmSkillSyncModal] = useState(false);
-    // const [showRateModal, setShowRateModal] = useState(false);
-    // const [rating, setRating] = useState('');
-    // const [comment, setComment] = useState('');
-
-    // const handleStartSkillSync = () => {
-    //     setShowConfirmSkillSyncModal(true);
-    // };
-
-    // const confirmSkillSync = () => {
-    //     if (!skillSyncingUsers.includes(selectedChat)) {
-    //         setSkillSyncingUsers([...skillSyncingUsers, selectedChat]);
-    //     }
-    //     setShowConfirmSkillSyncModal(false);
-    // };
-
-    // const handleBlock = () => {
-    //     if (blockedUsers.includes(selectedChat)) {
-    //         setBlockedUsers(blockedUsers.filter(id => id !== selectedChat));
-    //     } else {
-    //         setShowBlockModal(true);
-    //     }
-    // };
-
-    // const confirmBlock = () => {
-    //     setBlockedUsers([...blockedUsers, selectedChat]);
-    //     setShowBlockModal(false);
-    // }
-
-    // const handleRate = () => {
-    //     setShowRateModal(true);
-    // };
-
-    // const submitRating = () => {
-    //     setShowRateModal(false);
-    // };
 
     const handleSendMessage = async () => {
-        console.log('handleSendMessage called'); // Log when function is called
-    
-        // Check if there's a current message and a selected chat, and the chat is not blocked
         if (!currentMessage || !selectedChat || blockedUsers.includes(selectedChat.id)) {
-            console.log('Message sending conditions not met'); // Log condition failure
+            console.log('Message sending conditions not met');
             return;
         }
     
-        // Define the GraphQL mutation
         const mutation = `
             mutation sendMessage($chatId: ID!, $content: String!, $sender: ID!) {
                 sendMessage(chatId: $chatId, content: $content, sender: $sender) {
@@ -80,35 +38,27 @@ const Chats = () => {
             }
         `;
     
-        // Variables for the GraphQL query
         const vars = {
-            chatId: selectedChat.id, // Ensure this is a string if your server expects IDs to be strings
+            chatId: selectedChat.id,
             content: currentMessage,
-            sender: loggedInUser.id // Again, ensure this is a string if needed
-          };
+            sender: loggedInUser.id
+        };
     
         try {
-            console.log('Sending message:', vars); // Log the variables being sent
-    
             const response = await graphQLFetch(mutation, vars);
-            console.log('Message sent:', response); // Log the response
-    
-            // No need to manually add the message to the chat since the server does it
-            // Instead, we refetch the chat messages to get the latest messages including the one just sent
-            await fetchChats();
-    
+            if (response && response.sendMessage) {
+                // Refresh chats and keep the current chat selected
+                fetchChats(selectedChat.id);
+            }
         } catch (error) {
-            console.error('Error sending message:', error); // Log any errors
+            console.error('Error sending message:', error);
         }
     
-        setCurrentMessage(""); // Reset the input field
+        setCurrentMessage("");
     };
-    
-    
-      
-    const fetchChats = async () => {
+
+    const fetchChats = async (chatIdToSelect) => {
         if (loggedInUser && loggedInUser.id) {
-            console.log("Fetching chats for user:", loggedInUser.id);
             const query = `query getUserChats($userId: ID!) {
                 getUserChats(userId: $userId) {
                     id
@@ -118,7 +68,7 @@ const Chats = () => {
                         timestamp
                         sender
                     }
-                    participants{
+                    participants {
                         id
                         username
                         profile {
@@ -129,12 +79,16 @@ const Chats = () => {
             }`;
     
             const data = await graphQLFetch(query, { userId: loggedInUser.id });
-            console.log("Fetched chats:", data);
             if (data) {
                 setChats(data.getUserChats);
+                if (chatIdToSelect) {
+                    const chatToSelect = data.getUserChats.find(chat => chat.id === chatIdToSelect);
+                    if (chatToSelect) setSelectedChat(chatToSelect);
+                }
             }
         }
     };
+
     const handleDeleteChat = async (chatId) => {
         if (window.confirm('Are you sure you want to delete this chat?')) {
             const deleteChatMutation = `
@@ -147,40 +101,18 @@ const Chats = () => {
                 const vars = { chatId };
                 const response = await graphQLFetch(deleteChatMutation, vars);
                 if (response.deleteChat) {
-                    // Remove the chat from the local state to update the UI
                     setChats(chats.filter(chat => chat.id !== chatId));
-                    if (selectedChat?.id === chatId) {
-                        setSelectedChat(null); // Clear selection if the deleted chat was selected
-                    }
+                    if (selectedChat?.id === chatId) setSelectedChat(null);
                 }
             } catch (error) {
                 console.error('Error deleting chat:', error);
             }
         }
     };
-    
-    useEffect(() => {
-        fetchChats();
-    }, [loggedInUser]);
-    
-// This useEffect will run after 'chats' has been updated
-useEffect(() => {
-    if (profileChatId) {
-        // Ensure profileChatId is the same type as chat.id
-        const chatIdToFind = typeof chats[0]?.id === 'number' ? Number(profileChatId) : profileChatId;
-        console.log("profildid, ",  chatIdToFind)
-        console.log("chat, ", chats)
-        const foundChat = chats.find(chat => chat.id === chatIdToFind);
-        console.log("found", foundChat)
-        if (foundChat) {
-            setSelectedChat(foundChat);
-        }
-    } else if (chats.length > 0) {
-        // Select the first chat by default if no specific chat ID is given
-        setSelectedChat(chats[0]);
-    }
-}, [chats, profileChatId]); // This effect depends on 'chats' and 'profileChatId'
 
+    useEffect(() => {
+        fetchChats(profileChatId);
+    }, [loggedInUser, profileChatId]);
     
 
     return (
