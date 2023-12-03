@@ -191,19 +191,21 @@ const Chats = () => {
             {/* Chat Content */}
             <div className="chat-content">
                 <div className="chat-header">
-                    <Link to="/ViewProfile">
-                        {selectedChat && (
-                            <img 
-                                src={selectedChat.participants.find(p => p.id !== loggedInUser.id).profile.avatar} 
-                                className="profile-img" 
-                                alt="Profile" 
-                            />
-                        )}
+                {selectedChat && (
+                    // Find the user in the chat who is not the logged-in user
+                    <Link to={`/ViewProfile?userId=${(selectedChat.participants.find(p => p.id !== loggedInUser.id).id)}`}>
+                        <img 
+                            src={selectedChat.participants.find(p => p.id !== loggedInUser.id).profile.avatar} 
+                            className="profile-img" 
+                            alt="Profile" 
+                        />
                     </Link>
-                    {selectedChat 
+                )}
+
+                {selectedChat 
                         ? selectedChat.participants.find(p => p.id !== loggedInUser.id).username 
                         : "[Select a chat]"
-    }
+                    }
                     {/* SkillSync buttons */}
                     {!skillSyncingUsers.includes(selectedChat) && (
                         <button onClick={handleStartSkillSync} className="initiate-exchange-btn">
