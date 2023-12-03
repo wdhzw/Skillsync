@@ -2,6 +2,8 @@
 
 course-project-team-13 created by GitHub Classroom
 
+link of demo video folder: https://drive.google.com/drive/folders/1IlAT9vZ_aRzBrL7m2WMYBxrE1hyZfA_t?usp=sharing
+
 ## SkillSync
 
 SkillSync is a platform that allows users to showcase their skills, discover new ones, and connect with like-minded individuals.
