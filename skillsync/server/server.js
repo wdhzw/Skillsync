@@ -136,6 +136,7 @@ async function editProfileResolver(_, args) {
 
     if (profile) {
       if (profile.age) existingUser.profile.age = profile.age;
+      if (profile.postal) existingUser.profile.postal = profile.postal;
       if (profile.location !== undefined && profile.location!=="") existingUser.profile.location = profile.location;
       if (profile.avatar) {
         // Handle avatar logic

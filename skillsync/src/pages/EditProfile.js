@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 // import pic from '../pic.jpg';
 import graphQLFetch from './api';
+import { useLocation } from 'react-router-dom';
 import './Login.css';
 
-const EditProfile = ({ user }) => {
-
+const EditProfile = ({ user}) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  var userId = queryParams.get('userId');
+console.log(userId);
 const [newusername, setNewUsername] = useState('');
+const [username, setUsername] = useState('');
 const [password, setPassword] = useState('');
 const [age, setAge] = useState('');
 const [gender, setGender]= useState('');
@@ -31,6 +36,7 @@ const districts = [
   "Bukit Timah", "Novena", "Tanglin", "Rochor"];
 
 
+// setUsername(user.username);
 useEffect(() => {
   const fetchSkills = async () => {
       const query = `query {
@@ -47,7 +53,45 @@ useEffect(() => {
           setSkills(data.getAllSkills);
       }
   };
-
+  const fetchUser = async (userId) => {
+    try {
+      const getUserQuery = `
+        query getUser($id: Int!) {
+          getUserById(id: $id) {
+            id
+            username
+            gender
+            profile {
+              age
+              location
+              postal
+              avatar
+              skills {
+                skill_id
+                level
+              }
+              wanted_skills
+            }
+          }
+        }
+      `;
+      const data = await graphQLFetch(getUserQuery, { id: userId });
+      if (data) {
+        console.log(data);
+        setUsername(data.getUserById.username);
+      }
+    } catch (error) {
+      console.error('Error fetching user:', error);
+    }
+  };
+  
+    if(userId) {
+      userId=parseInt(userId,10);
+      fetchUser(userId,10);
+    } else {
+      setUsername(user.username);
+    }
+  
   fetchSkills();
 }, []); 
 
@@ -92,10 +136,6 @@ const transformSkillsForSubmission = () => {
     return { skill_id: skill.id, level: skill.proficiency };
   });
 };
-
-const username = user.username;
-
-const formData = new FormData();
 
   const handleUsernameChange = (event) => {
     setNewUsername(event.target.value);
