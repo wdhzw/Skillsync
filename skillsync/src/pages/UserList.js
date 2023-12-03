@@ -173,7 +173,7 @@ export default function UserList() {
                     <div className="user-grid-item" key={user.id}>
                         <UserItem user={user} />
                         {userRole === 'admin' && (
-                            <Link to={{ pathname: "/EditProfile", state: { user: user } }} className="button-link">
+                            <Link to={`/EditProfile?userId=${user.id}`} className="button-link">
                                 Edit
                             </Link>
                         )}
